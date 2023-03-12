@@ -17,14 +17,18 @@
     "commit": "git-cz"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.2.4",
+    "@chakra-ui/icons": "^2.0.17",
+    "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "framer-motion": "^6.5.1",
     "next": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.4.0"
+    "react-hook-form": "^7.43.5",
+    "react-icons": "^4.4.0",
+    "swr": "^2.1.0",
+    "zustand": "^4.3.6"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.3",
