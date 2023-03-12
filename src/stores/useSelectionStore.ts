@@ -1,14 +1,14 @@
 import { create } from "zustand";
 
 export interface SelectionStoreState {
-    category: string | undefined;
+    category: string | undefined | number;
     setCategory: (category: string) => void;
 
-    options: object[];
-    addOption: (option: object) => void;
-    addOptions: (options: object[]) => void;
-    updateOptions: (options: object[]) => void;
-    removeOption: (option: object) => void;
+    options: number[];
+    addOption: (option: number) => void;
+    addOptions: (options: number[]) => void;
+    updateOptions: (options: number[]) => void;
+    removeOption: (option: number) => void;
     clearOptions: () => void;
 }
 

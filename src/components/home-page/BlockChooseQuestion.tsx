@@ -12,14 +12,18 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import WrapperRadio from "components/WrapperRadio";
+import useGetQuestion from "lib/hooks/useGetQuestion";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import useSelectionStore from "stores/useSelectionStore";
 
-const BlockChooseQuestion = ({ question, nextStep }: any) => {
+const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
     const addOptions = useSelectionStore((state) => state.addOptions);
 
     const [optionValues, setOptionValues] = useState([]);
+
+    const { question, isLoading: questionIsLoading } =
+        useGetQuestion(questionId);
 
     useEffect(() => {
         console.log(optionValues);
@@ -34,7 +38,7 @@ const BlockChooseQuestion = ({ question, nextStep }: any) => {
         <VStack spacing={6}>
             <Heading>{question.name}</Heading>
             <Box>
-                {question.type === "single" && (
+                {!questionIsLoading && question.type === "single" && (
                     <SingleOption
                         options={question.options}
                         setOptionValues={setOptionValues}
@@ -42,7 +46,7 @@ const BlockChooseQuestion = ({ question, nextStep }: any) => {
                     />
                 )}
 
-                {question.type === "yesno" && (
+                {!questionIsLoading && question.type === "yesno" && (
                     <YesNoOption
                         options={question.options}
                         optionValues={optionValues}
@@ -111,7 +115,7 @@ const YesNoOption = ({ options, optionValues, setOptionValues }: any) => {
                             value={"yes"}
                             colorScheme="blue"
                             isChecked={isYes}
-                            onChange={() => setIsYes(!isYes)}
+                            onChange={() => setIsYes(true)}
                         >
                             Yes
                         </Radio>
@@ -121,7 +125,8 @@ const YesNoOption = ({ options, optionValues, setOptionValues }: any) => {
                             value={"no"}
                             colorScheme="blue"
                             isChecked={!isYes}
-                            onChange={() => setIsYes(!isYes)}
+                            defaultChecked={true}
+                            onChange={() => setIsYes(false)}
                         >
                             No
                         </Radio>
@@ -149,7 +154,7 @@ const YesNoOption = ({ options, optionValues, setOptionValues }: any) => {
                                 {options
                                     .filter(
                                         (option: { type: string }) =>
-                                            option.type === "ENOUGH"
+                                            option.type === "enough"
                                     )
                                     .map((option: any) => (
                                         <Checkbox
@@ -168,7 +173,7 @@ const YesNoOption = ({ options, optionValues, setOptionValues }: any) => {
                                 {options
                                     .filter(
                                         (option: { type: string }) =>
-                                            option.type === "ADDITIONAL"
+                                            option.type === "additional"
                                     )
                                     .map((option: any) => (
                                         <Checkbox

@@ -4,15 +4,22 @@ import ChooseAppOptions from "components/home-page/ChooseAppOptions";
 import { NextPage } from "next";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import createSelection from "lib/api/createSelection";
+import useSelectionStore from "stores/useSelectionStore";
 
 const Home: NextPage = () => {
-    const [documentType, setDocumentType] = useState(undefined);
-
     const methods = useForm();
     const { handleSubmit } = methods;
 
+    const [documentType, setDocumentType] = useState(undefined);
+
+    const options = useSelectionStore((state) => state.options);
+
     const onSubmit = (values: any) => {
-        console.log(values);
+        const { category } = values;
+        createSelection(category.id, options).then((data) => {
+            alert("successfull");
+        });
     };
 
     return (
