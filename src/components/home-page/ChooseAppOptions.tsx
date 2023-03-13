@@ -90,6 +90,11 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
 
     const category = useSelectionStore((state) => state.category);
     const options = useSelectionStore((state) => state.options);
+    const updateNumberBack = useSelectionStore((state) => state.numberBack);
+    const removeBackOptions = useSelectionStore(
+        (state) => state.removeBackOptions
+    );
+    // const optionsHistory = useSelectionStore((state) => state.optionsHistory);
 
     const { questions, isLoading: questionsIsLoading } = useGetQuestions();
 
@@ -98,6 +103,7 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
     };
 
     const prevStep = () => {
+        removeBackOptions(updateNumberBack);
         if (noStep - 1 >= 0) {
             setNoStep(noStep - 1);
         }
@@ -123,11 +129,17 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
                     </Stack>
                 )}
 
-                <Stack padding="4px 16px" bg="blackAlpha.300" borderRadius={12}>
-                    <Text>
-                        Step {noStep} of {questions.length}
-                    </Text>
-                </Stack>
+                {noStep <= questions.length && (
+                    <Stack
+                        padding="4px 16px"
+                        bg="blackAlpha.300"
+                        borderRadius={12}
+                    >
+                        <Text>
+                            Step {noStep} of {questions.length}
+                        </Text>
+                    </Stack>
+                )}
             </HStack>
 
             {noStep === 0 && <ChooseAppCategory nextStep={nextStep} />}

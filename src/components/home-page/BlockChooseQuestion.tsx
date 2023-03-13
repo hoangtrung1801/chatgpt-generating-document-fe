@@ -19,6 +19,7 @@ import useSelectionStore from "stores/useSelectionStore";
 
 const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
     const addOptions = useSelectionStore((state) => state.addOptions);
+    const numberBack = useSelectionStore((state) => state.updateNumberBack);
 
     const [optionValues, setOptionValues] = useState([]);
 
@@ -27,9 +28,11 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
 
     useEffect(() => {
         console.log(optionValues);
+        console.log(optionValues.length);
     }, [optionValues]);
 
     const onSave = () => {
+        numberBack(optionValues.length);
         addOptions([...optionValues]);
         nextStep();
     };
