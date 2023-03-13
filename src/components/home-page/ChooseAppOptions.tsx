@@ -1,5 +1,6 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Box, Button, Heading, HStack, Stack, Text } from "@chakra-ui/react";
+import useGetQuestions from "lib/hooks/useGetQuestions";
 import { useEffect, useState } from "react";
 import useSelectionStore from "stores/useSelectionStore";
 import BlockChooseQuestion from "./BlockChooseQuestion";
@@ -95,6 +96,8 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
     );
     // const optionsHistory = useSelectionStore((state) => state.optionsHistory);
 
+    const { questions, isLoading: questionsIsLoading } = useGetQuestions();
+
     const nextStep = () => {
         setNoStep(noStep + 1);
     };
@@ -107,7 +110,7 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
     };
 
     useEffect(() => {
-        console.log(options);
+        console.log("options", options);
     }, [options]);
 
     return (
@@ -126,39 +129,47 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
                     </Stack>
                 )}
 
-                <Stack padding="4px 16px" bg="blackAlpha.300" borderRadius={12}>
-                    {noStep > questions.length ? (
-                        <Text>
-                            Confirm
-                        </Text>
-                    ) : (
+                {noStep <= questions.length && (
+                    <Stack
+                        padding="4px 16px"
+                        bg="blackAlpha.300"
+                        borderRadius={12}
+                    >
                         <Text>
                             Step {noStep} of {questions.length}
                         </Text>
-                    )}
-                </Stack>
+                    </Stack>
+                )}
             </HStack>
 
             {noStep === 0 && <ChooseAppCategory nextStep={nextStep} />}
-            {noStep !== 0 && (
+            {!questionsIsLoading && noStep !== 0 && (
                 <Box>
-                    {questions.map((question, id) => (
+                    {questions.map((question: any, id: number) => (
                         <Box
                             key={question.name}
                             hidden={id + 1 === noStep ? false : true}
                         >
                             <BlockChooseQuestion
-                                question={question}
+                                questionId={question.id}
                                 nextStep={nextStep}
                             />
                         </Box>
                     ))}
                 </Box>
             )}
-            {noStep > questions.length && (
-                <Button type="submit" onSubmit={onSubmit}>
-                    submit
-                </Button>
+            {!questionsIsLoading && noStep > questions.length && (
+                <Box w="full" textAlign={"center"} mt={24}>
+                    <Button
+                        type="submit"
+                        onSubmit={onSubmit}
+                        colorScheme="blue"
+                        size={"lg"}
+                        onClick={onSubmit}
+                    >
+                        Submit
+                    </Button>
+                </Box>
             )}
         </Box>
     );

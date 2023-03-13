@@ -5,22 +5,37 @@ import { NextPage } from "next";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import createSelection from "lib/api/createSelection";
+import useSelectionStore from "stores/useSelectionStore";
+import generateAnswerWithSelection from "lib/api/generateAnswerWithSelection";
 
 const Home: NextPage = () => {
-    const [documentType, setDocumentType] = useState(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const methods = useForm();
     const { handleSubmit } = methods;
 
+    const [documentType, setDocumentType] = useState(undefined);
+
+    const options = useSelectionStore((state) => state.options);
+
     const onSubmit = (values: any) => {
         setIsLoading(true);
-        console.log(values);
-        const delay = setTimeout(() => {
-            router.push("/result");
-            // setIsLoading(false);
-        }, 2000);
-        return () => clearTimeout(delay);
+        const { category } = values;
+        createSelection(category.id, options)
+            .then((selectionData) => {
+                console.log("selectionData", selectionData);
+                const selectionId = selectionData.data.id;
+
+                generateAnswerWithSelection(selectionId).then((answerData) => {
+                    router.push("/result");
+                    console.log(answerData);
+                    alert("successfull");
+                });
+            })
+            .catch((error) => {
+                console.error("error", error);
+            });
     };
 
     return (
