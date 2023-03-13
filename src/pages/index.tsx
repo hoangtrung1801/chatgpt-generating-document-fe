@@ -6,6 +6,7 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import createSelection from "lib/api/createSelection";
 import useSelectionStore from "stores/useSelectionStore";
+import generateAnswerWithSelection from "lib/api/generateAnswerWithSelection";
 
 const Home: NextPage = () => {
     const methods = useForm();
@@ -17,9 +18,19 @@ const Home: NextPage = () => {
 
     const onSubmit = (values: any) => {
         const { category } = values;
-        createSelection(category.id, options).then((data) => {
-            alert("successfull");
-        });
+        createSelection(category.id, options)
+            .then((selectionData) => {
+                console.log("selectionData", selectionData);
+                const selectionId = selectionData.data.id;
+
+                generateAnswerWithSelection(selectionId).then((answerData) => {
+                    console.log(answerData);
+                    alert("successfull");
+                });
+            })
+            .catch((error) => {
+                console.error("error", error);
+            });
     };
 
     return (
