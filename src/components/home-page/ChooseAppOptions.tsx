@@ -89,12 +89,18 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
 
     const category = useSelectionStore((state) => state.category);
     const options = useSelectionStore((state) => state.options);
+    const updateNumberBack = useSelectionStore((state) => state.numberBack);
+    const removeBackOptions = useSelectionStore(
+        (state) => state.removeBackOptions
+    );
+    // const optionsHistory = useSelectionStore((state) => state.optionsHistory);
 
     const nextStep = () => {
         setNoStep(noStep + 1);
     };
 
     const prevStep = () => {
+        removeBackOptions(updateNumberBack);
         if (noStep - 1 >= 0) {
             setNoStep(noStep - 1);
         }
@@ -121,9 +127,15 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
                 )}
 
                 <Stack padding="4px 16px" bg="blackAlpha.300" borderRadius={12}>
-                    <Text>
-                        Step {noStep} of {questions.length}
-                    </Text>
+                    {noStep > questions.length ? (
+                        <Text>
+                            Confirm
+                        </Text>
+                    ) : (
+                        <Text>
+                            Step {noStep} of {questions.length}
+                        </Text>
+                    )}
                 </Stack>
             </HStack>
 
