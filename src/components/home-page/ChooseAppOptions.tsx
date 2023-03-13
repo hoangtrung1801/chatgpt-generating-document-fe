@@ -123,11 +123,17 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
                     </Stack>
                 )}
 
-                <Stack padding="4px 16px" bg="blackAlpha.300" borderRadius={12}>
-                    <Text>
-                        Step {noStep} of {questions.length}
-                    </Text>
-                </Stack>
+                {noStep <= questions.length && (
+                    <Stack
+                        padding="4px 16px"
+                        bg="blackAlpha.300"
+                        borderRadius={12}
+                    >
+                        <Text>
+                            Step {noStep} of {questions.length}
+                        </Text>
+                    </Stack>
+                )}
             </HStack>
 
             {noStep === 0 && <ChooseAppCategory nextStep={nextStep} />}
