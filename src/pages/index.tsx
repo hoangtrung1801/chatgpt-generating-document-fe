@@ -8,16 +8,18 @@ import { useRouter } from "next/router";
 import createSelection from "lib/api/createSelection";
 import useSelectionStore from "stores/useSelectionStore";
 import generateAnswerWithSelection from "lib/api/generateAnswerWithSelection";
+import useResultStore from "stores/useResultStore";
 
 const Home: NextPage = () => {
-    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const methods = useForm();
     const { handleSubmit } = methods;
 
+    const [isLoading, setIsLoading] = useState(false);
     const [documentType, setDocumentType] = useState(undefined);
 
     const options = useSelectionStore((state) => state.options);
+    const setResult = useResultStore((state) => state.setResult);
 
     const onSubmit = (values: any) => {
         setIsLoading(true);
@@ -28,8 +30,10 @@ const Home: NextPage = () => {
                 const selectionId = selectionData.data.id;
 
                 generateAnswerWithSelection(selectionId).then((answerData) => {
-                    router.push("/result");
                     console.log(answerData);
+
+                    setResult(answerData.data.answer);
+                    router.push("/result", {});
                     alert("successfull");
                 });
             })

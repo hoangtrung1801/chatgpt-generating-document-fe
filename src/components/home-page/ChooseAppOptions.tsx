@@ -96,7 +96,9 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
     );
     // const optionsHistory = useSelectionStore((state) => state.optionsHistory);
 
-    const { questions, isLoading: questionsIsLoading } = useGetQuestions();
+    const { questions, isLoading: questionsIsLoading } = useGetQuestions(
+        category as number
+    );
 
     const nextStep = () => {
         setNoStep(noStep + 1);
