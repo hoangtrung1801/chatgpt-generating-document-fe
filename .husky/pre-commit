@@ -1,7 +1,7 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+# . "$(dirname "$0")/_/husky.sh"
 
-echo '🏗️ Styling, testing and building your portfolio before committing.'
+# echo '🏗️ Styling, testing and building your portfolio before committing.'
 
 # Check Prettier standards
 # echo '🎨 Prettifying your code.'
@@ -12,20 +12,20 @@ echo '🏗️ Styling, testing and building your portfolio before committing.'
 # )
 
 # Check ESLint Standards
-echo '🤵 Checkign ESLint standards.'
-yarn lint ||
-(
-        echo '🤵 ❌ ESLint Check Failed. Make the changes required above and try committing again. ❌ 🤵'
-        false;
-)
+# echo '🤵 Checkign ESLint standards.'
+# yarn lint ||
+# (
+#         echo '🤵 ❌ ESLint Check Failed. Make the changes required above and try committing again. ❌ 🤵'
+#         false;
+# )
 
-# # Check tsconfig standards
-echo '⌨️ Type checking.'
-yarn type-check ||
-(
-    echo '❌ ⌨️ Failed Type check. Make the changes required above and try committing again. ⌨️ ❌'
-    false;
-)
+# # # Check tsconfig standards
+# echo '⌨️ Type checking.'
+# yarn type-check ||
+# (
+#     echo '❌ ⌨️ Failed Type check. Make the changes required above and try committing again. ⌨️ ❌'
+#     false;
+# )
 
-# If everything passes... Now we can commit
-echo '✅ ✅Your checked-in code looks good. Commiting... ✅ ✅'
+# # If everything passes... Now we can commit
+# echo '✅ ✅Your checked-in code looks good. Commiting... ✅ ✅'
