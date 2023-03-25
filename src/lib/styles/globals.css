@@ -1,1 +1,36 @@
 /* Global Styling here */
+.wrapper-class {
+    padding: 2rem 0;
+    border: 1px solid #fff;
+  }
+  .editor-class {
+    background-color: lightgray;
+    padding: 1rem;
+    border: 1px solid #ccc;
+  }
+  .toolbar-class {
+    border: 1px solid #ccc;
+  }
+  .App-header {
+    margin-top: 20px;
+    text-align: center;
+    font-style: oblique;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  .App {
+    display: flex;
+    flex-direction: column;
+  }
+  .btn-wrap {
+    display: flex;
+    padding: 0 4rem;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .btn-save {
+    padding: 10px 40px;
+    border-radius: 5px;
+  
+  }
+  
