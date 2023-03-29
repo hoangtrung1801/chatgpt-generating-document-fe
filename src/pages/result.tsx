@@ -3,6 +3,11 @@ import { NextPage } from "next";
 const ResultEditor = dynamic(import("../result/index"), { ssr: false });
 
 const Result: NextPage = () => {
-    return <ResultEditor />;
+    return (
+        <div>
+            <h1>Hello</h1>
+            <ResultEditor />;
+        </div>
+    );
 };
 export default Result;

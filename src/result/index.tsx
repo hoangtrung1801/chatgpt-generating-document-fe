@@ -2,7 +2,7 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { ContentState, convertFromHTML, convertToRaw } from "draft-js";
-import { Button, Text, VStack } from "@chakra-ui/react";
+import { Button, HStack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import draftToHtml from "draftjs-to-html";
 import { Box } from "@chakra-ui/react";
@@ -37,15 +37,22 @@ function ResultEditor() {
             <Text fontSize="28px" fontWeight="bold" textAlign="center">
                 Documentation
             </Text>
-            <VStack alignItems="flex-end">
+            <HStack mt={8} gap={4} justifyContent="flex-end">
                 <Button
                     onClick={handleOnclick}
                     fontSize="18px"
                     colorScheme={"blue"}
                 >
-                    Save
+                    Save Document
                 </Button>
-            </VStack>
+                <Button
+                    onClick={handleOnclick}
+                    fontSize="18px"
+                    colorScheme={"blue"}
+                >
+                    Generate Code
+                </Button>
+            </HStack>
             <Editor
                 defaultContentState={contentState}
                 onContentStateChange={setContentState}

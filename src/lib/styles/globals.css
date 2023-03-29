@@ -31,6 +31,17 @@
   .btn-save {
     padding: 10px 40px;
     border-radius: 5px;
-  
   }
-  
+
+h1 {
+  font-size: 2em !important;
+  font-weight: bold !important;
+}
+h2 {
+  font-size: 1.5em !important;
+  font-weight: bold !important;
+}
+h3 {
+  font-size: 1em !important;
+  font-weight: bold !important;
+}
