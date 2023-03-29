@@ -15,63 +15,98 @@ import WrapperRadio from "components/WrapperRadio";
 import useGetQuestion from "lib/hooks/useGetQuestion";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import useConfirmStore from "stores/useCofirmOptions";
 import useSelectionStore from "stores/useSelectionStore";
 
 const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
-    const addOptions = useSelectionStore((state) => state.addOptions);
-    const numberBack = useSelectionStore((state) => state.updateNumberBack);
+    // const addOptions = useSelectionStore((state) => state.addOptions);
+    // const numberBack = useSelectionStore((state) => state.updateNumberBack);
 
     const [optionValues, setOptionValues] = useState([]);
+    const [currentOption, setCurrentOption] = useState({});
 
     const { question, isLoading: questionIsLoading } =
         useGetQuestion(questionId);
+    const { addconfirmOption, confirmOptions } = useConfirmStore();
 
     useEffect(() => {
-        console.log(optionValues);
-        console.log(optionValues.length);
-    }, [optionValues]);
+        console.log(confirmOptions);
+    }, [confirmOptions, currentOption]);
 
     const onSave = () => {
-        numberBack(optionValues.length);
-        addOptions([...optionValues]);
+        // numberBack(optionValues.length);
+        addconfirmOption(currentOption);
+        // addOptions([...optionValues]);
         nextStep();
     };
 
     return (
-        <VStack spacing={6}>
-            <Heading>{question.name}</Heading>
-            <Box>
-                {!questionIsLoading && question.type === "single" && (
-                    <SingleOption
-                        options={question.options}
-                        setOptionValues={setOptionValues}
-                        optionValues={optionValues}
-                    />
-                )}
+        <Box>
+            {questionIsLoading ? (
+                <Button
+                    isLoading
+                    loadingText="Loading"
+                    colorScheme="teal"
+                    variant="outline"
+                    spinnerPlacement="end"
+                ></Button>
+            ) : (
+                <VStack spacing={6}>
+                    <Heading>{question.name}</Heading>
+                    <Box>
+                        {!questionIsLoading && question.type === "single" && (
+                            <SingleOption
+                                question_id={question.id}
+                                options={question.options}
+                                setOptionValues={setOptionValues}
+                                optionValues={optionValues}
+                                setCurrentOption={setCurrentOption}
+                                currentOption={currentOption}
+                            />
+                        )}
 
-                {!questionIsLoading && question.type === "yesno" && (
-                    <YesNoOption
-                        options={question.options}
-                        optionValues={optionValues}
-                        setOptionValues={setOptionValues}
-                    />
-                )}
-            </Box>
-            <Box textAlign={"right"} mt={8} w="full">
-                <Button colorScheme={"blue"} onClick={onSave}>
-                    Save & continue
-                </Button>
-            </Box>
-        </VStack>
+                        {!questionIsLoading && question.type === "yesno" && (
+                            <YesNoOption
+                                options={question.options}
+                                optionValues={optionValues}
+                                setOptionValues={setOptionValues}
+                                setCurrentOption={setCurrentOption}
+                                question_id={question.id}
+                                currentOption={currentOption}
+                            />
+                        )}
+                    </Box>
+                    <Box textAlign={"right"} mt={8} w="full">
+                        <Button colorScheme={"blue"} onClick={onSave}>
+                            Save & continue
+                        </Button>
+                    </Box>
+                </VStack>
+            )}
+        </Box>
     );
 };
 
-const SingleOption = ({ options, setOptionValues, optionValues }: any) => {
-    console.log(optionValues[0]);
+const SingleOption = ({
+    options,
+    setOptionValues,
+    optionValues,
+    setCurrentOption,
+    question_id,
+    currentOption,
+}: any) => {
+    // console.log(optionValues[0]);
     const onChange = (value: any) => {
-        setOptionValues([
-            options.find((option: any) => option.name === value).id,
-        ]);
+        setCurrentOption({
+            question_id: question_id,
+            answers: [value],
+            option_id: [
+                options.find((option: any) => option.name === value).id,
+            ],
+        });
+        // setOptionValues([
+        //     options.find((option: any) => option.name === value).id,
+        // ]);
     };
 
     return (
@@ -79,8 +114,9 @@ const SingleOption = ({ options, setOptionValues, optionValues }: any) => {
             <RadioGroup
                 onChange={onChange}
                 value={
-                    options.find((option: any) => option.id === optionValues[0])
-                        ?.name
+                    options.find(
+                        (option: any) => option.id === currentOption.option_id
+                    )?.name
                 }
             >
                 <Stack direction={"row"} spacing={12}>
@@ -97,16 +133,31 @@ const SingleOption = ({ options, setOptionValues, optionValues }: any) => {
     );
 };
 
-const YesNoOption = ({ options, optionValues, setOptionValues }: any) => {
+const YesNoOption = ({
+    options,
+    optionValues,
+    setOptionValues,
+    setCurrentOption,
+    question_id,
+    currentOption,
+}: any) => {
     const [isYes, setIsYes] = useState(false);
 
     const onChange = (values: any[]) => {
-        setOptionValues(
-            values.map(
+        setCurrentOption({
+            question_id: question_id,
+            answers: values,
+            option_id: values.map(
                 (value) =>
                     options.find((option: any) => option.name === value).id
-            )
-        );
+            ),
+        });
+        // setOptionValues(
+        //     values.map(
+        //         (value) =>
+        //             options.find((option: any) => option.name === value).id
+        //     )
+        // );
     };
 
     return (
@@ -128,8 +179,14 @@ const YesNoOption = ({ options, optionValues, setOptionValues }: any) => {
                             value={"no"}
                             colorScheme="blue"
                             isChecked={!isYes}
-                            defaultChecked={true}
-                            onChange={() => setIsYes(false)}
+                            // defaultChecked={isYes}
+                            onChange={() => {
+                                setIsYes(false);
+                                setCurrentOption({
+                                    question_id: question_id,
+                                    answers: ["No"],
+                                });
+                            }}
                         >
                             No
                         </Radio>
@@ -144,10 +201,10 @@ const YesNoOption = ({ options, optionValues, setOptionValues }: any) => {
                     <Box></Box>
                     <CheckboxGroup
                         onChange={onChange}
-                        value={optionValues.map(
-                            (optionValue: any) =>
+                        value={currentOption.option_id?.map(
+                            (optionId: any) =>
                                 options.find(
-                                    (option: any) => option.id === optionValue
+                                    (option: any) => option.id === optionId
                                 ).name
                         )}
                     >

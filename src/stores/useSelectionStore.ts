@@ -9,11 +9,11 @@ export interface SelectionStoreState {
     addOptions: (options: number[]) => void;
     updateOptions: (options: number[]) => void;
     removeOption: (option: number) => void;
-    removeBackOptions: (updateNumberBack: number) => void;
+    // removeBackOptions: (updateNumberBack: number) => void;
     clearOptions: () => void;
 
-    numberBack: number;
-    updateNumberBack: (data: number) => void;
+    // numberBack: number;
+    // updateNumberBack: (data: number) => void;
     // optionsHistory: object[];
     // addHistory: (history: object[]) => void;
     // removeHistory: () => void;
@@ -26,16 +26,16 @@ const useSelectionStore = create<SelectionStoreState>((set, get) => ({
     options: [],
     addOption: (option) => set({ options: [...get().options, option] }),
     addOptions: (options) => set({ options: [...get().options, ...options] }),
-    removeBackOptions: (updateNumberBack) => {
-        get().options.splice(-updateNumberBack, updateNumberBack);
-    },
+    // removeBackOptions: (updateNumberBack) => {
+    //     get().options.splice(-updateNumberBack, updateNumberBack);
+    // },
     updateOptions: (options) => set({ options: options }),
     removeOption: (optionId) =>
         set({ options: get().options.filter((id) => id !== optionId) }),
     clearOptions: () => set({ options: [] }),
 
-    numberBack: 0,
-    updateNumberBack: (data) => set({ numberBack: data }),
+    // numberBack: 0,
+    // updateNumberBack: (data) => set({ numberBack: data }),
 
     // optionsHistory : [],
     // addHistory : (history) => set({ optionsHistory: [...get().optionsHistory, history] }),

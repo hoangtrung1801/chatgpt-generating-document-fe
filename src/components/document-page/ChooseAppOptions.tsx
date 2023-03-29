@@ -1,7 +1,19 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { Box, Button, Heading, HStack, Stack, Text } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    FormControl,
+    FormLabel,
+    Heading,
+    HStack,
+    Input,
+    Stack,
+    Text,
+    Textarea,
+} from "@chakra-ui/react";
 import useGetQuestions from "lib/hooks/useGetQuestions";
 import { useEffect, useState } from "react";
+import useConfirmStore from "stores/useCofirmOptions";
 import useSelectionStore from "stores/useSelectionStore";
 import BlockChooseQuestion from "./BlockChooseQuestion";
 import ChooseAppCategory from "./ChooseAppCategory";
@@ -85,16 +97,21 @@ const questions = [
     },
 ];
 
-const ChooseAppOptions = ({ onSubmit }: any) => {
+const ChooseAppOptions = ({
+    onSubmit,
+    setOutStep,
+    shortDescriptionApp,
+}: any) => {
     const [noStep, setNoStep] = useState(0);
 
     const category = useSelectionStore((state) => state.category);
     const options = useSelectionStore((state) => state.options);
-    const updateNumberBack = useSelectionStore((state) => state.numberBack);
-    const removeBackOptions = useSelectionStore(
-        (state) => state.removeBackOptions
-    );
-    // const optionsHistory = useSelectionStore((state) => state.optionsHistory);
+    // const updateNumberBack = useSelectionStore((state) => state.numberBack);
+    // const removeBackOptions = useSelectionStore(
+    //     (state) => state.removeBackOptions
+    // );
+
+    const { clearOptions, confirmOptions } = useConfirmStore();
 
     const { questions, isLoading: questionsIsLoading } = useGetQuestions(
         category as number
@@ -105,15 +122,16 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
     };
 
     const prevStep = () => {
-        removeBackOptions(updateNumberBack);
+        // removeBackOptions(updateNumberBack);
         if (noStep - 1 >= 0) {
             setNoStep(noStep - 1);
         }
     };
+    // useEffect(() => {
+    //     console.log("category : ", category);
+    //     clearOptions();
 
-    useEffect(() => {
-        console.log("options", options);
-    }, [options]);
+    // }, [category, clearOptions]);
 
     return (
         <Box>
@@ -132,19 +150,28 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
                 )}
 
                 {noStep <= questions.length && (
-                    <Stack
-                        padding="4px 16px"
-                        bg="blackAlpha.300"
-                        borderRadius={12}
-                    >
-                        <Text>
-                            Step {noStep} of {questions.length}
-                        </Text>
-                    </Stack>
+                    <Box>
+                        {noStep > 0 && (
+                            <Stack
+                                padding="4px 16px"
+                                bg="blackAlpha.300"
+                                borderRadius={12}
+                            >
+                                <Text>
+                                    Step {noStep} of {questions.length}
+                                </Text>
+                            </Stack>
+                        )}
+                    </Box>
                 )}
             </HStack>
 
-            {noStep === 0 && <ChooseAppCategory nextStep={nextStep} />}
+            {noStep === 0 && (
+                <ChooseAppCategory
+                    nextStep={nextStep}
+                    setOutStep={setOutStep}
+                />
+            )}
             {!questionsIsLoading && noStep !== 0 && (
                 <Box>
                     {questions.map((question: any, id: number) => (
@@ -161,7 +188,43 @@ const ChooseAppOptions = ({ onSubmit }: any) => {
                 </Box>
             )}
             {!questionsIsLoading && noStep > questions.length && (
-                <Box w="full" textAlign={"center"} mt={24}>
+                <Box display="flex" flexDirection="column" w="full" gap={10}>
+                    <Heading>Confirm your selection</Heading>
+                    <FormControl>
+                        <FormLabel>Application name</FormLabel>
+                        <Input
+                            disabled
+                            defaultValue={shortDescriptionApp.name}
+                            bg="white"
+                        />
+                        <FormLabel>Description</FormLabel>
+                        <Textarea
+                            defaultValue={shortDescriptionApp.description}
+                            disabled
+                            minHeight="200px"
+                            bg="white"
+                        />
+                    </FormControl>
+                    <Box>
+                        {confirmOptions.map((answer: any, index: number) => {
+                            const question: any = questions.find(
+                                (item: any) => item.id === answer.question_id
+                            );
+                            return (
+                                <Box key={answer.question_id}>
+                                    <Text>
+                                        {index + 1}. {question?.name}
+                                    </Text>
+                                    <Text>
+                                        answer:{" "}
+                                        {answer.answers.length === 1
+                                            ? answer.answers[0]
+                                            : answer.answers.join(" && ")}
+                                    </Text>
+                                </Box>
+                            );
+                        })}
+                    </Box>
                     <Button
                         type="submit"
                         onSubmit={onSubmit}
