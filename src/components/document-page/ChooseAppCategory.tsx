@@ -45,13 +45,21 @@ const ChooseAppCategory = ({ nextStep, setOutStep }: any) => {
             <Heading>Choose application</Heading>
             <Box mt={4}>
                 {isLoading ? (
-                    <Button
-                        isLoading
-                        loadingText="Loading"
-                        colorScheme="teal"
-                        variant="outline"
-                        spinnerPlacement="end"
-                    ></Button>
+                    <Box
+                        w="100%"
+                        h="60vh"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Button
+                            isLoading
+                            loadingText="Loading"
+                            colorScheme="blue"
+                            variant="outline"
+                            spinnerPlacement="end"
+                        ></Button>
+                    </Box>
                 ) : (
                     <SimpleGrid columns={3} spacing={4}>
                         {categories.map((category: any) => (

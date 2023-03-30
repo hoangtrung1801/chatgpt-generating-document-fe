@@ -4,7 +4,9 @@ const API_URL = `${BE_URL}/selections`;
 
 export default async function createSelection(
     categoryId: number,
-    selectedOptions: (number | undefined)[]
+    selectedOptions: (number | undefined)[],
+    title: string,
+    description: string
 ) {
     const response = await fetch(API_URL, {
         method: "POST",
@@ -15,6 +17,8 @@ export default async function createSelection(
         body: JSON.stringify({
             categoryId,
             selectedOptions,
+            title,
+            description,
         }),
     });
     const data = await response.json();

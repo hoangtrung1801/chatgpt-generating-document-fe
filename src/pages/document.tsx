@@ -85,7 +85,12 @@ const Document: NextPage = () => {
         console.log("result : ", result);
         const { category } = values;
         if (result) {
-            createSelection(category.id, result)
+            createSelection(
+                category.id,
+                result,
+                shortDescriptionApp.name,
+                shortDescriptionApp.description
+            )
                 .then((selectionData) => {
                     console.log("selectionData", selectionData);
                     const selectionId = selectionData.data.id;
@@ -94,7 +99,7 @@ const Document: NextPage = () => {
                         (answerData) => {
                             console.log(answerData);
                             setResult(answerData.data.answer);
-                            router.push("/result", {});
+                            router.push("/result");
                             alert("successfull");
                         }
                     );
@@ -106,7 +111,17 @@ const Document: NextPage = () => {
     };
 
     return (
-        <Box minHeight="70vh" w="full" bg="blue.100" p={8}>
+        <Box
+            margin="50px auto"
+            maxWidth={"container.xl"}
+            transition="0.5s ease-out"
+            minHeight="70vh"
+            w="full"
+            // minHeight="70vh"
+            // w="full"
+            bg="blue.100"
+            p={8}
+        >
             {outStep === 0 ? (
                 <TypeShortDescriptionApp
                     isTyped={isTyped}
@@ -136,7 +151,9 @@ const Document: NextPage = () => {
                     ) : (
                         <FormProvider {...methods}>
                             {outStep < 3 && (
-                                <Button onClick={prevOutStep}>Back</Button>
+                                <Button size={"lg"} onClick={prevOutStep}>
+                                    Back
+                                </Button>
                             )}
 
                             <form onSubmit={handleSubmit(onSubmit)}>

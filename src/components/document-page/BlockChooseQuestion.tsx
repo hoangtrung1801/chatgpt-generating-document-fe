@@ -1,4 +1,8 @@
 import {
+    Alert,
+    AlertDescription,
+    AlertIcon,
+    AlertTitle,
     Box,
     Button,
     Checkbox,
@@ -24,6 +28,7 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
 
     const [optionValues, setOptionValues] = useState([]);
     const [currentOption, setCurrentOption] = useState({});
+    const [isSelected, setIsSelected] = useState(true);
 
     const { question, isLoading: questionIsLoading } =
         useGetQuestion(questionId);
@@ -35,23 +40,36 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
 
     const onSave = () => {
         // numberBack(optionValues.length);
-        addconfirmOption(currentOption);
+        if (Object.keys(currentOption).length > 0) {
+            addconfirmOption(currentOption);
+            setIsSelected(true);
+            nextStep();
+        } else {
+            setIsSelected(false);
+        }
         // addOptions([...optionValues]);
-        nextStep();
     };
 
     return (
         <Box>
             {questionIsLoading ? (
-                <Button
-                    isLoading
-                    loadingText="Loading"
-                    colorScheme="teal"
-                    variant="outline"
-                    spinnerPlacement="end"
-                ></Button>
+                <Box
+                    w="100%"
+                    h="60vh"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Button
+                        isLoading
+                        loadingText="Loading"
+                        colorScheme="blue"
+                        variant="outline"
+                        spinnerPlacement="end"
+                    ></Button>
+                </Box>
             ) : (
-                <VStack spacing={6}>
+                <VStack spacing={16}>
                     <Heading>{question.name}</Heading>
                     <Box>
                         {!questionIsLoading && question.type === "single" && (
@@ -80,6 +98,14 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
                         <Button colorScheme={"blue"} onClick={onSave}>
                             Save & continue
                         </Button>
+                    </Box>
+                    <Box alignItems="flex-end" justifyContent="center" flex={1}>
+                        <Alert hidden={isSelected} status="error">
+                            <AlertIcon />
+                            <AlertDescription>
+                                Please select some options
+                            </AlertDescription>
+                        </Alert>
                     </Box>
                 </VStack>
             )}

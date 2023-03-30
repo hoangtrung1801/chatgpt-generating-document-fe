@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
 export interface ResultStoreState {
-    result: string | undefined;
+    result: string;
     setResult: (result: string) => void;
 }
 
 const useResultStore = create<ResultStoreState>((set, get) => ({
-    result: undefined,
+    result: "",
     setResult: (result) => set({ result }),
 }));
 export default useResultStore;

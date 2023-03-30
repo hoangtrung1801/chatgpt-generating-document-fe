@@ -8,10 +8,12 @@ import {
     Button,
     HStack,
 } from "@chakra-ui/react";
+import useBriefs from "lib/hooks/useGetBriefs";
 import UseGetUser from "lib/hooks/useGetUser";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
+import useUSerStoreState from "stores/useUserInfo";
 
 const documentList = [
     {
@@ -26,11 +28,21 @@ const documentList = [
 ];
 const HomePage: NextPage = () => {
     const router = useRouter();
-    // const { user, isLoading, error } = UseGetUser(4);
-    const isLoading = false;
-    const user = {
-        name: "titus",
-    };
+    const { user, isLoading, error } = UseGetUser(2);
+    const { setSelectionID } = useUSerStoreState();
+    useEffect(() => {
+        if (!isLoading) {
+            const selections = user.selections.map(
+                (item: any, index: any) => item.id
+            );
+            setSelectionID(selections);
+        }
+    }, [isLoading, setSelectionID, user]);
+
+    // const isLoading = false;
+    // const user = {
+    //     name: "titus",
+    // };
     return (
         <Box
             margin="50px auto"
@@ -38,7 +50,7 @@ const HomePage: NextPage = () => {
             transition="0.5s ease-out"
             minHeight="70vh"
             w="full"
-            bg="blue.100"
+            // bg="blue.100"
             p={8}
         >
             {isLoading ? (
