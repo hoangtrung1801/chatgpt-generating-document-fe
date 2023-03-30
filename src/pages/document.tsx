@@ -115,7 +115,7 @@ const Document: NextPage = () => {
             margin="50px auto"
             maxWidth={"container.xl"}
             transition="0.5s ease-out"
-            minHeight="70vh"
+            minHeight="80vh"
             w="full"
             // minHeight="70vh"
             // w="full"
@@ -151,7 +151,7 @@ const Document: NextPage = () => {
                     ) : (
                         <FormProvider {...methods}>
                             {outStep < 3 && (
-                                <Button size={"lg"} onClick={prevOutStep}>
+                                <Button size={"lg"} mb="20px" onClick={prevOutStep}>
                                     Back
                                 </Button>
                             )}

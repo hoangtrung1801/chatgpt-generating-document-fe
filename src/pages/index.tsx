@@ -71,8 +71,10 @@ const HomePage: NextPage = () => {
                 </Box>
             ) : (
                 <Flex flexDirection="column" gap={10}>
-                    <Heading>Welcome to CodeDocAI</Heading>
-                    <Text fontWeight="bold">
+                    <Text fontWeight="bold" fontSize="40px">
+                        Welcome to CodeDocAI
+                    </Text>
+                    <Text fontSize="20px" fontWeight="bold">
                         Hi, {user.name}! Which function you want to use below?
                     </Text>
                     <HStack gap={8}>

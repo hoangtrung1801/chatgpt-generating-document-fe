@@ -2,9 +2,9 @@ import { Center, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 
 const ChooseDocumentType = ({ setDocumentType, setOutStep }: any) => {
     return (
-        <Flex direction={"column"} alignItems="center" textAlign={"center"}>
+        <Flex direction={"column"} gap={4} alignItems="center" textAlign={"center"}>
             <Heading>Which kind of app do you want to build?</Heading>
-            <HStack mt={4} gap={10}>
+            <HStack mt={4} gap={16}>
                 <Center
                     w={400}
                     h={400}
