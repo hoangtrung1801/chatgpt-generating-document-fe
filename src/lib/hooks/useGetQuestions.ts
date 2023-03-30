@@ -3,11 +3,16 @@ import useSwr, { SWRResponse } from "swr";
 
 const API_URL = `${BE_URL}/questions`;
 
-const useGetQuestions = () => {
+const useGetQuestions = (categoryId: number) => {
     const { data, error }: SWRResponse = useSwr(API_URL);
 
     return {
-        questions: data !== undefined ? data.data : [],
+        questions:
+            data !== undefined
+                ? data.data.filter(
+                      (question: any) => question.categoryId === categoryId
+                  )
+                : [],
         isLoading: !error && !data,
         // isLoading: true,
         error: error,

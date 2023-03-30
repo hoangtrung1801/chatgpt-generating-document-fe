@@ -185,41 +185,45 @@ function resulttest() {
                     </TabList>
                     <TabPanels>
                         <TabPanel>
-                            {/* <TableContainer overflowX="hidden"> */}
-                            <Table variant="simple">
-                                {/* <TableCaption>
+                            {/* <TableContainer overflowWrap="normal"> */}
+                                <Table variant="simple">
+                                    {/* <TableCaption>
                                         Imperial to metric conversion factors
                                     </TableCaption> */}
-                                <Thead>
-                                    <Tr h="100px">
-                                        <Th fontSize="medium">Order</Th>
-                                        <Th fontSize="medium">ID</Th>
-                                        <Th fontSize="medium">TODO</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {fetchData.map((item) => (
-                                        <Tr key={item.ID}>
-                                            <Td minW="150px">{item.Order}</Td>
-                                            <Td minW="150px">{item.ID}</Td>
-                                            <Td>
-                                                <Radio
-                                                    size="lg"
-                                                    value={item.Todo}
-                                                    colorScheme="blue"
-                                                >
-                                                    <Text
-                                                        ml="10px"
-                                                        lineHeight="30px"
-                                                    >
-                                                        {item.Todo}
-                                                    </Text>
-                                                </Radio>
-                                            </Td>
+                                    <Thead>
+                                        <Tr h="100px">
+                                            <Th fontSize="medium">Order</Th>
+                                            <Th fontSize="medium">ID</Th>
+                                            <Th fontSize="medium">TODO</Th>
                                         </Tr>
-                                    ))}
-                                </Tbody>
-                            </Table>
+                                    </Thead>
+                                    <Tbody>
+                                        {fetchData.map((item) => (
+                                            <Tr key={item.ID}>
+                                                <Td minW="150px">
+                                                    {item.Order}
+                                                </Td>
+                                                <Td minW="150px">{item.ID}</Td>
+                                                <Td>
+                                                    <Radio
+                                                        size="lg"
+                                                        value={item.Todo}
+                                                        colorScheme="blue"
+                                                   >
+                                                        <Text
+                                                            
+                                                            noOfLines={1}
+                                                            ml="10px"
+                                                            lineHeight="30px"
+                                                        >
+                                                            {item.Todo}
+                                                        </Text>
+                                                    </Radio>
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                    </Tbody>
+                                </Table>
                             {/* </TableContainer> */}
                         </TabPanel>
                         <TabPanel>
