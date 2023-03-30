@@ -32,7 +32,15 @@ const HomePage: NextPage = () => {
         name: "titus",
     };
     return (
-        <Box>
+        <Box
+            margin="50px auto"
+            maxWidth={"container.xl"}
+            transition="0.5s ease-out"
+            minHeight="70vh"
+            w="full"
+            bg="blue.100"
+            p={8}
+        >
             {isLoading ? (
                 <Box
                     w="100%"
