@@ -103,11 +103,12 @@ const Document: NextPage = () => {
             transition="0.5s ease-out"
             minHeight="80vh"
             w="full"
+            bg="#eaeaf1"
             // minHeight="70vh"
             // w="full"
             // bg="blue.100"
             // bg={outStep > 1 ? "#f8f8fb" : "blue.100"}
-            bg="#f8f8fb"
+            // bg="#f8f8fb"
             p={8}
         >
             {outStep === 0 ? (

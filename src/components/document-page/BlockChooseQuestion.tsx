@@ -285,6 +285,7 @@ const YesNoOption = ({
                                     )
                                     .map((option: any) => (
                                         <Checkbox
+                                            borderColor="blue.400"
                                             size="lg"
                                             key={option.name}
                                             value={option.name}
@@ -307,6 +308,7 @@ const YesNoOption = ({
                                     )
                                     .map((option: any) => (
                                         <Checkbox
+                                            borderColor="blue.400"
                                             size="lg"
                                             key={option.name}
                                             value={option.name}

@@ -278,7 +278,12 @@ const ChooseAppOptions = ({
                             );
                         })}
                     </Box>
-                    <Text fontWeight="bold" textAlign="center" color="blue.400">
+                    <Text
+                        fontWeight="bold"
+                        textAlign="center"
+                        fontSize="18px"
+                        color="blue.400"
+                    >
                         After this step, I will give you the result!
                     </Text>
                     <Button

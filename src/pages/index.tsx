@@ -66,6 +66,7 @@ const HomePage: NextPage = () => {
             transition="0.5s ease-out"
             minHeight="70vh"
             w="full"
+            // bg="#eaeaf1"
             // bg="blue.100"
             bg="#f8f8fb"
             p={8}
