@@ -15,6 +15,7 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
+import Loading from "components/Loading";
 import WrapperRadio from "components/WrapperRadio";
 import useGetQuestion from "lib/hooks/useGetQuestion";
 import { useEffect, useState } from "react";
@@ -27,7 +28,11 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
     // const numberBack = useSelectionStore((state) => state.updateNumberBack);
 
     const [optionValues, setOptionValues] = useState([]);
-    const [currentOption, setCurrentOption] = useState({});
+    const [currentOption, setCurrentOption] = useState({
+        question_id: "",
+        answers: [],
+        option_id: [],
+    });
     const [isSelected, setIsSelected] = useState(true);
 
     const { question, isLoading: questionIsLoading } =
@@ -40,7 +45,7 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
 
     const onSave = () => {
         // numberBack(optionValues.length);
-        if (Object.keys(currentOption).length > 0) {
+        if (currentOption.answers.length > 0) {
             addconfirmOption(currentOption);
             setIsSelected(true);
             nextStep();
@@ -53,21 +58,7 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
     return (
         <Box>
             {questionIsLoading ? (
-                <Box
-                    w="100%"
-                    h="60vh"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                >
-                    <Button
-                        isLoading
-                        loadingText="Loading"
-                        colorScheme="blue"
-                        variant="outline"
-                        spinnerPlacement="end"
-                    ></Button>
-                </Box>
+                <Loading />
             ) : (
                 <VStack spacing={16}>
                     <Heading>{question.name}</Heading>
@@ -99,8 +90,12 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
                             Save & continue
                         </Button>
                     </Box>
-                    <Box alignItems="flex-end" justifyContent="center" flex={1}>
-                        <Alert hidden={isSelected} status="error">
+                    <Box justifyContent="center" flex={1}>
+                        <Alert
+                            rounded="full"
+                            hidden={isSelected}
+                            status="error"
+                        >
                             <AlertIcon />
                             <AlertDescription>
                                 Please select some options
@@ -121,7 +116,6 @@ const SingleOption = ({
     question_id,
     currentOption,
 }: any) => {
-    // console.log(optionValues[0]);
     const onChange = (value: any) => {
         setCurrentOption({
             question_id: question_id,
@@ -136,7 +130,7 @@ const SingleOption = ({
     };
 
     return (
-        <Box>
+        <Box mt={10}>
             <RadioGroup
                 onChange={onChange}
                 value={
@@ -147,8 +141,30 @@ const SingleOption = ({
             >
                 <Stack direction={"row"} spacing={12}>
                     {options.map((option: any) => (
-                        <WrapperRadio key={option.name}>
-                            <Radio value={option.name} colorScheme="blue">
+                        <WrapperRadio
+                            transition="ease-all 2s"
+                            borderColor={
+                                currentOption.option_id.length > 0 &&
+                                currentOption.option_id[0] === option.id
+                                    ? "blue.600"
+                                    : ""
+                            }
+                            bg={
+                                currentOption.option_id.length > 0 &&
+                                currentOption.option_id[0] === option.id
+                                    ? "blue.200"
+                                    : ""
+                            }
+                            p={10}
+                            key={option.name}
+                        >
+                            <Radio
+                                _checked={{ bg: "blue.300" }}
+                                transition="ease-in-out .5s"
+                                size="lg"
+                                value={option.name}
+                                colorScheme="blue"
+                            >
                                 {option.name}
                             </Radio>
                         </WrapperRadio>
@@ -167,7 +183,8 @@ const YesNoOption = ({
     question_id,
     currentOption,
 }: any) => {
-    const [isYes, setIsYes] = useState(false);
+    const [isYes, setIsYes] = useState<any>();
+    const [isChecked, setIsChecked] = useState();
 
     const onChange = (values: any[]) => {
         setCurrentOption({
@@ -190,24 +207,44 @@ const YesNoOption = ({
         <Stack w="full">
             <RadioGroup>
                 <Stack direction={"row"} spacing={12}>
-                    <WrapperRadio>
+                    <WrapperRadio
+                        fontWeight="bold"
+                        _hover={{ bg: "blue.100" }}
+                        borderColor={isYes && "blue.600"}
+                        bg={isYes && "blue.200"}
+                        minW={300}
+                        p={10}
+                    >
                         <Radio
+                            size="lg"
                             value={"yes"}
                             colorScheme="blue"
                             isChecked={isYes}
-                            onChange={() => setIsYes(true)}
+                            onChange={() => {
+                                setIsYes(true);
+                                // setIsChecked(1);
+                            }}
                         >
                             Yes
                         </Radio>
                     </WrapperRadio>
-                    <WrapperRadio>
+                    <WrapperRadio
+                        fontWeight="bold"
+                        minW={300}
+                        p={10}
+                        borderColor={isYes === false && "blue.600"}
+                        bg={isYes === false && "blue.200"}
+                    >
                         <Radio
+                            size="lg"
                             value={"no"}
                             colorScheme="blue"
                             isChecked={!isYes}
                             // defaultChecked={isYes}
+
                             onChange={() => {
                                 setIsYes(false);
+                                // setIsChecked(0);
                                 setCurrentOption({
                                     question_id: question_id,
                                     answers: ["No"],
@@ -222,7 +259,9 @@ const YesNoOption = ({
             {isYes && (
                 <SimpleGrid columns={2} spacingY={4} mt={4}>
                     <Box>
-                        <Text>Please choose required features below:</Text>
+                        <Text my="10px" fontSize="20px">
+                            Please choose required features below:
+                        </Text>
                     </Box>
                     <Box></Box>
                     <CheckboxGroup
@@ -235,7 +274,9 @@ const YesNoOption = ({
                         )}
                     >
                         <Box>
-                            <Text fontWeight={"bold"}>Enough</Text>
+                            <Text mb="10px" fontSize="18px" fontWeight={"bold"}>
+                                Enough
+                            </Text>
                             <Stack>
                                 {options
                                     .filter(
@@ -244,6 +285,7 @@ const YesNoOption = ({
                                     )
                                     .map((option: any) => (
                                         <Checkbox
+                                            size="lg"
                                             key={option.name}
                                             value={option.name}
                                         >
@@ -254,7 +296,9 @@ const YesNoOption = ({
                         </Box>
 
                         <Box>
-                            <Text fontWeight={"bold"}>Additional</Text>
+                            <Text mb="10px" fontSize="18px" fontWeight={"bold"}>
+                                Additional
+                            </Text>
                             <Stack>
                                 {options
                                     .filter(
@@ -263,6 +307,7 @@ const YesNoOption = ({
                                     )
                                     .map((option: any) => (
                                         <Checkbox
+                                            size="lg"
                                             key={option.name}
                                             value={option.name}
                                         >

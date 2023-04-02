@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Spinner, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 
 type Props = {
@@ -13,13 +13,19 @@ function Loading() {
             justifyContent="center"
             alignItems="center"
         >
-            <Button
-                isLoading
-                loadingText="Loading"
-                colorScheme="teal"
-                variant="outlined"
-                spinnerPlacement="end"
-            ></Button>
+            <VStack gap={6}>
+                <Spinner
+                    thickness="4px"
+                    speed="0.65s"
+                    emptyColor="gray.200"
+                    color="blue.500"
+                    size="xl"
+                />
+                <Text textAlign="center" maxW="600px" fontSize="xl">
+                    One moment, please. The feature list of Application you have
+                    selected is being created
+                </Text>
+            </VStack>
         </Box>
     );
 }

@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
 export interface ResultStoreState {
-    result: string;
-    setResult: (result: string) => void;
+    result: object;
+    setResult: (result: object) => void;
 }
 
 const useResultStore = create<ResultStoreState>((set, get) => ({
-    result: "",
+    result: {},
     setResult: (result) => set({ result }),
 }));
 export default useResultStore;

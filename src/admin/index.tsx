@@ -1,4 +1,10 @@
-import { Admin, EditGuesser, Resource, ShowGuesser, ListGuesser } from "react-admin";
+import {
+    Admin,
+    EditGuesser,
+    Resource,
+    ShowGuesser,
+    ListGuesser,
+} from "react-admin";
 // import "./App.css";
 import {
     CategoryCreate,
@@ -25,7 +31,7 @@ function AdminPage() {
             <Resource
                 name="categories"
                 list={CategoryList}
-                edit={EditGuesser}
+                edit={CategoryEdit}
                 create={CategoryCreate}
                 show={ShowGuesser}
                 recordRepresentation="name"

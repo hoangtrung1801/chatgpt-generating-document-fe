@@ -36,39 +36,11 @@ import React, { Fragment, useEffect, useState } from "react";
 import useGetUser from "lib/hooks/useGetUser";
 import useUSerStoreState from "stores/useUserInfo";
 import useBriefs from "lib/hooks/useGetBriefs";
-const fetchData = [
-    {
-        ID: "ID-1234",
-        Order: 1,
-        Todo: "orem Ipsum is simply sss sdsdsa dummy text of the printing and typesetting industry.",
-    },
-    {
-        ID: "ID-1222",
-        Order: 1,
-        Todo: "orem Ipsum is simply sss sdsdsa dummy text of the printing and typesetting industry.",
-    },
-    {
-        ID: "ID-2334",
-        Order: 2,
-        Todo: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-    },
-    {
-        ID: "ID-5845",
-        Order: 3,
-        Todo: "when an unknown printer took a galley  It has survived not only five centuries,",
-    },
-    {
-        ID: "ID-5843",
-        Order: 4,
-        Todo: "Letraset sheets containing Lorem Ipsum pageMaker including versions of Lorem Ipsum sheets containing Lorem Ipsum sheets containing Lorem Ipsum.",
-    },
-    {
-        ID: "ID-5823",
-        Order: 5,
-        Todo: "Letraset sheets containing Lorem Ipsum pageMaker including versions of Lorem Ipsum sheets containing Lorem Ipsum sheets containing Lorem Ipsum.",
-    },
-];
-
+import ReactMarkdown from "react-markdown";
+import Loading from "components/Loading";
+import useResultStore from "stores/useResultStore";
+import Testing1 from "components/result/TodosTab";
+import TodosTab from "components/result/TodosTab";
 const TabLeftTitle = [
     {
         content: "Documents",
@@ -97,7 +69,7 @@ const TabTopTitle = [
         content: "Vision and Goals",
     },
     {
-        content: "To do of the day",
+        content: "Todos",
     },
     {
         content: "Project Roadmap",
@@ -110,26 +82,35 @@ const TabTopTitle = [
 function Result() {
     const [isActive, setIsActive] = useState(0);
     const { selectionID } = useUSerStoreState();
-    const { briefs, isLoading } = useBriefs();
-    const [yourBiefs, setYourBriefs] = useState([]);
+    const { briefs, isLoading } = useBriefs(); // all
+    const [yourBiefs, setYourBriefs] = useState<any[]>([]);
+    const result = useResultStore((state) => state.result);
+    // const { user, isLoading : userLoading, error } = UseGetUser(2);
 
     useEffect(() => {
         if (!isLoading) {
             const filteredBriefs = briefs.filter((brief: any) =>
                 selectionID.includes(brief.selectionId)
             );
-            setYourBriefs(filteredBriefs);
-            // console.log("filteredBriefs : ", filteredBriefs);
+            // setYourBriefs(filteredBriefs);
+            if (Object.keys(result).length > 0) {
+                console.log("result : ", result);
+                setYourBriefs([...filteredBriefs, result]);
+            } else {
+                setYourBriefs(filteredBriefs);
+            }
+            console.log("filteredBriefs : ", filteredBriefs);
         }
-    }, [briefs, isLoading, selectionID]);
+    }, [briefs, isLoading, result, selectionID]);
+    // console.log("yourBiefs : ", yourBiefs);
 
     return (
-        <Flex minH="100vh">
+        <Flex h="100vh">
             {/* column 1 */}
             <Flex
-                bg={"blackAlpha.700"}
+                bg="#090c10"
                 color="white"
-                minW="400px"
+                minW="350px"
                 gap={5}
                 px={5}
                 flexDir="column"
@@ -148,7 +129,7 @@ function Result() {
                     </Text>
                 </VStack>
                 <Flex gap={3} flexDirection="column">
-                    {TabLeftTitle.map((item, index) => (
+                    {TabLeftTitle.map((item, _index) => (
                         <Box
                             display="flex"
                             gap="10px"
@@ -156,16 +137,16 @@ function Result() {
                             cursor="pointer"
                             key={item.content}
                             bg={
-                                isActive === index
-                                    ? "blackAlpha.400"
+                                isActive === _index
+                                    ? "whiteAlpha.200"
                                     : "transparent"
                             }
                             _hover={{
-                                bg: "blackAlpha.400",
+                                bg: "whiteAlpha.200",
                             }}
                             p={4}
                             rounded="lg"
-                            onClick={() => setIsActive(index)}
+                            onClick={() => setIsActive(_index)}
                         >
                             <Icon w="19px" h="19px" as={item.icon} />
                             <Text>{item.content}</Text>
@@ -174,7 +155,16 @@ function Result() {
                 </Flex>
             </Flex>
             {/* column 2 */}
-            <Flex p="0 30px" gap={5} flex={1} flexDirection="column">
+            <Flex
+                bg="#1a202c"
+                color="white"
+                h="100vh"
+                overflow="auto"
+                p="0 30px"
+                gap={5}
+                flex={1}
+                flexDirection="column"
+            >
                 <Box
                     display="flex"
                     justifyContent="space-between"
@@ -183,9 +173,8 @@ function Result() {
                     <Heading mt="20px" as="h1" size="5xl" noOfLines={1}>
                         Overview
                     </Heading>
-                    <ThemeToggle />
+                    {/* <ThemeToggle /> */}
                 </Box>
-
                 <Tabs isFitted variant="soft-rounded">
                     <TabList>
                         {TabTopTitle.map((title) => (
@@ -204,15 +193,27 @@ function Result() {
                     <TabPanels>
                         <TabPanel>
                             {/* <TableContainer overflowWrap="normal"> */}
-                            <Table variant="simple">
+                            <Table
+                                style={{
+                                    borderCollapse: "separate",
+                                    borderSpacing: "0 1em",
+                                }}
+                                variant="simple"
+                            >
                                 {/* <TableCaption>
                                         Imperial to metric conversion factors
                                     </TableCaption> */}
                                 <Thead>
                                     <Tr h="100px">
-                                        <Th fontSize="medium">Order</Th>
-                                        <Th fontSize="medium">ID</Th>
-                                        <Th fontSize="medium">TODO</Th>
+                                        <Th color="white" fontSize="medium">
+                                            Order
+                                        </Th>
+                                        <Th color="white" fontSize="medium">
+                                            ID
+                                        </Th>
+                                        <Th color="white" fontSize="medium">
+                                            TODO
+                                        </Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
@@ -229,34 +230,21 @@ function Result() {
                                     ) : (
                                         <Fragment>
                                             {yourBiefs.map(
-                                                (brief: any, index: number) => (
+                                                (
+                                                    brief: any,
+                                                    _index: number
+                                                ) => (
                                                     <Tr key={brief.id}>
                                                         <Td minW="150px">
-                                                            {index + 1}
+                                                            {_index + 1}
                                                         </Td>
                                                         <Td minW="150px">
                                                             {brief.id}
                                                         </Td>
                                                         <Td>
-                                                            <Radio
-                                                                size="lg"
-                                                                value={
-                                                                    brief.answer
-                                                                }
-                                                                colorScheme="blue"
-                                                            >
-                                                                <Text
-                                                                    noOfLines={
-                                                                        1
-                                                                    }
-                                                                    ml="10px"
-                                                                    lineHeight="30px"
-                                                                >
-                                                                    {
-                                                                        brief.answer
-                                                                    }
-                                                                </Text>
-                                                            </Radio>
+                                                            <ReactMarkdown className="markdown">
+                                                                {brief.answer}
+                                                            </ReactMarkdown>
                                                         </Td>
                                                     </Tr>
                                                 )
@@ -268,7 +256,7 @@ function Result() {
                             {/* </TableContainer> */}
                         </TabPanel>
                         <TabPanel>
-                            <p>one!</p>
+                            <TodosTab />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

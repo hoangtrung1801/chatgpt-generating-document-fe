@@ -1,4 +1,8 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import {
+    ArrowBackIcon,
+    ArrowForwardIcon,
+    TriangleDownIcon,
+} from "@chakra-ui/icons";
 import {
     Box,
     Button,
@@ -7,6 +11,7 @@ import {
     Heading,
     HStack,
     Input,
+    Progress,
     Stack,
     Text,
     Textarea,
@@ -144,12 +149,18 @@ const ChooseAppOptions = ({
                         cursor={"pointer"}
                         onClick={prevStep}
                     >
-                        <ArrowBackIcon />
-                        <Text>Back</Text>
+                        <Button
+                            colorScheme="blue"
+                            leftIcon={<ArrowBackIcon />}
+                            size={"lg"}
+                            mb="20px"
+                        >
+                            Back
+                        </Button>
                     </Stack>
                 )}
 
-                {noStep <= questions.length && (
+                {/* {noStep <= questions.length && (
                     <Box>
                         {noStep > 0 && (
                             <Stack
@@ -163,7 +174,7 @@ const ChooseAppOptions = ({
                             </Stack>
                         )}
                     </Box>
-                )}
+                )} */}
             </HStack>
 
             {noStep === 0 && (
@@ -185,12 +196,27 @@ const ChooseAppOptions = ({
                             />
                         </Box>
                     ))}
+                    {noStep <= questions.length && (
+                        <Box>
+                            <Text fontSize="lg" mb={4} textAlign="center">
+                                Step {noStep} of {questions.length}
+                            </Text>
+                            <Progress
+                                hasStripe
+                                colorScheme="blue"
+                                size="sm"
+                                value={(noStep * 100) / questions.length}
+                            />
+                        </Box>
+                    )}
                 </Box>
             )}
             {!questionsIsLoading && noStep > questions.length && (
                 <Box display="flex" flexDirection="column" w="full" gap={10}>
-                    <Heading>Confirm your selection</Heading>
-                    <FormControl>
+                    <Text fontSize="3xl" fontWeight="bold" textAlign="center">
+                        Confirm your selection
+                    </Text>
+                    {/* <FormControl>
                         <FormLabel>Application name</FormLabel>
                         <Input
                             disabled
@@ -204,28 +230,59 @@ const ChooseAppOptions = ({
                             minHeight="200px"
                             bg="white"
                         />
-                    </FormControl>
+                    </FormControl> */}
                     <Box>
+                        <Box>
+                            <Text fontSize="xl" fontWeight="semibold">
+                                1. What is your description?
+                            </Text>
+                            <Box display="flex" alignItems="center" gap={2}>
+                                <ArrowForwardIcon
+                                    color="blue.500"
+                                    fontSize={22}
+                                />
+                                <Text fontSize="lg">
+                                    Building an app called
+                                    {shortDescriptionApp.name} and have
+                                    descriptive details like{" "}
+                                    {shortDescriptionApp.description}
+                                </Text>
+                            </Box>
+                        </Box>
+
                         {confirmOptions.map((answer: any, index: number) => {
                             const question: any = questions.find(
                                 (item: any) => item.id === answer.question_id
                             );
                             return (
-                                <Box key={answer.question_id}>
-                                    <Text>
-                                        {index + 1}. {question?.name}
+                                <Box mb={2} key={answer.question_id}>
+                                    <Text fontSize="xl" fontWeight="semibold">
+                                        {index + 2}. {question?.name}
                                     </Text>
-                                    <Text>
-                                        answer:{" "}
-                                        {answer.answers.length === 1
-                                            ? answer.answers[0]
-                                            : answer.answers.join(" && ")}
-                                    </Text>
+                                    <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        gap={2}
+                                    >
+                                        <ArrowForwardIcon
+                                            color="blue.500"
+                                            fontSize={22}
+                                        />
+                                        <Text fontSize="lg">
+                                            {answer.answers.length === 1
+                                                ? answer.answers[0]
+                                                : answer.answers.join(" && ")}
+                                        </Text>
+                                    </Box>
                                 </Box>
                             );
                         })}
                     </Box>
+                    <Text fontWeight="bold" textAlign="center" color="blue.400">
+                        After this step, I will give you the result!
+                    </Text>
                     <Button
+                        mt="auto"
                         type="submit"
                         onSubmit={onSubmit}
                         colorScheme="blue"

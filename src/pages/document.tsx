@@ -1,21 +1,4 @@
-import {
-    Alert,
-    AlertDescription,
-    AlertIcon,
-    AlertTitle,
-    Box,
-    Button,
-    Center,
-    Flex,
-    FormControl,
-    FormLabel,
-    Heading,
-    HStack,
-    Input,
-    Textarea,
-    Toast,
-    useToast,
-} from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import ChooseDocumentType from "components/document-page/ChooseDocumentType";
 import ChooseAppOptions from "components/document-page/ChooseAppOptions";
 import { NextPage } from "next";
@@ -23,11 +6,12 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import createSelection from "lib/api/createSelection";
-import useSelectionStore from "stores/useSelectionStore";
 import generateAnswerWithSelection from "lib/api/generateAnswerWithSelection";
 import useResultStore from "stores/useResultStore";
 import useConfirmStore from "stores/useCofirmOptions";
 import TypeShortDescriptionApp from "components/document-page/TypeShortDescriptionApp";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import Loading from "components/Loading";
 
 type shortDescription = {
     name: string;
@@ -76,14 +60,16 @@ const Document: NextPage = () => {
             setIsTyped(false);
         }
     };
+    console.log("outStep : ", outStep);
     const onSubmit = (values: any) => {
         console.log("confirmOptions : ", confirmOptions);
         const result = confirmOptions
             .flatMap((item) => item.option_id)
             .filter((option) => option !== undefined);
         setIsLoading(true);
-        console.log("result : ", result);
+        // console.log("result : ", result);
         const { category } = values;
+        // router.push("/result");
         if (result) {
             createSelection(
                 category.id,
@@ -98,7 +84,7 @@ const Document: NextPage = () => {
                     generateAnswerWithSelection(selectionId).then(
                         (answerData) => {
                             console.log(answerData);
-                            setResult(answerData.data.answer);
+                            setResult(answerData.data);
                             router.push("/result");
                             alert("successfull");
                         }
@@ -119,7 +105,9 @@ const Document: NextPage = () => {
             w="full"
             // minHeight="70vh"
             // w="full"
-            bg="blue.100"
+            // bg="blue.100"
+            // bg={outStep > 1 ? "#f8f8fb" : "blue.100"}
+            bg="#f8f8fb"
             p={8}
         >
             {outStep === 0 ? (
@@ -133,25 +121,17 @@ const Document: NextPage = () => {
             ) : (
                 <Box>
                     {isLoading ? (
-                        <Box
-                            w="100%"
-                            h="70vh"
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                        >
-                            <Button
-                                isLoading
-                                loadingText="Loading"
-                                colorScheme="teal"
-                                variant="outline"
-                                spinnerPlacement="end"
-                            ></Button>
-                        </Box>
+                        <Loading />
                     ) : (
                         <FormProvider {...methods}>
                             {outStep < 3 && (
-                                <Button size={"lg"} mb="20px" onClick={prevOutStep}>
+                                <Button
+                                    colorScheme="blue"
+                                    leftIcon={<ArrowBackIcon />}
+                                    size={"lg"}
+                                    mb="20px"
+                                    onClick={prevOutStep}
+                                >
                                     Back
                                 </Button>
                             )}

@@ -12,20 +12,9 @@ import {
     Icon,
     Image,
     Textarea,
-    Alert,
-    AlertIcon,
-    AlertTitle,
-    AlertDescription,
 } from "@chakra-ui/react";
-import React from "react";
 
-function TypeShortDescriptionApp({
-    shortDescriptionApp,
-    isTyped,
-    handleDescriptionChange,
-    handleNameChange,
-    handleSubmitDescription,
-}: any) {
+export default function JoinOurTeam() {
     return (
         <Box position={"relative"}>
             <Container
@@ -105,8 +94,6 @@ function TypeShortDescriptionApp({
                         <Stack spacing={10}>
                             <Input
                                 placeholder="Name"
-                                value={shortDescriptionApp.name}
-                                onChange={handleNameChange}
                                 bg={"gray.100"}
                                 border={0}
                                 color={"gray.500"}
@@ -115,8 +102,6 @@ function TypeShortDescriptionApp({
                                 }}
                             />
                             <Textarea
-                                value={shortDescriptionApp.description}
-                                onChange={handleDescriptionChange}
                                 minH={200}
                                 placeholder="Description"
                                 bg={"gray.100"}
@@ -128,7 +113,6 @@ function TypeShortDescriptionApp({
                             />
                         </Stack>
                         <Button
-                            onClick={handleSubmitDescription}
                             mt={8}
                             w={"full"}
                             bgGradient="linear(to-r, blue.400,blue.200)"
@@ -149,16 +133,10 @@ function TypeShortDescriptionApp({
                 left={0}
                 style={{ filter: "blur(70px)" }}
             />
-            <Alert hidden={isTyped} rounded="full" status="error">
-                <AlertIcon />
-                <AlertTitle>Missing some field!</AlertTitle>
-                <AlertDescription>
-                    Please enter a name and a description
-                </AlertDescription>
-            </Alert>
         </Box>
     );
 }
+
 export const Blur = (props: IconProps) => {
     return (
         <Icon
@@ -182,5 +160,3 @@ export const Blur = (props: IconProps) => {
         </Icon>
     );
 };
-
-export default TypeShortDescriptionApp;

@@ -3,10 +3,14 @@ import { Center } from "@chakra-ui/react";
 const WrapperRadio = ({ children, ...rest }: any) => {
     return (
         <Center
-            w={48}
-            h={12}
+            // w={48}
+            // h={12}
+            minW={300}
+            transition="ease-in-out .5s"
+            fontWeight="medium"
             border="1px"
-            borderRadius={12}
+            _hover={{ bg: "blue.100" }}
+            borderRadius={20}
             cursor="pointer"
             {...rest}
         >
