@@ -110,6 +110,12 @@ const fetchData2 = [
     },
     {
         id: 5,
+        type: "INPROCESS",
+        content:
+            "Caffè latte is a coffee beverage of Italian origin made with espresso and steamed milk.",
+    },
+    {
+        id: 5,
         type: "INPREVIEW",
         content: "Implement feedback collector.",
     },
@@ -133,23 +139,28 @@ const fetchData2 = [
 ];
 
 function TodosTab() {
-    // const { setTodos, todos } = useTodoStoreStore();
-    // const { setTodos, todos } = useTodoStoreStore();
-    // const { setTodos, todos } = useTodoStoreStore();
-    // const { setTodos, todos } = useTodoStoreStore();
-    const todoItems = fetchData2.filter((item) => item.type === "TODO");
-    const inProcessItems = fetchData2.filter(
-        (item) => item.type === "INPROCESS"
+    const { setTodos, todos } = useTodoStoreStore();
+    const todoItems = todos.filter((item) => item.status === "IN");
+    const inProcessItems = todos.filter(
+        (item) => item.status === "IN_PROGRESS"
     );
-    const inPreviewItems = fetchData2.filter(
-        (item) => item.type === "INPREVIEW"
-    );
-    // useEffect(() => {
-    //     setTodos(fetchData);
-    // }, [setTodos]);
+    const inPreviewItems = todos.filter((item) => item.status === "INPREVIEW");
+    const inDoneItems = todos.filter((item) => item.status === "DONE");
+    console.log("todos : ", todos);
+
     return (
         <Box display="flex" gap={4}>
-            {types.map((type) =>
+            <CardTodo data={todoItems} title={`TODOS ${todoItems.length}`} />
+            <CardTodo
+                data={inProcessItems}
+                title={`INPROCESS ${inProcessItems.length}`}
+            />
+            <CardTodo
+                data={inPreviewItems}
+                title={`INPREVIEW ${inPreviewItems.length}`}
+            />
+            <CardTodo data={inDoneItems} title={`DONE ${inDoneItems.length}`} />
+            {/* {types.map((type) =>
                 // eslint-disable-next-line react/jsx-key
                 fetchData2.map(
                     (data) =>
@@ -158,7 +169,7 @@ function TodosTab() {
                             <CardTodo title={type} data={data} />
                         )
                 )
-            )}
+            )} */}
         </Box>
     );
 }
