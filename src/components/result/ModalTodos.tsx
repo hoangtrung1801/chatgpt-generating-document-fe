@@ -1,8 +1,5 @@
 import {
-    Box,
     Button,
-    Checkbox,
-    CheckboxGroup,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -16,7 +13,9 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { updateUserStories } from "lib/api/userStories";
-import React, { useEffect, useState } from "react";
+import useUserStoriesOfSelection from "lib/hooks/useUserStoriesOfSelection";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import useTodoStoreStore from "stores/useTodosStore";
 
 type todo = {
@@ -26,6 +25,11 @@ type todo = {
     content?: string;
 };
 function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
+    const router = useRouter();
+    const documentId = Number(router.query.documentId);
+
+    const { mutate } = useUserStoriesOfSelection(documentId);
+
     const { setTodos, todos } = useTodoStoreStore();
     const [item, setItem] = useState();
     const onClose = () => {
@@ -44,6 +48,7 @@ function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
         updateUserStories(itemSelected.selectionId, itemSelected.id, item).then(
             (res) => {
                 console.log("res", res);
+                mutate();
             }
         );
     };

@@ -10,12 +10,13 @@ import {
     Link as ChakraLink,
     Stack,
     Text,
-    useColorModeValue,
+    useColorModeValue
 } from "@chakra-ui/react";
 import { login } from "lib/api/auth";
 import useCurrentUser, {
-    API_URL as useCurrentUserEndpoint,
+    API_URL as useCurrentUserEndpoint
 } from "lib/hooks/useCurrentUser";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
