@@ -1,44 +1,33 @@
 import {
+    AddIcon,
+    AttachmentIcon,
+    CalendarIcon,
+    EmailIcon,
+    HamburgerIcon,
+} from "@chakra-ui/icons";
+import {
     Box,
     Flex,
     Heading,
-    HStack,
-    Radio,
+    Icon,
     Tab,
     Table,
-    TableCaption,
-    TableContainer,
     TabList,
     TabPanel,
     TabPanels,
     Tabs,
     Tbody,
-    Td,
     Text,
-    Tfoot,
     Th,
     Thead,
     Tr,
-    Icon,
     VStack,
-    Button,
-    Center,
 } from "@chakra-ui/react";
-import {
-    HamburgerIcon,
-    AddIcon,
-    CalendarIcon,
-    EmailIcon,
-    AttachmentIcon,
-} from "@chakra-ui/icons";
-import ThemeToggle from "../lib/layout/ThemeToggle";
-import React, { Fragment, useEffect, useState } from "react";
-import useGetUser from "lib/hooks/useGetUser";
-import useUSerStoreState from "stores/useUserInfo";
+import TodosTab from "components/result/TodosTab";
 import useBriefs from "lib/hooks/useGetBriefs";
-import ReactMarkdown from "react-markdown";
-import Loading from "components/Loading";
+import { useState } from "react";
 import useResultStore from "stores/useResultStore";
+import useUSerStoreState from "stores/useUserInfo";
 import Testing1 from "components/result/TodosTab";
 import TodosTab from "components/result/TodosTab";
 import useGetTodos from "lib/hooks/useGetTodos";
