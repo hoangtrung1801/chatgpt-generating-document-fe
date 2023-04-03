@@ -1,38 +1,28 @@
 import {
+    Avatar,
     Box,
+    Button,
     Flex,
     Grid,
     GridItem,
     Heading,
-    Text,
-    Button,
     HStack,
-    Spinner,
-    VStack,
-    useBreakpointValue,
-    IconProps,
     Icon,
-    Stack,
-    Tooltip,
+    IconProps,
     Menu,
     MenuButton,
-    MenuList,
     MenuGroup,
     MenuItem,
-    MenuDivider,
-    Avatar,
+    MenuList,
+    Text,
+    useBreakpointValue,
 } from "@chakra-ui/react";
 import Loading from "components/Loading";
-import useBriefs from "lib/hooks/useGetBriefs";
-import UseGetUser from "lib/hooks/useGetUser";
+import useCurrentUser from "lib/hooks/useCurrentUser";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { getCookies, setCookie, deleteCookie } from "cookies-next";
 import useUSerStoreState from "stores/useUserInfo";
-import useGetUser from "lib/hooks/useGetUser";
-import { logout } from "lib/api/auth";
-import getResult from "lib/api/getResult";
+
 const documentList = [
     {
         name: "Document 1",
@@ -46,32 +36,11 @@ const documentList = [
 ];
 const HomePage: NextPage = () => {
     const router = useRouter();
-    const [loginSuccess, setLoginSuccess] = useState(true);
-    const [loading, setLoading] = useState(true);
-    const { user, isLoading } = useGetUser();
-    const { UserInfo } = useUSerStoreState();
 
-    const handleLogout = () => {
-        setLoading(true);
-        deleteCookie("userID");
-        logout().then((res) => {
-            alert("User logout successful");
-            router.push("/login");
-        });
-    };
-    useEffect(() => {
-        // getResult().then((res) => console.log("res", res));
-        if (Object.keys(getCookies("Authorization")).length > 0) {
-            setLoading(false);
-        } else {
-            router.push("/login");
-        }
-    }, [router]);
+    const { currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
 
-    console.log("user", user);
-    // const user = {
-    //     name: "titus",
-    // };
+    const { setSelectionID } = useUSerStoreState();
+
     return (
         <Box
             position="relative"
@@ -85,7 +54,8 @@ const HomePage: NextPage = () => {
             bg="#f8f8fb"
             p={8}
         >
-            {isLoading && loading ? (
+            {/* userLoading && */}
+            {isCurrentUserLoading ? (
                 <Loading />
             ) : (
                 <Flex flexDirection="column" gap={10}>
@@ -102,15 +72,14 @@ const HomePage: NextPage = () => {
                             <MenuList>
                                 <MenuGroup fontSize="20px" title="Profile">
                                     <MenuItem>My Account</MenuItem>
-                                    <MenuItem onClick={handleLogout}>
-                                        Log out{" "}
-                                    </MenuItem>
+                                    <MenuItem>Log out </MenuItem>
                                 </MenuGroup>
                             </MenuList>
                         </Menu>
                     </HStack>
                     <Text fontSize="20px" fontWeight="bold">
-                        Hi, {user.name}! Which function you want to use below?
+                        Hi, {currentUser.name}! Which function you want to use
+                        below?
                     </Text>
                     <HStack gap={8}>
                         <Button
