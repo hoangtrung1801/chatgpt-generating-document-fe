@@ -19,6 +19,52 @@ function CardTodo({ data, title }: any) {
             <Text p="20px" fontWeight="bold" fontSize="16px">
                 {title}
             </Text>
+            {/* {data.map((item: any) => (
+                <Card
+                    onClick={() => {
+                        setIsOpen(true);
+                    }}
+                    cursor="pointer"
+                    _hover={{
+                        bg: "gray.300",
+                    }}
+                    key={item.id}
+                    mb={2}
+                >
+                    <Stack>
+                        <CardBody>
+                            <Text fontSize="16px" py="2">
+                                {item.content}
+                            </Text>
+                        </CardBody>
+                        <CardFooter>
+                            <Box
+                                w="full"
+                                display="flex"
+                                justifyContent="space-between"
+                                alignItems="center"
+                            >
+                                <Text>NUC-205</Text>
+                                <Box
+                                    display="flex"
+                                    alignItems="center"
+                                    gap="4px"
+                                >
+                                    <Box
+                                        borderRadius="50%"
+                                        px={2}
+                                        bg="gray.200"
+                                    >
+                                        <Text>9</Text>
+                                    </Box>
+                                    <ArrowDownIcon w="20px" h="20px" />
+                                    <Avatar size="xs" />
+                                </Box>
+                            </Box>
+                        </CardFooter>
+                    </Stack>
+                </Card>
+            ))} */}
             <Card
                 onClick={() => {
                     setIsOpen(true);

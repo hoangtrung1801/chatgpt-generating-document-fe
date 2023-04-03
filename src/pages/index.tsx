@@ -27,8 +27,9 @@ import useBriefs from "lib/hooks/useGetBriefs";
 import UseGetUser from "lib/hooks/useGetUser";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useUSerStoreState from "stores/useUserInfo";
+import { cookies } from "next/headers";
 
 const documentList = [
     {
@@ -43,17 +44,29 @@ const documentList = [
 ];
 const HomePage: NextPage = () => {
     const router = useRouter();
-    const { user, isLoading, error } = UseGetUser(2);
+    const [loginSuccess, setLoginSuccess] = useState(false);
+    const { user, isLoading: userLoading, error } = UseGetUser(2);
     const { setSelectionID } = useUSerStoreState();
     // const isLoading = true;
     useEffect(() => {
-        if (!isLoading) {
-            const selections = user.selections.map(
-                (item: any, _index: any) => item.id
-            );
-            setSelectionID(selections);
+        // if (!userLoading) {
+        //     const selections = user.selections.map(
+        //         (item: any, _index: any) => item.id
+        //     );
+        //     setSelectionID(selections);
+        //     setLoginSuccess(true);
+        // }
+        if (loginSuccess) {
+            const cookieStore = cookies();
+            const hasCookie = cookieStore.has("Authorization");
+            if (hasCookie) {
+                setLoginSuccess(true);
+            }
+        } else {
+            // alert("login first");
+            router.push("/login");
         }
-    }, [isLoading, setSelectionID, user]);
+    }, [loginSuccess, router]);
 
     // const user = {
     //     name: "titus",
@@ -71,7 +84,8 @@ const HomePage: NextPage = () => {
             bg="#f8f8fb"
             p={8}
         >
-            {isLoading ? (
+            {/* userLoading && */}
+            {loginSuccess ? (
                 <Loading />
             ) : (
                 <Flex flexDirection="column" gap={10}>

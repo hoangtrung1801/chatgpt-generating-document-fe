@@ -87,21 +87,21 @@ function Result() {
     const result = useResultStore((state) => state.result);
     // const { user, isLoading : userLoading, error } = UseGetUser(2);
 
-    useEffect(() => {
-        if (!isLoading) {
-            const filteredBriefs = briefs.filter((brief: any) =>
-                selectionID.includes(brief.selectionId)
-            );
-            // setYourBriefs(filteredBriefs);
-            if (Object.keys(result).length > 0) {
-                console.log("result : ", result);
-                setYourBriefs([...filteredBriefs, result]);
-            } else {
-                setYourBriefs(filteredBriefs);
-            }
-            console.log("filteredBriefs : ", filteredBriefs);
-        }
-    }, [briefs, isLoading, result, selectionID]);
+    // useEffect(() => {
+    //     if (!isLoading) {
+    //         const filteredBriefs = briefs.filter((brief: any) =>
+    //             selectionID.includes(brief.selectionId)
+    //         );
+    //         // setYourBriefs(filteredBriefs);
+    //         if (Object.keys(result).length > 0) {
+    //             console.log("result : ", result);
+    //             setYourBriefs([...filteredBriefs, result]);
+    //         } else {
+    //             setYourBriefs(filteredBriefs);
+    //         }
+    //         console.log("filteredBriefs : ", filteredBriefs);
+    //     }
+    // }, [briefs, isLoading, result, selectionID]);
     // console.log("yourBiefs : ", yourBiefs);
 
     return (
@@ -217,7 +217,7 @@ function Result() {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {isLoading ? (
+                                    {/* {isLoading ? (
                                         <Box flex={1} display="flex" w="100%">
                                             <Button
                                                 isLoading
@@ -250,7 +250,7 @@ function Result() {
                                                 )
                                             )}
                                         </Fragment>
-                                    )}
+                                    )} */}
                                 </Tbody>
                             </Table>
                             {/* </TableContainer> */}
