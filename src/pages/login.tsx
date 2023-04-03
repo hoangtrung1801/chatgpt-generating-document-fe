@@ -37,6 +37,7 @@ export default function Login() {
             });
         }
     };
+
     const handleChangeEmail = (e: any) => {
         setAuth({
             email: e.target.value,
@@ -49,9 +50,11 @@ export default function Login() {
             password: e.target.value,
         });
     };
+
     useEffect(() => {
         console.log("auth : ", auth);
     }, [auth]);
+
     return (
         <Flex
             minH={"100vh"}

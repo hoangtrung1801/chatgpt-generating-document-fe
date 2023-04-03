@@ -1,35 +1,27 @@
 import {
+    Avatar,
     Box,
+    Button,
     Flex,
     Grid,
     GridItem,
     Heading,
-    Text,
-    Button,
     HStack,
-    Spinner,
-    VStack,
-    useBreakpointValue,
-    IconProps,
     Icon,
-    Stack,
-    Tooltip,
+    IconProps,
     Menu,
     MenuButton,
-    MenuList,
     MenuGroup,
     MenuItem,
-    MenuDivider,
-    Avatar,
+    MenuList,
+    Text,
+    useBreakpointValue,
 } from "@chakra-ui/react";
 import Loading from "components/Loading";
-import useBriefs from "lib/hooks/useGetBriefs";
-import UseGetUser from "lib/hooks/useGetUser";
+import useCurrentUser from "lib/hooks/useCurrentUser";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
 import useUSerStoreState from "stores/useUserInfo";
-import { cookies } from "next/headers";
 
 const documentList = [
     {
@@ -44,33 +36,11 @@ const documentList = [
 ];
 const HomePage: NextPage = () => {
     const router = useRouter();
-    const [loginSuccess, setLoginSuccess] = useState(false);
-    const { user, isLoading: userLoading, error } = UseGetUser(2);
-    const { setSelectionID } = useUSerStoreState();
-    // const isLoading = true;
-    useEffect(() => {
-        // if (!userLoading) {
-        //     const selections = user.selections.map(
-        //         (item: any, _index: any) => item.id
-        //     );
-        //     setSelectionID(selections);
-        //     setLoginSuccess(true);
-        // }
-        if (loginSuccess) {
-            const cookieStore = cookies();
-            const hasCookie = cookieStore.has("Authorization");
-            if (hasCookie) {
-                setLoginSuccess(true);
-            }
-        } else {
-            // alert("login first");
-            router.push("/login");
-        }
-    }, [loginSuccess, router]);
 
-    // const user = {
-    //     name: "titus",
-    // };
+    const { currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
+
+    const { setSelectionID } = useUSerStoreState();
+
     return (
         <Box
             position="relative"
@@ -85,7 +55,7 @@ const HomePage: NextPage = () => {
             p={8}
         >
             {/* userLoading && */}
-            {loginSuccess ? (
+            {isCurrentUserLoading ? (
                 <Loading />
             ) : (
                 <Flex flexDirection="column" gap={10}>
@@ -108,7 +78,8 @@ const HomePage: NextPage = () => {
                         </Menu>
                     </HStack>
                     <Text fontSize="20px" fontWeight="bold">
-                        Hi, {user.name}! Which function you want to use below?
+                        Hi, {currentUser.name}! Which function you want to use
+                        below?
                     </Text>
                     <HStack gap={8}>
                         <Button

@@ -2,20 +2,20 @@ import { BE_URL } from "lib/config";
 import { fetchWithCredentials } from "lib/fetcher";
 import useSwr, { SWRResponse } from "swr";
 
-const API_URL = `${BE_URL}/users`;
+const API_URL = `${BE_URL}/auth`;
 
-const useGetUser = (userId: number) => {
+const useCurrentUser = () => {
     const { data, error }: SWRResponse = useSwr(
-        `${API_URL}/${userId}`,
+        `${API_URL}`,
         fetchWithCredentials
     );
 
     return {
-        user: data !== undefined ? data.data : [],
+        currentUser: data || undefined,
         isLoading: !error && !data,
         // isLoading: true,
         error: error,
     };
 };
 
-export default useGetUser;
+export default useCurrentUser;
