@@ -38,6 +38,7 @@ const HomePage: NextPage = () => {
     const router = useRouter();
 
     const { currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
+    console.log("currentUser :", currentUser);
 
     const { setSelectionID } = useUSerStoreState();
 
@@ -78,8 +79,8 @@ const HomePage: NextPage = () => {
                         </Menu>
                     </HStack>
                     <Text fontSize="20px" fontWeight="bold">
-                        Hi, {currentUser.name}! Which function you want to use
-                        below?
+                        Hi, {currentUser.data.name}! Which function you want to
+                        use below?
                     </Text>
                     <HStack gap={8}>
                         <Button
