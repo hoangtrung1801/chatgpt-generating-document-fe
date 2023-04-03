@@ -15,6 +15,9 @@ import {
 import { login } from "lib/api/auth";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import useUSerStoreState from "stores/useUserInfo";
+import { getCookies, setCookie, deleteCookie } from "cookies-next";
+import Link from "next/link";
 type Auth = {
     email?: string;
     password?: string;
@@ -22,6 +25,7 @@ type Auth = {
 export default function Login() {
     const [auth, setAuth] = useState<Auth>();
     const [message, setMessage] = useState();
+    const { UserInfo, setUserInfo } = useUSerStoreState();
     const route = useRouter();
 
     const handleSubmit = () => {
@@ -29,6 +33,8 @@ export default function Login() {
             login(auth.email, auth.password).then((response) => {
                 console.log(response);
                 if (response.data) {
+                    setCookie("userID", response.data.id);
+                    setUserInfo(response.data);
                     alert("login successful");
                     route.push("/");
                 } else {
@@ -92,8 +98,9 @@ export default function Login() {
                                 justify={"space-between"}
                             >
                                 <Checkbox>Remember me</Checkbox>
+
                                 <ChakraLink color={"blue.400"}>
-                                    Forgot password?
+                                    <Link href="/signup">Sign up</Link>
                                 </ChakraLink>
                             </Stack>
                             <Button

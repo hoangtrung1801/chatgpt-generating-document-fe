@@ -38,7 +38,7 @@ export default function SignupCard() {
             signup(signupInfo.name, signupInfo.email, signupInfo.password).then(
                 (response) => {
                     console.log(response);
-                    if (response.success) {
+                    if (response.data) {
                         alert("signup success");
                         router.push("/login");
                     } else {

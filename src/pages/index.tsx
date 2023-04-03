@@ -28,9 +28,11 @@ import UseGetUser from "lib/hooks/useGetUser";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { getCookies, setCookie, deleteCookie } from "cookies-next";
 import useUSerStoreState from "stores/useUserInfo";
-import { cookies } from "next/headers";
-
+import useGetUser from "lib/hooks/useGetUser";
+import { logout } from "lib/api/auth";
+import getResult from "lib/api/getResult";
 const documentList = [
     {
         name: "Document 1",
@@ -44,30 +46,29 @@ const documentList = [
 ];
 const HomePage: NextPage = () => {
     const router = useRouter();
-    const [loginSuccess, setLoginSuccess] = useState(false);
-    const { user, isLoading: userLoading, error } = UseGetUser(2);
-    const { setSelectionID } = useUSerStoreState();
-    // const isLoading = true;
+    const [loginSuccess, setLoginSuccess] = useState(true);
+    const [loading, setLoading] = useState(true);
+    const { user, isLoading } = useGetUser();
+    const { UserInfo } = useUSerStoreState();
+
+    const handleLogout = () => {
+        setLoading(true);
+        deleteCookie("userID");
+        logout().then((res) => {
+            alert("User logout successful");
+            router.push("/login");
+        });
+    };
     useEffect(() => {
-        // if (!userLoading) {
-        //     const selections = user.selections.map(
-        //         (item: any, _index: any) => item.id
-        //     );
-        //     setSelectionID(selections);
-        //     setLoginSuccess(true);
-        // }
-        if (loginSuccess) {
-            const cookieStore = cookies();
-            const hasCookie = cookieStore.has("Authorization");
-            if (hasCookie) {
-                setLoginSuccess(true);
-            }
+        // getResult().then((res) => console.log("res", res));
+        if (Object.keys(getCookies("Authorization")).length > 0) {
+            setLoading(false);
         } else {
-            // alert("login first");
             router.push("/login");
         }
-    }, [loginSuccess, router]);
+    }, [router]);
 
+    console.log("user", user);
     // const user = {
     //     name: "titus",
     // };
@@ -84,8 +85,7 @@ const HomePage: NextPage = () => {
             bg="#f8f8fb"
             p={8}
         >
-            {/* userLoading && */}
-            {loginSuccess ? (
+            {isLoading && loading ? (
                 <Loading />
             ) : (
                 <Flex flexDirection="column" gap={10}>
@@ -102,7 +102,9 @@ const HomePage: NextPage = () => {
                             <MenuList>
                                 <MenuGroup fontSize="20px" title="Profile">
                                     <MenuItem>My Account</MenuItem>
-                                    <MenuItem>Log out </MenuItem>
+                                    <MenuItem onClick={handleLogout}>
+                                        Log out{" "}
+                                    </MenuItem>
                                 </MenuGroup>
                             </MenuList>
                         </Menu>

@@ -83,10 +83,12 @@ const Document: NextPage = () => {
 
                     generateAnswerWithSelection(selectionId).then(
                         (answerData) => {
+                            if (answerData.data) {
+                                setResult(answerData.data);
+                                router.push("/result");
+                                alert("successfull");
+                            }
                             console.log(answerData);
-                            setResult(answerData.data);
-                            router.push("/result");
-                            alert("successfull");
                         }
                     );
                 })
