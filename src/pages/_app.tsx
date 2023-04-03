@@ -20,9 +20,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     } = useCurrentUser();
 
     useEffect(() => {
-        // console.log("currentUser : ", currentUser);
         if (isCurrentUserLoading) return;
+        console.log("asPath : ", asPath);
         if (!currentUser && asPath !== "/login" && asPath !== "/signup") {
+            console.log("ok");
             replace("/login");
         }
     }, [asPath, currentUser, isCurrentUserLoading, replace]);
