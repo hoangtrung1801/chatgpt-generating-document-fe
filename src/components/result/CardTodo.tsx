@@ -52,15 +52,15 @@ function CardTodo({ data, title }: any) {
                                     alignItems="center"
                                     gap="4px"
                                 >
-                                    <Box
+                                    {/* <Box
                                         borderRadius="50%"
                                         px={2}
                                         bg="gray.200"
                                     >
                                         <Text>9</Text>
-                                    </Box>
-                                    <ArrowDownIcon w="20px" h="20px" />
-                                    <Avatar size="xs" />
+                                    </Box> */}
+                                    {/* <ArrowDownIcon w="20px" h="20px" /> */}
+                                    <Avatar size="sm" />
                                 </Box>
                             </Box>
                         </CardFooter>

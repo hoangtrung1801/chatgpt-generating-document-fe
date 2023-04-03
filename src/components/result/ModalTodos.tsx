@@ -15,9 +15,16 @@ import {
     Stack,
     Text,
 } from "@chakra-ui/react";
+import { updateUserStories } from "lib/api/userStories";
 import React, { useEffect, useState } from "react";
 import useTodoStoreStore from "stores/useTodosStore";
 
+type todo = {
+    id?: number;
+    status?: string;
+    selectionId?: number;
+    content?: string;
+};
 function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
     const { setTodos, todos } = useTodoStoreStore();
     const [item, setItem] = useState();
@@ -25,16 +32,20 @@ function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
         setIsOpen(false);
     };
     const onSave = () => {
-        const updatedFetchData2 = todos.map((data) => {
+        const updatedFetchData = todos.map((data: todo) => {
             if (data.id === itemSelected.id) {
-                return { ...data, type: item }; // tạo ra một item mới với type mới
+                return { ...data, status: item }; // tạo ra một item mới với type mới
             } else {
                 return data; // không phải item cần thay đổi, trả về item cũ
             }
         });
-        console.log("updatedFetchData2:", updatedFetchData2);
-        setTodos(updatedFetchData2);
+        setTodos(updatedFetchData);
         setIsOpen(false);
+        updateUserStories(itemSelected.selectionId, itemSelected.id, item).then(
+            (res) => {
+                console.log("res", res);
+            }
+        );
     };
 
     const finalRef = React.useRef(null);
@@ -46,36 +57,35 @@ function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
                 <ModalHeader>Modal</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Text>{itemSelected?.title}</Text>
-                    <RadioGroup defaultValue={itemSelected?.status}>
+                    <Text>Content: {itemSelected?.title}</Text>
+                    <RadioGroup mt={6} defaultValue={itemSelected?.status}>
                         <Stack spacing={[1, 2]} direction={"column"}>
                             <Radio
-                                onChange={(value) =>
+                                onChange={(value: any) =>
                                     setItem(value.target.value)
                                 }
                                 value="IN"
                             >
-                                IN
+                                TODO
                             </Radio>
                             <Radio
-                                onChange={(value) => {
-                                    console.log(value.target.value);
-                                    // setItem(value.target.value)
+                                onChange={(value: any) => {
+                                    setItem(value.target.value);
                                 }}
                                 value="IN_PROGRESS"
                             >
                                 IN_PROGRESS
                             </Radio>
                             <Radio
-                                onChange={(value) =>
+                                onChange={(value: any) =>
                                     setItem(value.target.value)
                                 }
-                                value="INPREVIEW"
+                                value="IN_REVIEW"
                             >
                                 INPREVIEW
                             </Radio>
                             <Radio
-                                onChange={(value) =>
+                                onChange={(value: any) =>
                                     setItem(value.target.value)
                                 }
                                 value="DONE"

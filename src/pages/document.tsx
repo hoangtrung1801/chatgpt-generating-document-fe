@@ -12,6 +12,7 @@ import useConfirmStore from "stores/useCofirmOptions";
 import TypeShortDescriptionApp from "components/document-page/TypeShortDescriptionApp";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import Loading from "components/Loading";
+import createTodos from "lib/api/createTodos";
 
 type shortDescription = {
     name: string;
@@ -85,8 +86,14 @@ const Document: NextPage = () => {
                         (answerData) => {
                             if (answerData.data) {
                                 setResult(answerData.data);
-                                router.push("/result");
-                                alert("successfull");
+                                createTodos(answerData.data.id).then(
+                                    (todoRes) => {
+                                        if (todoRes.data) {
+                                            router.push("/result");
+                                            alert("successfull");
+                                        }
+                                    }
+                                );
                             }
                             console.log(answerData);
                         }

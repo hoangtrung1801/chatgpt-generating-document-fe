@@ -17,6 +17,7 @@ import {
     TabPanels,
     Tabs,
     Tbody,
+    Td,
     Text,
     Th,
     Thead,
@@ -25,15 +26,17 @@ import {
 } from "@chakra-ui/react";
 import TodosTab from "components/result/TodosTab";
 import useBriefs from "lib/hooks/useGetBriefs";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import useResultStore from "stores/useResultStore";
 import useUSerStoreState from "stores/useUserInfo";
 import Testing1 from "components/result/TodosTab";
-import TodosTab from "components/result/TodosTab";
 import useGetTodos from "lib/hooks/useGetTodos";
 import useTodoStoreStore from "stores/useTodosStore";
 import getResult from "lib/api/getResult";
 import getTodos from "lib/api/getTodos";
+import useGetUser from "lib/hooks/useGetSelection";
+import Loading from "components/Loading";
+import ReactMarkdown from "react-markdown";
 const TabLeftTitle = [
     {
         content: "Documents",
@@ -85,45 +88,22 @@ function Result() {
     // const { user, isLoading : userLoading, error } = UseGetUser(2);
 
     useEffect(() => {
-        getResult().then((res) => {
-            setYourBriefs(res.data);
-            const selectionId = res.data[0].selectionId;
-            getTodos(selectionId).then((todos) => {
-                setIsLoading(false);
-                setTodos(todos.data);
+        if (!userLoading) {
+            getResult().then((res) => {
+                setYourBriefs(res.data);
+                console.log("user : ", user);
+                // const selectionId = res.data[0].selectionId;
+                const selectionId =
+                    user.selections[user.selections.length - 1].id;
+                console.log("selectionId", selectionId);
+                getTodos(selectionId).then((todos) => {
+                    setIsLoading(false);
+                    console.log(todos.data);
+                    setTodos(todos.data);
+                });
             });
-        });
-        // getResult().then(
-        //     (res) => {
-        //         setYourBriefs(res.data);
-        //         const selectionId = res.data[0].selectionId;
-        //         setIsLoading(false);
-        //         getTodos(selectionId).then((todos) => {
-        //             console.log("todos : ", todos);
-        //             setIsLoading(false);
-        //         });
-        //     }
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-    }, [isLoading, setTodos]);
-    // if (!isLoading) {
-    //     const filteredBriefs = briefs.filter((brief: any) =>
-    //         user.selections.includes(brief.selectionId)
-    //     );
-    //     // setYourBriefs(filteredBriefs);
-    //     if (Object.keys(result).length > 0) {
-    //         console.log("result : ", result);
-    //         setYourBriefs([...filteredBriefs, result]);
-    //         getTodos(user.selectionId).then((todos) => {
-    //             console.log("todos : ", todos);
-    //         });
-    //     } else {
-    //         getTodos(user.selectionId).then((todos) => {
-    //             console.log("todos : ", todos);
-    //         });
-    //         setYourBriefs(filteredBriefs);
-    //     }
-    //     console.log("filteredBriefs : ", filteredBriefs);
-    // }
+        }
+    }, [isLoading, setTodos, user, userLoading]);
 
     return (
         <Fragment>
@@ -217,7 +197,6 @@ function Result() {
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
-                                    {/* <TableContainer overflowWrap="normal"> */}
                                     <Table
                                         style={{
                                             borderCollapse: "separate",
@@ -225,9 +204,6 @@ function Result() {
                                         }}
                                         variant="simple"
                                     >
-                                        {/* <TableCaption>
-                                        Imperial to metric conversion factors
-                                    </TableCaption> */}
                                         <Thead>
                                             <Tr h="100px">
                                                 <Th
@@ -246,7 +222,7 @@ function Result() {
                                                     color="white"
                                                     fontSize="medium"
                                                 >
-                                                    TODO
+                                                    DOCUMENTS
                                                 </Th>
                                             </Tr>
                                         </Thead>
@@ -258,10 +234,10 @@ function Result() {
                                                         _index: number
                                                     ) => (
                                                         <Tr key={brief.id}>
-                                                            <Td minW="150px">
+                                                            <Td minW="120px">
                                                                 {_index + 1}
                                                             </Td>
-                                                            <Td minW="150px">
+                                                            <Td minW="120px">
                                                                 {brief.id}
                                                             </Td>
                                                             <Td>
@@ -275,46 +251,12 @@ function Result() {
                                                     )
                                                 )}
                                             </Fragment>
-                                            {/* {isLoading ? (
-                                        <Box flex={1} display="flex" w="100%">
-                                            <Button
-                                                isLoading
-                                                loadingText="Loading"
-                                                colorScheme="blue"
-                                                variant="outline"
-                                                spinnerPlacement="end"
-                                            ></Button>
-                                        </Box>
-                                    ) : (
-                                        <Fragment>
-                                            {yourBiefs.map(
-                                                (
-                                                    brief: any,
-                                                    _index: number
-                                                ) => (
-                                                    <Tr key={brief.id}>
-                                                        <Td minW="150px">
-                                                            {_index + 1}
-                                                        </Td>
-                                                        <Td minW="150px">
-                                                            {brief.id}
-                                                        </Td>
-                                                        <Td>
-                                                            <ReactMarkdown className="markdown">
-                                                                {brief.answer}
-                                                            </ReactMarkdown>
-                                                        </Td>
-                                                    </Tr>
-                                                )
-                                            )}
-                                        </Fragment>
-                                    )} */}
                                         </Tbody>
                                     </Table>
                                     {/* </TableContainer> */}
                                 </TabPanel>
                                 <TabPanel>
-                                    <TodosTab todos={todos} />
+                                    <TodosTab />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

@@ -11,6 +11,7 @@ import { SWRConfig } from "swr/_internal";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
     const { asPath, replace } = useRouter();
+    const route = useRouter();
 
     const {
         currentUser,
@@ -19,6 +20,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     } = useCurrentUser();
 
     useEffect(() => {
+        // console.log("currentUser : ", currentUser);
         if (isCurrentUserLoading) return;
         if (!currentUser && asPath !== "/login" && asPath !== "/signup") {
             replace("/login");

@@ -12,6 +12,7 @@ import {
 import React, { useEffect } from "react";
 import CardTodo from "./CardTodo";
 import useTodoStoreStore from "stores/useTodosStore";
+import useCurrentUser from "lib/hooks/useCurrentUser";
 const types = ["TODO", "INPROCESS", "INPREVIEW", "DONE"];
 const fetchData = [
     {
@@ -138,15 +139,22 @@ const fetchData2 = [
     },
 ];
 
+type todo = {
+    id?: number;
+    status?: string;
+    selectionId?: number;
+    content?: string;
+};
 function TodosTab() {
     const { setTodos, todos } = useTodoStoreStore();
-    const todoItems = todos.filter((item) => item.status === "IN");
+    const todoItems = todos.filter((item: todo) => item.status === "IN");
     const inProcessItems = todos.filter(
-        (item) => item.status === "IN_PROGRESS"
+        (item: todo) => item.status === "IN_PROGRESS"
     );
-    const inPreviewItems = todos.filter((item) => item.status === "INPREVIEW");
-    const inDoneItems = todos.filter((item) => item.status === "DONE");
-    console.log("todos : ", todos);
+    const inPreviewItems = todos.filter(
+        (item: todo) => item.status === "IN_REVIEW"
+    );
+    const inDoneItems = todos.filter((item: todo) => item.status === "DONE");
 
     return (
         <Box display="flex" gap={4}>
@@ -160,24 +168,7 @@ function TodosTab() {
                 title={`INPREVIEW ${inPreviewItems.length}`}
             />
             <CardTodo data={inDoneItems} title={`DONE ${inDoneItems.length}`} />
-            {/* {types.map((type) =>
-                // eslint-disable-next-line react/jsx-key
-                fetchData2.map(
-                    (data) =>
-                        data.type === type && (
-                            // eslint-disable-next-line react/jsx-key
-                            <CardTodo title={type} data={data} />
-                        )
-                )
-            )} */}
         </Box>
     );
 }
-
 export default TodosTab;
-{
-    /* <CardTodo title="TODO 2" />
-            <CardTodo title="INPROCESS 2" />
-            <CardTodo title="INPREVIEW 2" />
-            <CardTodo title="DONE 2" /> */
-}
