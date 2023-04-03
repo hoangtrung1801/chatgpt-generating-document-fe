@@ -186,6 +186,7 @@ const HomePage: NextPage = () => {
         </Box>
     );
 };
+
 export const Blur = (props: IconProps) => {
     return (
         <Icon

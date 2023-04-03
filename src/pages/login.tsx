@@ -1,21 +1,20 @@
 import {
-    Flex,
     Box,
+    Button,
+    Checkbox,
+    Flex,
     FormControl,
     FormLabel,
-    Input,
-    Checkbox,
-    Stack,
-    Button,
     Heading,
+    Input,
     Link as ChakraLink,
+    Stack,
     Text,
     useColorModeValue,
 } from "@chakra-ui/react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
 import { login } from "lib/api/auth";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 type Auth = {
     email?: string;
     password?: string;
