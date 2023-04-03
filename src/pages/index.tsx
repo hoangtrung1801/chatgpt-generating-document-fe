@@ -21,9 +21,15 @@ import { useRouter } from "next/router";
 const HomePage: NextPage = () => {
     const router = useRouter();
 
-    const { currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
+    const {
+        currentUser,
+        isLoading: isCurrentUserLoading,
+        error,
+    } = useCurrentUser();
     const { selections, isLoading: isUserSelectionLoading } =
         useUserSelections();
+
+    console.log(selections, currentUser, error);
 
     return (
         <Box
@@ -45,8 +51,8 @@ const HomePage: NextPage = () => {
                 <Flex flexDirection="column" gap={10}>
                     <Header />
                     <Text fontSize="20px" fontWeight="bold">
-                        Hi, {currentUser.name}! Which function you want to use
-                        below?
+                        Hi, {currentUser && currentUser.name}! Which function
+                        you want to use below?
                     </Text>
                     <HStack gap={8}>
                         <Button
@@ -75,7 +81,7 @@ const HomePage: NextPage = () => {
                     </HStack>
                     <Heading size="md">Your documents</Heading>
                     <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                        {!isUserSelectionLoading &&
+                        {selections &&
                             (selections as any[]).map((selection) => (
                                 <GridItem
                                     key={selection.id}

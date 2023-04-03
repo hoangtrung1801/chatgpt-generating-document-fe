@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Box,
     Flex,
     HStack,
     Menu,
@@ -10,10 +9,19 @@ import {
     MenuList,
     Text,
 } from "@chakra-ui/react";
-
-import ThemeToggle from "./ThemeToggle";
+import { logout } from "lib/api/auth";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Header = () => {
+    const { reload } = useRouter();
+
+    const handleLogout = () => {
+        logout().then(() => {
+            reload();
+        });
+    };
+
     return (
         <Flex as="header" width="full" align="center">
             <HStack justifyContent="space-between" w="100%">
@@ -25,11 +33,13 @@ const Header = () => {
                         as={Avatar}
                         cursor="pointer"
                         colorScheme="pink"
-                    ></MenuButton>
+                    />
                     <MenuList>
                         <MenuGroup fontSize="20px" title="Profile">
-                            <MenuItem>My Account</MenuItem>
-                            <MenuItem>Log out </MenuItem>
+                            <MenuItem as={Link} href="/result">
+                                Personal
+                            </MenuItem>
+                            <MenuItem onClick={handleLogout}>My page</MenuItem>
                         </MenuGroup>
                     </MenuList>
                 </Menu>

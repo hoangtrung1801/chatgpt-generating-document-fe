@@ -13,30 +13,31 @@ import {
     useColorModeValue,
 } from "@chakra-ui/react";
 import { login } from "lib/api/auth";
+import useCurrentUser, {
+    API_URL as useCurrentUserEndpoint,
+} from "lib/hooks/useCurrentUser";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import useUSerStoreState from "stores/useUserInfo";
-import { getCookies, setCookie, deleteCookie } from "cookies-next";
-import Link from "next/link";
+import { mutate } from "swr";
 type Auth = {
     email?: string;
     password?: string;
 };
 export default function Login() {
     const [auth, setAuth] = useState<Auth>();
-    const [message, setMessage] = useState();
-    const { UserInfo, setUserInfo } = useUSerStoreState();
-    const route = useRouter();
+
+    const router = useRouter();
+
+    const { currentUser, isLoading: isCurrentUserLoading } = useCurrentUser();
 
     const handleSubmit = () => {
         if (auth) {
             login(auth.email, auth.password).then((response) => {
                 console.log(response);
                 if (response.data) {
-                    setCookie("userID", response.data.id);
-                    setUserInfo(response.data);
+                    mutate(useCurrentUserEndpoint);
                     alert("login successful");
-                    route.push("/");
+                    router.push("/");
                 } else {
                     alert(response.message);
                 }
@@ -50,6 +51,7 @@ export default function Login() {
             password: auth?.password,
         });
     };
+
     const handleChangePassword = (e: any) => {
         setAuth({
             email: auth?.email,
@@ -60,6 +62,12 @@ export default function Login() {
     useEffect(() => {
         console.log("auth : ", auth);
     }, [auth]);
+
+    useEffect(() => {
+        if (!isCurrentUserLoading && currentUser) {
+            router.replace("/");
+        }
+    }, [currentUser, isCurrentUserLoading, router]);
 
     return (
         <Flex
