@@ -10,11 +10,13 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { logout } from "lib/api/auth";
+import useCurrentUser from "lib/hooks/useCurrentUser";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Header = () => {
     const { reload } = useRouter();
+    const { currentUser, isLoading } = useCurrentUser();
 
     const handleLogout = () => {
         logout().then(() => {
@@ -35,11 +37,14 @@ const Header = () => {
                         colorScheme="pink"
                     />
                     <MenuList>
-                        <MenuGroup fontSize="20px" title="Profile">
+                        <MenuGroup
+                            fontSize="20px"
+                            title={`Hi, ${currentUser && currentUser.name}`}
+                        >
                             <MenuItem as={Link} href="/result">
-                                Personal
+                                Dashboard
                             </MenuItem>
-                            <MenuItem onClick={handleLogout}>My page</MenuItem>
+                            <MenuItem onClick={handleLogout}>Log out</MenuItem>
                         </MenuGroup>
                     </MenuList>
                 </Menu>
