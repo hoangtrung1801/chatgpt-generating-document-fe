@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { ArrowDownIcon } from "@chakra-ui/icons";
 import {
     Avatar,
     Box,
@@ -9,8 +7,8 @@ import {
     Stack,
     Text,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import ModalTodo from "./ModalTodos";
-import useTodoStoreStore from "stores/useTodosStore";
 
 function CardTodo({ data, title }: any) {
     const [isOpen, setIsOpen] = useState(false);

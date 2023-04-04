@@ -8,7 +8,7 @@ const useBriefs = () => {
     const { data, error }: SWRResponse = useSwr(API_URL, fetchWithCredentials);
 
     return {
-        briefs: data !== undefined ? data.data : [],
+        briefs: data === undefined ? undefined : data.data,
         isLoading: !error && !data,
         // isLoading: true,
         error: error,
