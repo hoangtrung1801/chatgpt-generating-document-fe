@@ -16,7 +16,7 @@ import { updateUserStories } from "lib/api/userStories";
 import useUserStoriesOfSelection from "lib/hooks/useUserStoriesOfSelection";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import useTodoStoreStore from "stores/useTodosStore";
+import useUserStoriesStore from "stores/useUserStoriesStore";
 
 type todo = {
     id?: number;
@@ -30,20 +30,22 @@ function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
 
     const { mutate } = useUserStoriesOfSelection(documentId);
 
-    const { setTodos, todos } = useTodoStoreStore();
+    const { userStories, setUserStories } = useUserStoriesStore();
     const [item, setItem] = useState();
     const onClose = () => {
         setIsOpen(false);
     };
+    // console.log("userStories:", userStories);
     const onSave = () => {
-        const updatedFetchData = todos.map((data: todo) => {
+        const updatedFetchData = userStories.map((data: todo) => {
             if (data.id === itemSelected.id) {
                 return { ...data, status: item }; // tạo ra một item mới với type mới
             } else {
                 return data; // không phải item cần thay đổi, trả về item cũ
             }
         });
-        setTodos(updatedFetchData);
+        console.log("updatedFetchData : ", updatedFetchData);
+        setUserStories(updatedFetchData);
         setIsOpen(false);
         updateUserStories(itemSelected.selectionId, itemSelected.id, item).then(
             (res) => {

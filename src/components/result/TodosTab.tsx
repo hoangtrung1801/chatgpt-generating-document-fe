@@ -9,9 +9,9 @@ import {
     Stack,
     Text,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import CardTodo from "./CardTodo";
-import useTodoStoreStore from "stores/useTodosStore";
+import useTodoStoreStore from "stores/useUserStoriesStore";
 import useCurrentUser from "lib/hooks/useCurrentUser";
 import useUserStoriesOfSelection from "lib/hooks/useUserStoriesOfSelection";
 import { useState } from "react";
@@ -23,18 +23,23 @@ type UserStory = {
     content?: string;
 };
 function TodosTab({ userStories }) {
-    const [todo, setTodo] = useState(
-        userStories.filter((item: UserStory) => item.status === "IN")
-    );
-    const [inProgress, setInProgress] = useState(
-        userStories.filter((item: UserStory) => item.status === "IN_PROGRESS")
-    );
-    const [inReview, setInReview] = useState(
-        userStories.filter((item: UserStory) => item.status === "IN_REVIEW")
-    );
-    const [done, setDone] = useState(
-        userStories.filter((item: UserStory) => item.status === "DONE")
-    );
+    console.log("userStories : ", userStories);
+    const filteredUserStories = useMemo(() => {
+        return {
+            todo: userStories.filter((item: UserStory) => item.status === "IN"),
+            inProgress: userStories.filter(
+                (item: UserStory) => item.status === "IN_PROGRESS"
+            ),
+            inReview: userStories.filter(
+                (item: UserStory) => item.status === "IN_REVIEW"
+            ),
+            done: userStories.filter(
+                (item: UserStory) => item.status === "DONE"
+            ),
+        };
+    }, [userStories]);
+
+    const { todo, inProgress, inReview, done } = filteredUserStories;
 
     return (
         <Box display="flex" gap={4}>

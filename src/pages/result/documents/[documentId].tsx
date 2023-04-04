@@ -25,6 +25,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import useUserStoriesStore from "stores/useUserStoriesStore";
 
 const TabLeftTitle = [
     {
@@ -75,9 +76,14 @@ const DocumentPage: NextPage = () => {
     const { userStories, isUserStoriesLoading } =
         useUserStoriesOfSelection(documentId);
 
-    console.log(userStories);
+    // console.log(userStories);
+    const { userStories: userStoriesStore, setUserStories } =
+        useUserStoriesStore();
 
     useEffect(() => {
+        if (userStories) {
+            setUserStories(userStories);
+        }
         if (brief === undefined && briefs) {
             console.log(
                 "briefs",
@@ -88,7 +94,7 @@ const DocumentPage: NextPage = () => {
                 briefs.find((brief: any) => brief.selectionId === documentId)
             );
         }
-    }, [brief, briefs, documentId]);
+    }, [brief, briefs, documentId, setUserStories, userStories]);
 
     return (
         <>
@@ -183,8 +189,8 @@ const DocumentPage: NextPage = () => {
                                 </ReactMarkdown>
                             </TabPanel>
                             <TabPanel>
-                                {userStories && (
-                                    <TodosTab userStories={userStories} />
+                                {userStoriesStore && (
+                                    <TodosTab userStories={userStoriesStore} />
                                 )}
                             </TabPanel>
                         </TabPanels>
