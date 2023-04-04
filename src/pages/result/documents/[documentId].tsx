@@ -77,12 +77,17 @@ const DocumentPage: NextPage = () => {
         useUserStoriesOfSelection(documentId);
 
     // console.log(userStories);
-    const { userStories: userStoriesStore, setUserStories } =
-        useUserStoriesStore();
+    const {
+        userStories: userStoriesStore,
+        setUserStories,
+        flag,
+        setFlag,
+    } = useUserStoriesStore();
 
     useEffect(() => {
-        if (userStories) {
+        if (userStories && !flag) {
             setUserStories(userStories);
+            setFlag(true);
         }
         if (brief === undefined && briefs) {
             console.log(
@@ -94,7 +99,7 @@ const DocumentPage: NextPage = () => {
                 briefs.find((brief: any) => brief.selectionId === documentId)
             );
         }
-    }, [brief, briefs, documentId, setUserStories, userStories]);
+    }, [brief, briefs, documentId, flag, setFlag, setUserStories, userStories]);
 
     return (
         <>
