@@ -202,6 +202,7 @@ const ChooseAppOptions = ({
                                 Step {noStep} of {questions.length}
                             </Text>
                             <Progress
+                                // transition="ease-in-out 2s"
                                 hasStripe
                                 colorScheme="blue"
                                 size="sm"

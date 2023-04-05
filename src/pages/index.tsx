@@ -8,8 +8,10 @@ import {
     HStack,
     Icon,
     IconProps,
+    Stack,
     Text,
     useBreakpointValue,
+    VStack,
 } from "@chakra-ui/react";
 import Loading from "components/Loading";
 import useCurrentUser from "lib/hooks/useCurrentUser";
@@ -50,11 +52,16 @@ const HomePage: NextPage = () => {
             ) : (
                 <Flex flexDirection="column" gap={10}>
                     <Header />
-                    <Text fontSize="20px" fontWeight="bold">
+                    <Text fontSize={["18px", "20px"]} fontWeight="bold">
                         Hi, {currentUser && currentUser.name}! Which function
                         you want to use below?
                     </Text>
-                    <HStack gap={8}>
+                    <Stack
+                        justifyContent="center"
+                        alignItems="center"
+                        flexDir={["column", "row"]}
+                        gap={8}
+                    >
                         <Button
                             zIndex="1"
                             size="lg"
@@ -68,6 +75,7 @@ const HomePage: NextPage = () => {
                             Generate document
                         </Button>
                         <Button
+                            mt={["0px !important"]}
                             size="lg"
                             zIndex="1"
                             bgGradient="linear(to-r, blue.500,blue.300)"
@@ -78,9 +86,12 @@ const HomePage: NextPage = () => {
                         >
                             Generate code project
                         </Button>
-                    </HStack>
+                    </Stack>
                     <Heading size="md">Your documents</Heading>
-                    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+                    <Grid
+                        templateColumns={["repeat(1, 1fr)", "repeat(3, 1fr)"]}
+                        gap={6}
+                    >
                         {selections &&
                             (selections as any[]).map((selection) => (
                                 <GridItem

@@ -14,7 +14,12 @@ function CardTodo({ data, title }: any) {
     const [isOpen, setIsOpen] = useState(false);
     const [itemSelected, setItemSelected] = useState();
     return (
-        <Box minH="75vh" p="4px 10px" w="25%" bg="#1a202c">
+        <Box
+            // minH="75vh"
+            p={["4px 4px", "4px 10px"]}
+            w={["100%", "100%", "100%", "25%"]}
+            bg="#1a202c"
+        >
             <Text p="20px" fontWeight="bold" fontSize="16px">
                 {title}
             </Text>

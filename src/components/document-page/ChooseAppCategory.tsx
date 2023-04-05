@@ -45,14 +45,14 @@ const ChooseAppCategory = ({ nextStep, setOutStep }: any) => {
 
     return (
         <Box>
-            <Heading>Choose application</Heading>
+            <Heading textAlign={["center", "left"]}>Choose application</Heading>
             <Box mt={10}>
                 {isLoading ? (
                     <Loading />
                 ) : (
-                    <SimpleGrid columns={4} spacing={10}>
+                    <SimpleGrid columns={[1, 1, 2, 4]} spacing={[5, 10]}>
                         {categories.map((category: any) => (
-                            <Box key={category.id}>
+                            <Box mx={"auto"} key={category.id}>
                                 {category.status ? (
                                     <Box
                                         w="240px"

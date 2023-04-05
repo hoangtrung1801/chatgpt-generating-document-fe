@@ -60,8 +60,8 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
             {questionIsLoading ? (
                 <Loading />
             ) : (
-                <VStack spacing={16}>
-                    <Heading>{question.name}</Heading>
+                <VStack spacing={[10, 16]}>
+                    <Heading as={"h3"}>{question.name}</Heading>
                     <Box>
                         {!questionIsLoading && question.type === "single" && (
                             <SingleOption
@@ -86,7 +86,12 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
                         )}
                     </Box>
                     <Box textAlign={"right"} mt={8} w="full">
-                        <Button colorScheme={"blue"} onClick={onSave}>
+                        <Button
+                            w={["100%", "auto"]}
+                            size="lg"
+                            colorScheme={"blue"}
+                            onClick={onSave}
+                        >
                             Save & continue
                         </Button>
                     </Box>
@@ -139,7 +144,10 @@ const SingleOption = ({
                     )?.name
                 }
             >
-                <Stack direction={"row"} spacing={12}>
+                <Stack
+                    direction={["column", "column", "column", "row"]}
+                    spacing={12}
+                >
                     {options.map((option: any) => (
                         <WrapperRadio
                             transition="ease-all 2s"
@@ -206,7 +214,10 @@ const YesNoOption = ({
     return (
         <Stack w="full">
             <RadioGroup>
-                <Stack direction={"row"} spacing={12}>
+                <Stack
+                    direction={["column", "column", "column", "row"]}
+                    spacing={12}
+                >
                     <WrapperRadio
                         fontWeight="bold"
                         _hover={{ bg: "blue.100" }}
@@ -257,69 +268,78 @@ const YesNoOption = ({
                 </Stack>
             </RadioGroup>
             {isYes && (
-                <SimpleGrid columns={2} spacingY={4} mt={4}>
+                <>
                     <Box>
-                        <Text my="10px" fontSize="20px">
+                        <Text w="full" my="10px" fontSize="20px">
                             Please choose required features below:
                         </Text>
                     </Box>
-                    <Box></Box>
-                    <CheckboxGroup
-                        onChange={onChange}
-                        value={currentOption.option_id?.map(
-                            (optionId: any) =>
-                                options.find(
-                                    (option: any) => option.id === optionId
-                                ).name
-                        )}
-                    >
-                        <Box>
-                            <Text mb="10px" fontSize="18px" fontWeight={"bold"}>
-                                Enough
-                            </Text>
-                            <Stack>
-                                {options
-                                    .filter(
-                                        (option: { type: string }) =>
-                                            option.type === "enough"
-                                    )
-                                    .map((option: any) => (
-                                        <Checkbox
-                                            borderColor="blue.400"
-                                            size="lg"
-                                            key={option.name}
-                                            value={option.name}
-                                        >
-                                            {option.name}
-                                        </Checkbox>
-                                    ))}
-                            </Stack>
-                        </Box>
+                    <SimpleGrid columns={2} spacingY={4} mt={4}>
+                        <CheckboxGroup
+                            onChange={onChange}
+                            value={currentOption.option_id?.map(
+                                (optionId: any) =>
+                                    options.find(
+                                        (option: any) => option.id === optionId
+                                    ).name
+                            )}
+                        >
+                            <Box>
+                                <Text
+                                    mb="10px"
+                                    fontSize="18px"
+                                    fontWeight={"bold"}
+                                >
+                                    Enough
+                                </Text>
+                                <Stack>
+                                    {options
+                                        .filter(
+                                            (option: { type: string }) =>
+                                                option.type === "enough"
+                                        )
+                                        .map((option: any) => (
+                                            <Checkbox
+                                                borderColor="blue.400"
+                                                size="lg"
+                                                key={option.name}
+                                                value={option.name}
+                                            >
+                                                {option.name}
+                                            </Checkbox>
+                                        ))}
+                                </Stack>
+                            </Box>
 
-                        <Box>
-                            <Text mb="10px" fontSize="18px" fontWeight={"bold"}>
-                                Additional
-                            </Text>
-                            <Stack>
-                                {options
-                                    .filter(
-                                        (option: { type: string }) =>
-                                            option.type === "additional"
-                                    )
-                                    .map((option: any) => (
-                                        <Checkbox
-                                            borderColor="blue.400"
-                                            size="lg"
-                                            key={option.name}
-                                            value={option.name}
-                                        >
-                                            {option.name}
-                                        </Checkbox>
-                                    ))}
-                            </Stack>
-                        </Box>
-                    </CheckboxGroup>
-                </SimpleGrid>
+                            <Box>
+                                <Text
+                                    mb="10px"
+                                    fontSize="18px"
+                                    fontWeight={"bold"}
+                                >
+                                    Additional
+                                </Text>
+                                <Stack>
+                                    {options
+                                        .filter(
+                                            (option: { type: string }) =>
+                                                option.type === "additional"
+                                        )
+                                        .map((option: any) => (
+                                            <Checkbox
+                                                borderColor="blue.400"
+                                                size="lg"
+                                                key={option.name}
+                                                value={option.name}
+                                            >
+                                                {option.name}
+                                            </Checkbox>
+                                        ))}
+                                </Stack>
+                            </Box>
+                        </CheckboxGroup>
+                    </SimpleGrid>
+                </>
             )}
         </Stack>
     );

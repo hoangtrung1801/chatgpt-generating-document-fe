@@ -10,6 +10,7 @@ import {
     Flex,
     Heading,
     Icon,
+    Show,
     Tab,
     TabList,
     TabPanel,
@@ -18,6 +19,7 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
+import LeftDashBoardMobile from "components/result/LeftDashBoardMobile";
 import TodosTab from "components/result/TodosTab";
 import useBriefs from "lib/hooks/useGetBriefs";
 import useUserStoriesOfSelection from "lib/hooks/useUserStoriesOfSelection";
@@ -29,24 +31,12 @@ import useUserStoriesStore from "stores/useUserStoriesStore";
 
 const TabLeftTitle = [
     {
-        content: "Documents",
+        content: "Vision and Goals",
         icon: HamburgerIcon,
     },
     {
-        content: "Logo",
+        content: "Todos",
         icon: AddIcon,
-    },
-    {
-        content: "SOP & Document",
-        icon: CalendarIcon,
-    },
-    {
-        content: "Assistant",
-        icon: EmailIcon,
-    },
-    {
-        content: "BLacklogs",
-        icon: AttachmentIcon,
     },
 ];
 
@@ -57,17 +47,18 @@ const TabTopTitle = [
     {
         content: "Todos",
     },
-    {
-        content: "Project Roadmap",
-    },
-    {
-        content: "Project Boards",
-    },
+    // {
+    //     content: "Project Roadmap",
+    // },
+    // {
+    //     content: "Project Boards",
+    // },
 ];
 
 const DocumentPage: NextPage = () => {
     const [isActive, setIsActive] = useState(0);
     const [brief, setBrief] = useState(undefined);
+    const [isShow, setIsShow] = useState(false);
 
     const router = useRouter();
     const documentId = Number(router.query.documentId);
@@ -104,53 +95,59 @@ const DocumentPage: NextPage = () => {
     return (
         <>
             <Flex h="100vh">
-                <Flex
-                    bg="#090c10"
-                    color="white"
-                    minW="350px"
-                    gap={5}
-                    px={5}
-                    flexDir="column"
-                >
-                    <VStack
-                        rounded="md"
-                        border="1px"
-                        borderColor="white"
-                        alignItems="flex-start"
-                        gap={2}
-                        p="20px 20px"
-                        mt="80px"
+                <Show above="sm">
+                    {/* column 1 */}
+                    <Flex
+                        bg="#090c10"
+                        color="white"
+                        w={["0", "200px", "250px", "350px"]}
+                        gap={5}
+                        px={[0, 5]}
+                        flexDir="column"
                     >
-                        <Text fontSize={"xl"} fontWeight="bold">
-                            Welcome to CodeDocAI
-                        </Text>
-                    </VStack>
-                    <Flex gap={3} flexDirection="column">
-                        {TabLeftTitle.map((item, _index) => (
-                            <Box
-                                display="flex"
-                                gap="10px"
-                                alignItems="center"
-                                cursor="pointer"
-                                key={item.content}
-                                bg={
-                                    isActive === _index
-                                        ? "whiteAlpha.200"
-                                        : "transparent"
-                                }
-                                _hover={{
-                                    bg: "whiteAlpha.200",
-                                }}
-                                p={4}
-                                rounded="lg"
-                                onClick={() => setIsActive(_index)}
-                            >
-                                <Icon w="19px" h="19px" as={item.icon} />
-                                <Text>{item.content}</Text>
-                            </Box>
-                        ))}
+                        <VStack
+                            rounded="md"
+                            border="1px"
+                            borderColor="white"
+                            alignItems="flex-start"
+                            gap={2}
+                            display={["none", "block"]}
+                            p={["0 0", "20px 20px"]}
+                            mt="80px"
+                        >
+                            <Text fontSize={"xl"} fontWeight="bold">
+                                Welcome to CodeDocAI
+                            </Text>
+                        </VStack>
+                        <Flex gap={3} flexDirection="column">
+                            {TabLeftTitle.map((item, _index) => (
+                                <Box
+                                    display="flex"
+                                    gap="10px"
+                                    alignItems="center"
+                                    cursor="pointer"
+                                    key={item.content}
+                                    bg={
+                                        isActive === _index
+                                            ? "whiteAlpha.200"
+                                            : "transparent"
+                                    }
+                                    _hover={{
+                                        bg: "whiteAlpha.200",
+                                    }}
+                                    p={4}
+                                    rounded="lg"
+                                    onClick={() => setIsActive(_index)}
+                                >
+                                    <Icon w="19px" h="19px" as={item.icon} />
+                                    <Text>{item.content}</Text>
+                                </Box>
+                            ))}
+                        </Flex>
                     </Flex>
-                </Flex>
+                </Show>
+                {/* <Show below="md"> */}
+                <LeftDashBoardMobile isShow={isShow} setIsShow={setIsShow} />
 
                 <Flex
                     bg="#1a202c"
@@ -160,6 +157,7 @@ const DocumentPage: NextPage = () => {
                     p="0 30px"
                     gap={5}
                     flex={1}
+                    w="full"
                     flexDirection="column"
                 >
                     <Box

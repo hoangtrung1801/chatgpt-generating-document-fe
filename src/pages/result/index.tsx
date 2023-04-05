@@ -30,6 +30,8 @@ import useBriefs from "lib/hooks/useGetBriefs";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { Show, Hide } from "@chakra-ui/react";
+import LeftDashBoardMobile from "components/result/LeftDashBoardMobile";
 
 const TabLeftTitle = [
     {
@@ -71,6 +73,7 @@ const TabTopTitle = [
 
 function Result() {
     const [isActive, setIsActive] = useState(0);
+    const [isShow, setIsShow] = useState(false);
 
     const { briefs, isLoading } = useBriefs();
     console.log("briefs : ", briefs);
@@ -78,54 +81,61 @@ function Result() {
     return (
         <Fragment>
             <Flex h="100vh">
-                {/* column 1 */}
-                <Flex
-                    bg="#090c10"
-                    color="white"
-                    minW="350px"
-                    gap={5}
-                    px={5}
-                    flexDir="column"
-                >
-                    <VStack
-                        rounded="md"
-                        border="1px"
-                        borderColor="white"
-                        alignItems="flex-start"
-                        gap={2}
-                        p="20px 20px"
-                        mt="80px"
+                <Show above="sm">
+                    {/* column 1 */}
+                    <Flex
+                        bg="#090c10"
+                        color="white"
+                        w={["0", "200px", "250px", "350px"]}
+                        gap={5}
+                        px={[0, 5]}
+                        flexDir="column"
                     >
-                        <Text fontSize={"xl"} fontWeight="bold">
-                            Welcome to CodeDocAI
-                        </Text>
-                    </VStack>
-                    <Flex gap={3} flexDirection="column">
-                        {TabLeftTitle.map((item, _index) => (
-                            <Box
-                                display="flex"
-                                gap="10px"
-                                alignItems="center"
-                                cursor="pointer"
-                                key={item.content}
-                                bg={
-                                    isActive === _index
-                                        ? "whiteAlpha.200"
-                                        : "transparent"
-                                }
-                                _hover={{
-                                    bg: "whiteAlpha.200",
-                                }}
-                                p={4}
-                                rounded="lg"
-                                onClick={() => setIsActive(_index)}
-                            >
-                                <Icon w="19px" h="19px" as={item.icon} />
-                                <Text>{item.content}</Text>
-                            </Box>
-                        ))}
+                        <VStack
+                            rounded="md"
+                            border="1px"
+                            borderColor="white"
+                            alignItems="flex-start"
+                            gap={2}
+                            display={["none", "block"]}
+                            p={["0 0", "20px 20px"]}
+                            mt="80px"
+                        >
+                            <Text fontSize={"xl"} fontWeight="bold">
+                                Welcome to CodeDocAI
+                            </Text>
+                        </VStack>
+                        <Flex gap={3} flexDirection="column">
+                            {TabLeftTitle.map((item, _index) => (
+                                <Box
+                                    display="flex"
+                                    gap="10px"
+                                    alignItems="center"
+                                    cursor="pointer"
+                                    key={item.content}
+                                    bg={
+                                        isActive === _index
+                                            ? "whiteAlpha.200"
+                                            : "transparent"
+                                    }
+                                    _hover={{
+                                        bg: "whiteAlpha.200",
+                                    }}
+                                    p={4}
+                                    rounded="lg"
+                                    onClick={() => setIsActive(_index)}
+                                >
+                                    <Icon w="19px" h="19px" as={item.icon} />
+                                    <Text>{item.content}</Text>
+                                </Box>
+                            ))}
+                        </Flex>
                     </Flex>
-                </Flex>
+                </Show>
+                {/* <Show below="md"> */}
+                <LeftDashBoardMobile isShow={isShow} setIsShow={setIsShow} />
+                {/* </Show> */}
+
                 {/* column 2 */}
                 <Flex
                     bg="#1a202c"
@@ -145,6 +155,9 @@ function Result() {
                         <Heading mt="20px" as="h1" size="5xl" noOfLines={1}>
                             Overview
                         </Heading>
+                        <Show below="md">
+                            <HamburgerIcon onClick={() => setIsShow(!isShow)} />
+                        </Show>
                         {/* <ThemeToggle /> */}
                     </Box>
                     <Table
@@ -172,8 +185,12 @@ function Result() {
                                 {briefs &&
                                     briefs.map((brief: any, _index: number) => (
                                         <Tr key={brief.id}>
-                                            <Td minW="120px">{_index + 1}</Td>
-                                            <Td minW="120px">{brief.id}</Td>
+                                            <Td minW={["80px", "120px"]}>
+                                                {_index + 1}
+                                            </Td>
+                                            <Td minW={["80px", "120px"]}>
+                                                {brief.id}
+                                            </Td>
                                             <Td>
                                                 <Button
                                                     colorScheme={"blue"}

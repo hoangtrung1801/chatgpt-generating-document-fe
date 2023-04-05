@@ -110,7 +110,7 @@ const Document: NextPage = () => {
             margin="50px auto"
             maxWidth={"container.xl"}
             transition="0.5s ease-out"
-            minHeight="80vh"
+            minHeight={["50vh", "80vh"]}
             w="full"
             bg="#eaeaf1"
             // minHeight="70vh"

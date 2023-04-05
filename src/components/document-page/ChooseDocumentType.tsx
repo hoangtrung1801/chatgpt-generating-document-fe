@@ -5,6 +5,7 @@ import {
     Heading,
     HStack,
     Image,
+    Stack,
     Text,
     VStack,
 } from "@chakra-ui/react";
@@ -21,12 +22,16 @@ const ChooseDocumentType = ({ setDocumentType, setOutStep }: any) => {
             textAlign={"center"}
         >
             <Heading>Which kind of app do you want to build?</Heading>
-            <HStack mt={4} gap={16}>
+            <Stack
+                flexDir={["column", "column", "column", "row"]}
+                mt={4}
+                gap={16}
+            >
                 <Flex
                     overflow="hidden"
                     flexDirection="column"
-                    w={400}
-                    h={400}
+                    w={[400]}
+                    h={[400]}
                     borderRadius="1rem"
                     alignItems="center"
                     pt="40px"
@@ -56,6 +61,7 @@ const ChooseDocumentType = ({ setDocumentType, setOutStep }: any) => {
                     />
                 </Flex>
                 <Flex
+                    mt={"0px !important"}
                     position="relative"
                     overflow="hidden"
                     flexDirection="column"
@@ -128,7 +134,7 @@ const ChooseDocumentType = ({ setDocumentType, setOutStep }: any) => {
                 >
                     <Text>New app</Text>
                 </Center> */}
-            </HStack>
+            </Stack>
         </Flex>
     );
 };

@@ -1,4 +1,5 @@
 const apiUrl = "http://localhost:3000";
+import { fetchWithCredentials } from "lib/fetcher";
 
 const createHeadersFromOptions = (options: RequestInit): Headers => {
     // const requestHeaders = (
@@ -28,10 +29,10 @@ const createHeadersFromOptions = (options: RequestInit): Headers => {
 const fetchJson = (resource: string, options?: RequestInit) => {
     const requestHeaders = createHeadersFromOptions(options);
 
-    return fetch(`${apiUrl}/${resource}`, {
+    return fetchWithCredentials(`${apiUrl}/${resource}`, {
         ...options,
         headers: requestHeaders,
-    }).then((data) => data.json());
+    }).then((data) => data);
 };
 
 // const fetchJson = (url, options: Options = {}) => {

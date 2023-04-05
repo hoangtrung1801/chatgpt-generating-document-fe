@@ -27,7 +27,7 @@ const Header = () => {
     return (
         <Flex as="header" width="full" align="center">
             <HStack justifyContent="space-between" w="100%">
-                <Text fontWeight="bold" fontSize="40px">
+                <Text fontWeight="bold" fontSize={["20px", "40px"]}>
                     Welcome to CodeDocAI
                 </Text>
                 <Menu>
