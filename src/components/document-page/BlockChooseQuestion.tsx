@@ -15,6 +15,7 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
+import { CustomToast } from "components/CustomToast";
 import Loading from "components/Loading";
 import WrapperRadio from "components/WrapperRadio";
 import useGetQuestion from "lib/hooks/useGetQuestion";
@@ -33,7 +34,7 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
         answers: [],
         option_id: [],
     });
-    const [isSelected, setIsSelected] = useState(true);
+    const { addToast } = CustomToast();
 
     const { question, isLoading: questionIsLoading } =
         useGetQuestion(questionId);
@@ -47,12 +48,10 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
         // numberBack(optionValues.length);
         if (currentOption.answers.length > 0) {
             addconfirmOption(currentOption);
-            setIsSelected(true);
             nextStep();
         } else {
-            setIsSelected(false);
+            addToast({ message: " Please select some options", type: "error" });
         }
-        // addOptions([...optionValues]);
     };
 
     return (
@@ -61,7 +60,7 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
                 <Loading />
             ) : (
                 <VStack spacing={[10, 16]}>
-                    <Heading as={"h3"}>{question.name}</Heading>
+                    <Heading>{question.name}</Heading>
                     <Box>
                         {!questionIsLoading && question.type === "single" && (
                             <SingleOption
@@ -94,18 +93,6 @@ const BlockChooseQuestion = ({ questionId, nextStep }: any) => {
                         >
                             Save & continue
                         </Button>
-                    </Box>
-                    <Box justifyContent="center" flex={1}>
-                        <Alert
-                            rounded="full"
-                            hidden={isSelected}
-                            status="error"
-                        >
-                            <AlertIcon />
-                            <AlertDescription>
-                                Please select some options
-                            </AlertDescription>
-                        </Alert>
                     </Box>
                 </VStack>
             )}

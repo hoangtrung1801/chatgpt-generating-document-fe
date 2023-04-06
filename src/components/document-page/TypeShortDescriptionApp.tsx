@@ -12,16 +12,11 @@ import {
     Icon,
     Image,
     Textarea,
-    Alert,
-    AlertIcon,
-    AlertTitle,
-    AlertDescription,
 } from "@chakra-ui/react";
 import React from "react";
 
 function TypeShortDescriptionApp({
     shortDescriptionApp,
-    isTyped,
     handleDescriptionChange,
     handleNameChange,
     handleSubmitDescription,
@@ -33,7 +28,7 @@ function TypeShortDescriptionApp({
                 maxW={"7xl"}
                 columns={{ base: 1, md: 2 }}
                 spacing={{ base: 10, lg: 32 }}
-                py={{ base: 10, sm: 20, lg: 32 }}
+                py={{ base: 10, sm: 14, lg: 18 }}
             >
                 <Stack
                     display="flex"
@@ -149,13 +144,6 @@ function TypeShortDescriptionApp({
                 left={0}
                 style={{ filter: "blur(70px)" }}
             />
-            <Alert hidden={isTyped} rounded="full" status="error">
-                <AlertIcon />
-                <AlertTitle>Missing some field!</AlertTitle>
-                <AlertDescription>
-                    Please enter a name and a description
-                </AlertDescription>
-            </Alert>
         </Box>
     );
 }

@@ -8,6 +8,7 @@ import {
     HStack,
     Icon,
     IconProps,
+    Skeleton,
     Stack,
     Text,
     useBreakpointValue,
@@ -57,7 +58,7 @@ const HomePage: NextPage = () => {
                         you want to use below?
                     </Text>
                     <Stack
-                        justifyContent="center"
+                        justifyContent={["center", "left"]}
                         alignItems="center"
                         flexDir={["column", "row"]}
                         gap={8}
@@ -92,25 +93,58 @@ const HomePage: NextPage = () => {
                         templateColumns={["repeat(1, 1fr)", "repeat(3, 1fr)"]}
                         gap={6}
                     >
-                        {selections &&
-                            (selections as any[]).map((selection) => (
-                                <GridItem
-                                    key={selection.id}
-                                    p={4}
-                                    borderRadius={12}
-                                    cursor="pointer"
-                                    fontWeight="bold"
-                                    _hover={{
-                                        bg: "blue.400",
-                                        color: "white",
-                                    }}
-                                    w="100%"
-                                    h="300"
-                                    bg="blue.100"
-                                >
-                                    {selection.title}
-                                </GridItem>
-                            ))}
+                        {selections === undefined || isUserSelectionLoading ? (
+                            Array(3)
+                                .fill()
+                                .map((index) => {
+                                    return (
+                                        <GridItem key={index}>
+                                            <Skeleton
+                                                p={4}
+                                                borderRadius={12}
+                                                cursor="pointer"
+                                                fontWeight="bold"
+                                                w="100%"
+                                                h="300"
+                                            />
+                                        </GridItem>
+                                    );
+                                })
+                        ) : (
+                            <>
+                                {selections.length === 0 ? (
+                                    <Text>You have no documents yet!</Text>
+                                ) : (
+                                    <>
+                                        {(selections as any[]).map(
+                                            (selection) => (
+                                                <GridItem
+                                                    onClick={() => {
+                                                        router.push(
+                                                            `/result/documents/${selection.id}`
+                                                        );
+                                                    }}
+                                                    key={selection.id}
+                                                    p={4}
+                                                    borderRadius={12}
+                                                    cursor="pointer"
+                                                    fontWeight="bold"
+                                                    _hover={{
+                                                        bg: "blue.400",
+                                                        color: "white",
+                                                    }}
+                                                    w="100%"
+                                                    h="300"
+                                                    bg="blue.100"
+                                                >
+                                                    {selection.title}
+                                                </GridItem>
+                                            )
+                                        )}
+                                    </>
+                                )}
+                            </>
+                        )}
                     </Grid>
                     {/* <Heading size="md">2. Your code projects</Heading>
                     <Grid templateColumns="repeat(3, 1fr)" gap={6}>

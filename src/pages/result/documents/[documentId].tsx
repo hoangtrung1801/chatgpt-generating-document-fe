@@ -28,6 +28,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import useUserStoriesStore from "stores/useUserStoriesStore";
+import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
 const TabLeftTitle = [
     {
@@ -76,9 +77,9 @@ const DocumentPage: NextPage = () => {
     } = useUserStoriesStore();
 
     useEffect(() => {
-        if (userStories && !flag) {
+        if (userStories) {
             setUserStories(userStories);
-            setFlag(true);
+            // setFlag(true);
         }
         if (brief === undefined && briefs) {
             console.log(
@@ -186,13 +187,50 @@ const DocumentPage: NextPage = () => {
                             ))}
                         </TabList>
                         <TabPanels>
-                            <TabPanel>
-                                <ReactMarkdown className="markdown">
-                                    {brief && brief.answer}
-                                </ReactMarkdown>
+                            <TabPanel mt={4}>
+                                {isBriefsLoading ? (
+                                    <SkeletonText
+                                        noOfLines={20}
+                                        spacing="4"
+                                        // skeletonHeight="2"
+                                    />
+                                ) : (
+                                    <ReactMarkdown className="markdown">
+                                        {brief?.answer}
+                                    </ReactMarkdown>
+                                )}
                             </TabPanel>
                             <TabPanel>
-                                {userStoriesStore && (
+                                {isUserStoriesLoading ? (
+                                    <Flex
+                                        justifyContent="center"
+                                        height="100%"
+                                        flexDir={[
+                                            "column",
+                                            "column",
+                                            "row",
+                                            "row",
+                                        ]}
+                                        gap={4}
+                                    >
+                                        <Skeleton
+                                            height="100vh"
+                                            w={["100%", "100%", "100%", "25%"]}
+                                        />
+                                        <Skeleton
+                                            height="100vh"
+                                            w={["100%", "100%", "100%", "25%"]}
+                                        />
+                                        <Skeleton
+                                            height="100vh"
+                                            w={["100%", "100%", "100%", "25%"]}
+                                        />
+                                        <Skeleton
+                                            height="100vh"
+                                            w={["100%", "100%", "100%", "25%"]}
+                                        />
+                                    </Flex>
+                                ) : (
                                     <TodosTab userStories={userStoriesStore} />
                                 )}
                             </TabPanel>

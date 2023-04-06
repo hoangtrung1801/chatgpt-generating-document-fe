@@ -32,6 +32,8 @@ import { Fragment, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Show, Hide } from "@chakra-ui/react";
 import LeftDashBoardMobile from "components/result/LeftDashBoardMobile";
+import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
+const arr = [1, 2, 3, 4];
 
 const TabLeftTitle = [
     {
@@ -181,28 +183,111 @@ function Result() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Fragment>
-                                {briefs &&
-                                    briefs.map((brief: any, _index: number) => (
-                                        <Tr key={brief.id}>
-                                            <Td minW={["80px", "120px"]}>
-                                                {_index + 1}
-                                            </Td>
-                                            <Td minW={["80px", "120px"]}>
-                                                {brief.id}
-                                            </Td>
-                                            <Td>
-                                                <Button
-                                                    colorScheme={"blue"}
-                                                    as={Link}
-                                                    href={`/result/documents/${brief.selectionId}`}
-                                                >
-                                                    Watch document
-                                                </Button>
-                                            </Td>
-                                        </Tr>
-                                    ))}
-                            </Fragment>
+                            {briefs === undefined && isLoading ? (
+                                <>
+                                    <Tr>
+                                        <Td>
+                                            <SkeletonText
+                                                noOfLines={4}
+                                                spacing="4"
+                                                skeletonHeight="2"
+                                            />
+                                        </Td>
+                                        <Td>
+                                            <SkeletonText
+                                                noOfLines={4}
+                                                spacing="4"
+                                                skeletonHeight="2"
+                                            />
+                                        </Td>
+                                        <Td>
+                                            <SkeletonText
+                                                noOfLines={4}
+                                                spacing="4"
+                                                skeletonHeight="2"
+                                            />
+                                        </Td>
+                                    </Tr>
+                                    <Tr>
+                                        <Td>
+                                            <SkeletonText
+                                                noOfLines={4}
+                                                spacing="4"
+                                                skeletonHeight="2"
+                                            />
+                                        </Td>
+                                        <Td>
+                                            <SkeletonText
+                                                noOfLines={4}
+                                                spacing="4"
+                                                skeletonHeight="2"
+                                            />
+                                        </Td>
+                                        <Td>
+                                            <SkeletonText
+                                                noOfLines={4}
+                                                spacing="4"
+                                                skeletonHeight="2"
+                                            />
+                                        </Td>
+                                    </Tr>
+                                    <Tr>
+                                        <Td>
+                                            <SkeletonText
+                                                noOfLines={4}
+                                                spacing="4"
+                                                skeletonHeight="2"
+                                            />
+                                        </Td>
+                                        <Td>
+                                            <SkeletonText
+                                                noOfLines={4}
+                                                spacing="4"
+                                                skeletonHeight="2"
+                                            />
+                                        </Td>
+                                        <Td>
+                                            <SkeletonText
+                                                noOfLines={4}
+                                                spacing="4"
+                                                skeletonHeight="2"
+                                            />
+                                        </Td>
+                                    </Tr>
+                                </>
+                            ) : (
+                                <>
+                                    {briefs.length === 0 ? (
+                                        <Text>You have no documents yet!</Text>
+                                    ) : (
+                                        briefs.map(
+                                            (brief: any, _index: number) => (
+                                                <Tr key={brief.id}>
+                                                    <Td
+                                                        minW={["80px", "120px"]}
+                                                    >
+                                                        {_index + 1}
+                                                    </Td>
+                                                    <Td
+                                                        minW={["80px", "120px"]}
+                                                    >
+                                                        {brief.id}
+                                                    </Td>
+                                                    <Td>
+                                                        <Button
+                                                            colorScheme={"blue"}
+                                                            as={Link}
+                                                            href={`/result/documents/${brief.selectionId}`}
+                                                        >
+                                                            Watch document
+                                                        </Button>
+                                                    </Td>
+                                                </Tr>
+                                            )
+                                        )
+                                    )}
+                                </>
+                            )}
                         </Tbody>
                     </Table>
                 </Flex>

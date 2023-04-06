@@ -20,6 +20,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { signup } from "lib/api/auth";
 import ToastHook from "lib/hooks/useToastHook";
 import { useRouter } from "next/router";
+import { CustomToast } from "components/CustomToast";
 
 type Signup = {
     name?: string;
@@ -31,18 +32,25 @@ export default function SignupCard() {
     const [signupInfo, setSignupInfo] = useState<Signup>();
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
-    const toast = useToast();
+    const [isSubmit, setIsSubmit] = useState(false);
+    const { addToast } = CustomToast();
 
     const handleSubmit = () => {
+        setIsSubmit(true);
         if (signupInfo) {
             signup(signupInfo.name, signupInfo.email, signupInfo.password).then(
                 (response) => {
                     console.log(response);
                     if (response.data) {
-                        alert("signup success");
+                        addToast({
+                            message: "signup successfully",
+                            type: "success",
+                        });
                         router.push("/login");
                     } else {
-                        alert(response.message);
+                        setIsSubmit(false);
+                        addToast({ message: response.message, type: "error" });
+                        // alert(response.message);
                     }
                     // eslint-disable-next-line react-hooks/rules-of-hooks
                     // ToastHook("success", "ok");
@@ -135,22 +143,38 @@ export default function SignupCard() {
                             </InputGroup>
                         </FormControl>
                         <Stack spacing={10} pt={2}>
-                            <Button
-                                onClick={handleSubmit}
-                                loadingText="Submitting"
-                                size="lg"
-                                bg={"blue.400"}
-                                color={"white"}
-                                _hover={{
-                                    bg: "blue.500",
-                                }}
-                            >
-                                Sign up
-                            </Button>
+                            {isSubmit ? (
+                                <Button
+                                    isLoading
+                                    loadingText="signup"
+                                    colorScheme="teal"
+                                    variant="outline"
+                                >
+                                    signup
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={handleSubmit}
+                                    loadingText="Submitting"
+                                    size="lg"
+                                    bg={"blue.400"}
+                                    color={"white"}
+                                    _hover={{
+                                        bg: "blue.500",
+                                    }}
+                                >
+                                    Sign up
+                                </Button>
+                            )}
                         </Stack>
                         <Stack pt={6}>
                             <Text color={"blue.400"} align={"center"}>
-                                Already a user? <Link href="/login">Login</Link>
+                                Already a user?{" "}
+                                <Link href="/login">
+                                    <Text as="u" color="blue.400">
+                                        Login
+                                    </Text>
+                                </Link>
                             </Text>
                         </Stack>
                     </Stack>

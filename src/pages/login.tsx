@@ -10,22 +10,26 @@ import {
     Link as ChakraLink,
     Stack,
     Text,
-    useColorModeValue
+    useColorModeValue,
 } from "@chakra-ui/react";
 import { login } from "lib/api/auth";
+
 import useCurrentUser, {
-    API_URL as useCurrentUserEndpoint
+    API_URL as useCurrentUserEndpoint,
 } from "lib/hooks/useCurrentUser";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
+import { CustomToast } from "components/CustomToast";
 type Auth = {
     email?: string;
     password?: string;
 };
 export default function Login() {
     const [auth, setAuth] = useState<Auth>();
+    const { addToast } = CustomToast();
+    const [isSubmit, setIsSubmit] = useState(false);
 
     const router = useRouter();
 
@@ -33,14 +37,16 @@ export default function Login() {
 
     const handleSubmit = () => {
         if (auth) {
+            setIsSubmit(true);
             login(auth.email, auth.password).then((response) => {
                 console.log(response);
                 if (response.data) {
                     mutate(useCurrentUserEndpoint);
-                    alert("login successful");
+                    addToast({ message: "login successful", type: "success" });
                     router.push("/");
                 } else {
-                    alert(response.message);
+                    setIsSubmit(false);
+                    addToast({ message: response.message, type: "error" });
                 }
             });
         }
@@ -59,10 +65,6 @@ export default function Login() {
             password: e.target.value,
         });
     };
-
-    useEffect(() => {
-        console.log("auth : ", auth);
-    }, [auth]);
 
     useEffect(() => {
         if (!isCurrentUserLoading && currentUser) {
@@ -116,22 +118,34 @@ export default function Login() {
                                 align={"start"}
                                 justify={"space-between"}
                             >
-                                <Checkbox>Remember me</Checkbox>
-
-                                <ChakraLink color={"blue.400"}>
-                                    <Link href="/signup">Sign up</Link>
-                                </ChakraLink>
+                                <Box></Box>
+                                <Link href="/signup">
+                                    <Text as="u" color={"blue.400"}>
+                                        Sign up
+                                    </Text>
+                                </Link>
                             </Stack>
-                            <Button
-                                onClick={handleSubmit}
-                                bg={"blue.400"}
-                                color={"white"}
-                                _hover={{
-                                    bg: "blue.500",
-                                }}
-                            >
-                                Sign in
-                            </Button>
+                            {isSubmit ? (
+                                <Button
+                                    isLoading
+                                    loadingText="login"
+                                    colorScheme="teal"
+                                    variant="outline"
+                                >
+                                    login
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={handleSubmit}
+                                    bg={"blue.400"}
+                                    color={"white"}
+                                    _hover={{
+                                        bg: "blue.500",
+                                    }}
+                                >
+                                    Sign in
+                                </Button>
+                            )}
                         </Stack>
                     </Stack>
                 </Box>

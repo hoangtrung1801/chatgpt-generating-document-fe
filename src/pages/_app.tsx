@@ -19,14 +19,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         error,
     } = useCurrentUser();
 
+    console.log("currentUser : ", currentUser);
     useEffect(() => {
         if (isCurrentUserLoading) return;
-        console.log("asPath : ", asPath);
         if (!currentUser && asPath !== "/login" && asPath !== "/signup") {
             console.log("ok");
             replace("/login");
         }
-    }, [asPath, currentUser, isCurrentUserLoading, replace]);
+    }, [currentUser, isCurrentUserLoading]);
 
     return (
         <SWRConfig value={{ fetcher: fetchWithCredentials }}>

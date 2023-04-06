@@ -13,6 +13,7 @@ import TypeShortDescriptionApp from "components/document-page/TypeShortDescripti
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import Loading from "components/Loading";
 import createTodos from "lib/api/createTodos";
+import { CustomToast } from "components/CustomToast";
 
 type shortDescription = {
     name: string;
@@ -29,7 +30,7 @@ const Document: NextPage = () => {
     const [outStep, setOutStep] = useState(0);
     const [shortDescriptionApp, setShortDescriptionApp] =
         useState<shortDescription>({ name: "", description: "" });
-    const [isTyped, setIsTyped] = useState(true);
+    const { addToast } = CustomToast();
 
     // const options = useSelectionStore((state) => state.options);
     const setResult = useResultStore((state) => state.setResult);
@@ -54,11 +55,9 @@ const Document: NextPage = () => {
     };
     const handleSubmitDescription = () => {
         if (shortDescriptionApp.description && shortDescriptionApp.name) {
-            console.log("shortDescriptionApp : ", shortDescriptionApp);
-            setIsTyped(true);
             nextOutStep();
         } else {
-            setIsTyped(false);
+            addToast({ message: "Missing some field", type: "error" });
         }
     };
     console.log("outStep : ", outStep);
@@ -80,17 +79,30 @@ const Document: NextPage = () => {
             )
                 .then((selectionData) => {
                     console.log("selectionData", selectionData);
+                    addToast({
+                        message: "Your document generation is in progress!",
+                        type: "info",
+                    });
                     const selectionId = selectionData.data.id;
 
                     generateAnswerWithSelection(selectionId).then(
                         (answerData) => {
                             if (answerData.data) {
                                 setResult(answerData.data);
+                                addToast({
+                                    message:
+                                        "The system has generated the basic content of the document, waiting for creating your todos!",
+                                    type: "info",
+                                });
                                 createTodos(answerData.data.id).then(
                                     (todoRes) => {
                                         if (todoRes.data) {
                                             router.push("/result");
-                                            alert("successfull");
+                                            addToast({
+                                                message:
+                                                    "Your document was generated!",
+                                                type: "success",
+                                            });
                                         }
                                     }
                                 );
@@ -122,7 +134,6 @@ const Document: NextPage = () => {
         >
             {outStep === 0 ? (
                 <TypeShortDescriptionApp
-                    isTyped={isTyped}
                     shortDescriptionApp={shortDescriptionApp}
                     handleNameChange={handleNameChange}
                     handleDescriptionChange={handleDescriptionChange}

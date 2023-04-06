@@ -78,7 +78,11 @@ const onDragEnd = (result, columns, setColumns) => {
                 items: destItems,
             },
         });
-        updateUserStories(selectionId, userStoryId, status).then((res) => {
+        updateUserStories(
+            selectionId,
+            userStoryId,
+            status === "TODOS" ? "IN" : status
+        ).then((res) => {
             console.log("res", res);
         });
     } else {
