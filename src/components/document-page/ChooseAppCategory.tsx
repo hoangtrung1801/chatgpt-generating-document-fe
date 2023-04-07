@@ -55,6 +55,7 @@ const ChooseAppCategory = ({ nextStep, setOutStep }: any) => {
                             <Box mx={"auto"} key={category.id}>
                                 {category.status ? (
                                     <Box
+                                        rounded="full"
                                         w="240px"
                                         h="60px"
                                         overflow="hidden"
@@ -66,6 +67,7 @@ const ChooseAppCategory = ({ nextStep, setOutStep }: any) => {
                                         key={category.id}
                                     >
                                         <Image
+                                            objectFit="fill"
                                             w="full"
                                             h="full"
                                             cursor="pointer"

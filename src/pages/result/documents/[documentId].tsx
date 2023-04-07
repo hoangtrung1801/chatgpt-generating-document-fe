@@ -32,13 +32,13 @@ import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
 const TabLeftTitle = [
     {
-        content: "Vision and Goals",
+        content: "Documents",
         icon: HamburgerIcon,
     },
-    {
-        content: "Todos",
-        icon: AddIcon,
-    },
+    // {
+    //     content: "Todos",
+    //     icon: AddIcon,
+    // },
 ];
 
 const TabTopTitle = [

@@ -57,7 +57,7 @@ const ChooseDocumentType = ({ setDocumentType, setOutStep }: any) => {
                         transform={isHoverExsistApp ? "scale(1.1)" : ""}
                         mt="auto"
                         alt="app"
-                        src="https://www.cleveroad.com/images/article-previews/calc-category-001.png"
+                        src="https://i.ibb.co/FXbkbm0/calc-category-001.png"
                     />
                 </Flex>
                 <Flex
@@ -92,7 +92,7 @@ const ChooseDocumentType = ({ setDocumentType, setOutStep }: any) => {
                         transform={isHoverNewApp ? "scale(1.1)" : ""}
                         mt="auto"
                         alt="app"
-                        src="https://cleveroad.com/images/article-previews/calc-category-2.png"
+                        src="https://i.ibb.co/YWx2TWh/calc-category-2.png"
                     />
                     <Box
                         position="absolute"

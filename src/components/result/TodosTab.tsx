@@ -187,13 +187,13 @@ function TodosTab({ userStories }) {
                                                 {(provided, snapshot) => {
                                                     return (
                                                         <Box
-                                                            p={2}
+                                                            // p={1}
                                                             w={250}
                                                             minH={500}
                                                             bg={
                                                                 snapshot.isDraggingOver
-                                                                    ? "lightblue"
-                                                                    : "lightgrey"
+                                                                    ? "#f4f5f7"
+                                                                    : "#d4d6d8"
                                                             }
                                                             {...provided.droppableProps}
                                                             ref={
@@ -221,13 +221,13 @@ function TodosTab({ userStories }) {
                                                                             ) => {
                                                                                 return (
                                                                                     <Box
+                                                                                        minH="150px"
+                                                                                        userSelect="none"
+                                                                                        margin="0 0 8px 0"
+                                                                                        color="black"
                                                                                         onClick={() => {
                                                                                             setIsOpen(
                                                                                                 true
-                                                                                            );
-                                                                                            console.log(
-                                                                                                "item:",
-                                                                                                item
                                                                                             );
                                                                                             setItemSelected(
                                                                                                 item
@@ -239,17 +239,11 @@ function TodosTab({ userStories }) {
                                                                                         {...provided.draggableProps}
                                                                                         {...provided.dragHandleProps}
                                                                                         style={{
-                                                                                            userSelect:
-                                                                                                "none",
                                                                                             padding: 16,
-                                                                                            margin: "0 0 8px 0",
-                                                                                            minHeight:
-                                                                                                "50px",
                                                                                             backgroundColor:
                                                                                                 snapshot.isDragging
-                                                                                                    ? "#263B4A"
-                                                                                                    : "#456C86",
-                                                                                            color: "white",
+                                                                                                    ? "gray.300"
+                                                                                                    : "white",
                                                                                             ...provided
                                                                                                 .draggableProps
                                                                                                 .style,
