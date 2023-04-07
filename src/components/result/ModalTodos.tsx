@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 import CustomRadio from "components/CustomRadio";
 import { updateUserStories } from "lib/api/userStories";
+import useGetAllUsers from "lib/hooks/useGetAllUsers";
 import useUserStoriesOfSelection from "lib/hooks/useUserStoriesOfSelection";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -38,7 +39,22 @@ type todo = {
     content?: string;
 };
 const type = ["IN", "IN_PROGRESS", "IN_REVIEW", "DONE"];
+const userStoryStatus = {
+    IN: "TODO",
+    IN_PROGRESS: "IN PROGRESS",
+    IN_REVIEW: "IN REVIEW",
+    DONE: "DONE",
+};
 function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
+    const { users, isLoading: usersLoading } = useGetAllUsers();
+    // const users = [
+    //     {
+    //         name: "admin",
+    //     },
+    //     {
+    //         name: "123",
+    //     },
+    // ];
     const router = useRouter();
     const documentId = Number(router.query.documentId);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -51,7 +67,7 @@ function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
         setIsOpen(false);
     };
     // console.log("userStories:", userStories);
-    console.log("item : ", item);
+    console.log("users : ", users);
     const onSave = () => {
         setLoadingSubmit(true);
         const updatedFetchData = userStories.map((data: todo) => {
@@ -132,13 +148,11 @@ function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
                                 >
                                     <HStack justifyContent="center">
                                         <Text>
-                                            {item
-                                                ? item === "IN"
-                                                    ? "TODO"
-                                                    : item
-                                                : itemSelected?.status === "IN"
-                                                ? "TODO"
-                                                : itemSelected?.status}
+                                            {item === undefined
+                                                ? userStoryStatus[
+                                                      itemSelected?.status
+                                                  ]
+                                                : userStoryStatus[item]}
                                         </Text>
                                         <ChevronDownIcon />
                                     </HStack>
@@ -149,14 +163,18 @@ function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
                                             if (item !== itemSelected?.status) {
                                                 return (
                                                     <MenuItem
-                                                        onClick={() =>
-                                                            setItem(item)
-                                                        }
+                                                        onClick={() => {
+                                                            setItem(item);
+                                                            console.log(
+                                                                "userStoryStatus[item] : ",
+                                                                userStoryStatus[
+                                                                    item
+                                                                ]
+                                                            );
+                                                        }}
                                                         key={item}
                                                     >
-                                                        {item === "IN"
-                                                            ? "TODO"
-                                                            : item}
+                                                        {userStoryStatus[item]}
                                                     </MenuItem>
                                                 );
                                             }
@@ -240,7 +258,23 @@ function ModalTodo({ isOpen, setIsOpen, itemSelected, setItemSelected }: any) {
                                 >
                                     <HStack justifyContent="space-between">
                                         <Text>Assignee</Text>
-                                        <Avatar />
+                                        <Menu>
+                                            <MenuButton>
+                                                <Avatar name="admin" />
+                                            </MenuButton>
+                                            <MenuList>
+                                                {!usersLoading &&
+                                                    users.map((user) => (
+                                                        <MenuItem
+                                                            key={user.name}
+                                                        >
+                                                            <Avatar
+                                                                name={user.name}
+                                                            />
+                                                        </MenuItem>
+                                                    ))}
+                                            </MenuList>
+                                        </Menu>
                                     </HStack>
                                     <HStack justifyContent="space-between">
                                         <Text>Reporter</Text>
