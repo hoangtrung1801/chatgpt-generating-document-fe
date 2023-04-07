@@ -43,6 +43,12 @@ type UserStory = {
 //         ],
 //     },
 // ];
+const userStoryStatus = {
+    TODOS: "IN",
+    "IN PROGRESS": "IN_PROGRESS",
+    "IN REVIEW": "IN_REVIEW",
+    DONE: "DONE",
+};
 const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
     const { source, destination } = result;
@@ -56,7 +62,7 @@ const onDragEnd = (result, columns, setColumns) => {
         // );
         const { id: userStoryId, selectionId } =
             columns[source.droppableId].items[source.index];
-        const status = columns[destination.droppableId].name;
+        const status = userStoryStatus[columns[destination.droppableId].name];
         console.log("userStoryId : ", userStoryId);
         console.log("selectionId : ", selectionId);
         console.log("status : ", status);
@@ -132,12 +138,12 @@ function TodosTab({ userStories }) {
                 },
                 {
                     id: 2,
-                    name: "IN_PROGRESS",
+                    name: "IN PROGRESS",
                     items: inProgress,
                 },
                 {
                     id: 3,
-                    name: "IN_REVIEW",
+                    name: "IN REVIEW",
                     items: inReview,
                 },
                 {
