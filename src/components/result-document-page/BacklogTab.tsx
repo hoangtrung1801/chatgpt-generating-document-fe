@@ -65,16 +65,6 @@ const BacklogTab = () => {
                     Create sprint
                 </Button>
             </Box>
-            <Box>
-                {isSelectionLoading &&
-                    selection &&
-                    selection?.sprints?.map((sprint) => (
-                        <Box key={sprint.id}>
-                            <Heading>{sprint.name}</Heading>
-                        </Box>
-                    ))}
-            </Box>
-
             <Stack direction={"column"} spacing={4}>
                 {sprints &&
                     sprints.map((sprint) => (
