@@ -25,13 +25,13 @@ import {
     Tr,
     VStack,
 } from "@chakra-ui/react";
-import TodosTab from "components/result/TodosTab";
+import TodosTab from "components/result-document-page/TodosTab";
 import useBriefs from "lib/hooks/useGetBriefs";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Show, Hide } from "@chakra-ui/react";
-import LeftDashBoardMobile from "components/result/LeftDashBoardMobile";
+import LeftDashBoardMobile from "components/result-document-page/LeftDashBoardMobile";
 import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 const arr = [1, 2, 3, 4];
 
