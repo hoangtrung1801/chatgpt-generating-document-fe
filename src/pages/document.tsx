@@ -1,19 +1,17 @@
 import { Box, Button } from "@chakra-ui/react";
-import ChooseDocumentType from "components/document-page/ChooseDocumentType";
-import ChooseAppOptions from "components/document-page/ChooseAppOptions";
-import { NextPage } from "next";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useRouter } from "next/router";
-import createSelection from "lib/api/createSelection";
-import generateAnswerWithSelection from "lib/api/generateAnswerWithSelection";
-import useResultStore from "stores/useResultStore";
-import useConfirmStore from "stores/useCofirmOptions";
-import TypeShortDescriptionApp from "components/document-page/TypeShortDescriptionApp";
-import { ArrowBackIcon } from "@chakra-ui/icons";
-import Loading from "components/Loading";
-import createTodos from "lib/api/createTodos";
 import { CustomToast } from "components/CustomToast";
+import ChooseApp from "components/document-page/ChooseApp";
+import ChooseAppCategory from "components/document-page/ChooseAppCategory";
+import ChooseAppOptions from "components/document-page/ChooseAppOptions";
+import TypeShortDescriptionApp from "components/document-page/TypeShortDescriptionApp";
+import createSelection from "lib/api/createSelection";
+import generateDocument from "lib/api/generateDocument";
+import useGetQuestions from "lib/hooks/useGetQuestions";
+import useOptions from "lib/hooks/useOptions";
+import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
 type shortDescription = {
     name: string;
@@ -22,100 +20,127 @@ type shortDescription = {
 
 const Document: NextPage = () => {
     const router = useRouter();
-    const methods = useForm();
-    const { handleSubmit } = methods;
+    const step = Number(router.query?.step) || 0;
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [documentType, setDocumentType] = useState(undefined);
-    const [outStep, setOutStep] = useState(0);
-    const [shortDescriptionApp, setShortDescriptionApp] =
-        useState<shortDescription>({ name: "", description: "" });
+    const methods = useForm();
+    const { watch, handleSubmit } = methods;
+
+    const formValues = watch();
+    const appId = watch("appId");
+
+    const { questions } = useGetQuestions(appId);
+    const { options } = useOptions();
+
     const { addToast } = CustomToast();
 
-    // const options = useSelectionStore((state) => state.options);
-    const setResult = useResultStore((state) => state.setResult);
-    const { confirmOptions } = useConfirmStore();
+    const nextStep = () => {
+        router.query.step = String(step + 1);
+        router.push(router);
+        console.log({ formValues });
+    };
 
-    const handleDescriptionChange = (e: any) =>
-        setShortDescriptionApp({
-            name: shortDescriptionApp.name,
-            description: e.target.value,
-        });
-    const handleNameChange = (e: any) =>
-        setShortDescriptionApp({
-            name: e.target.value,
-            description: shortDescriptionApp.description,
-        });
+    const backStep = () => {
+        router.query.step = String(Math.max(step - 1, 0));
+        router.push(router);
+    };
 
-    const nextOutStep = () => {
-        setOutStep(outStep + 1);
+    const gotoStep = (step: number) => {
+        router.query.step = String(step);
+        router.push(router);
     };
-    const prevOutStep = () => {
-        setOutStep(outStep - 1);
-    };
-    const handleSubmitDescription = () => {
-        if (shortDescriptionApp.description && shortDescriptionApp.name) {
-            nextOutStep();
-        } else {
-            addToast({ message: "Missing some field", type: "error" });
-        }
-    };
-    console.log("outStep : ", outStep);
-    const onSubmit = (values: any) => {
-        console.log("confirmOptions : ", confirmOptions);
-        const result = confirmOptions
-            .flatMap((item) => item.option_id)
-            .filter((option) => option !== undefined);
-        setIsLoading(true);
-        // console.log("result : ", result);
-        const { category } = values;
-        // router.push("/result");
-        if (result) {
-            createSelection(
-                category.id,
-                result,
-                shortDescriptionApp.name,
-                shortDescriptionApp.description
-            )
-                .then((selectionData) => {
-                    console.log("selectionData", selectionData);
-                    addToast({
-                        message: "Your document generation is in progress!",
-                        type: "info",
-                    });
-                    const selectionId = selectionData.data.id;
 
-                    generateAnswerWithSelection(selectionId).then(
-                        (answerData) => {
-                            if (answerData.data) {
-                                setResult(answerData.data);
-                                addToast({
-                                    message:
-                                        "The system has generated the basic content of the document, waiting for creating your todos!",
-                                    type: "info",
-                                });
-                                createTodos(answerData.data.id).then(
-                                    (todoRes) => {
-                                        if (todoRes.data) {
-                                            router.push("/result");
-                                            addToast({
-                                                message:
-                                                    "Your document was generated!",
-                                                type: "success",
-                                            });
-                                        }
-                                    }
-                                );
-                            }
-                            console.log(answerData);
-                        }
-                    );
-                })
-                .catch((error) => {
-                    console.error("error", error);
-                });
-        }
+    const onSubmit = async (values) => {
+        console.log({ values });
+        // console.log("confirmOptions : ", confirmOptions);
+        // const result = confirmOptions
+        //     .flatMap((item) => item.option_id)
+        //     .filter((option) => option !== undefined);
+        // setIsLoading(true);
+        // // console.log("result : ", result);
+        // const { category } = values;
+        // // router.push("/result");
+        // if (result) {
+        //     createSelection(
+        //         category.id,
+        //         result,
+        //         shortDescriptionApp.name,
+        //         shortDescriptionApp.description
+        //     )
+        //         .then((selectionData) => {
+        //             console.log("selectionData", selectionData);
+        //             addToast({
+        //                 message: "Your document generation is in progress!",
+        //                 type: "info",
+        //             });
+        //             const selectionId = selectionData.data.id;
+
+        //             generateAnswerWithSelection(selectionId).then(
+        //                 (answerData) => {
+        //                     if (answerData.data) {
+        //                         setResult(answerData.data);
+        //                         addToast({
+        //                             message:
+        //                                 "The system has generated the basic content of the document, waiting for creating your todos!",
+        //                             type: "info",
+        //                         });
+        //                         createTodos(answerData.data.id).then(
+        //                             (todoRes) => {
+        //                                 if (todoRes.data) {
+        //                                     router.push("/result");
+        //                                     addToast({
+        //                                         message:
+        //                                             "Your document was generated!",
+        //                                         type: "success",
+        //                                     });
+        //                                 }
+        //                             }
+        //                         );
+        //                     }
+        //                     console.log(answerData);
+        //                 }
+        //             );
+        //         })
+        //         .catch((error) => {
+        //             console.error("error", error);
+        //         });
+        // }
+
+        const body = { ...values };
+        delete body.category;
+        body.selectedOptions = Object.values(body.selectedOptions).reduce(
+            (prev: Array<Number>, cur: any) => {
+                if (!cur) return prev;
+                return [...prev, ...cur];
+            },
+            []
+        );
+
+        // Test
+        body.username = "Hoang Trung";
+
+        console.log({ body });
+        // console.log(
+        //     body.selectedOptions.filter(
+        //         (id) => !options.find((option) => option.id === id)
+        //     )
+        // );
+
+        // API - Create Selection
+        const response = await createSelection(body);
+        const selection = response.data;
+        console.log({ selection });
+
+        // API - Generate Document
+        const response2 = await generateDocument(selection.id);
+        const outline = response2.data;
+        console.log({ outline });
+
+        router.push("/result");
     };
+
+    useEffect(() => {
+        console.log("query", router.query);
+    }, [router.query]);
 
     return (
         <Box
@@ -125,62 +150,23 @@ const Document: NextPage = () => {
             minHeight={["50vh", "80vh"]}
             w="full"
             bg="#eaeaf1"
-            // minHeight="70vh"
-            // w="full"
-            // bg="blue.100"
-            // bg={outStep > 1 ? "#f8f8fb" : "blue.100"}
-            // bg="#f8f8fb"
             p={8}
         >
-            {outStep === 0 ? (
-                <TypeShortDescriptionApp
-                    shortDescriptionApp={shortDescriptionApp}
-                    handleNameChange={handleNameChange}
-                    handleDescriptionChange={handleDescriptionChange}
-                    handleSubmitDescription={handleSubmitDescription}
-                />
-            ) : (
-                <Box>
-                    {isLoading ? (
-                        <Loading />
-                    ) : (
-                        <FormProvider {...methods}>
-                            {outStep < 3 && (
-                                <Button
-                                    colorScheme="blue"
-                                    leftIcon={<ArrowBackIcon />}
-                                    size={"lg"}
-                                    mb="20px"
-                                    onClick={prevOutStep}
-                                >
-                                    Back
-                                </Button>
-                            )}
-
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <Box h={"100%"}>
-                                    {outStep >= 2 && documentType === "app" && (
-                                        <Box>
-                                            <ChooseAppOptions
-                                                shortDescriptionApp={
-                                                    shortDescriptionApp
-                                                }
-                                                setOutStep={setOutStep}
-                                            />
-                                        </Box>
-                                    )}
-                                    {outStep === 1 && (
-                                        <ChooseDocumentType
-                                            setDocumentType={setDocumentType}
-                                            setOutStep={setOutStep}
-                                        />
-                                    )}
-                                </Box>
-                            </form>
-                        </FormProvider>
-                    )}
-                </Box>
-            )}
+            <FormProvider {...methods}>
+                {step === 0 && <TypeShortDescriptionApp nextStep={nextStep} />}
+                {step !== 0 && (
+                    <>
+                        <Button onClick={() => backStep()}>Back</Button>
+                        <Button onClick={() => nextStep()}>Next</Button>
+                    </>
+                )}
+                {step === 1 && <ChooseAppCategory nextStep={nextStep} />}
+                {step === 2 && <ChooseApp nextStep={nextStep} />}
+                {step >= 3 && <ChooseAppOptions nextStep={nextStep} />}
+                {step === questions.length + 3 && (
+                    <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+                )}
+            </FormProvider>
         </Box>
     );
 };

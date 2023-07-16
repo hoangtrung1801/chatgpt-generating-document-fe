@@ -95,8 +95,8 @@ const HomePage: NextPage = () => {
                     >
                         {selections === undefined || isUserSelectionLoading ? (
                             Array(3)
-                                .fill()
-                                .map((index) => {
+                                .fill(0)
+                                .map((_, index) => {
                                     return (
                                         <GridItem key={index}>
                                             <Skeleton

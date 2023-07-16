@@ -2,20 +2,16 @@ import { BE_URL } from "lib/config";
 import { fetchWithCredentials } from "lib/fetcher";
 import useSwr, { SWRResponse } from "swr";
 
-const API_URL = `${BE_URL}/questions`;
-
-const useGetQuestions = (appId: number) => {
+const useCategoryWithId = (categoryId: number) => {
+    const API_URL = `${BE_URL}/categories/${categoryId}`;
     const { data, error }: SWRResponse = useSwr(API_URL, fetchWithCredentials);
 
     return {
-        questions:
-            data !== undefined
-                ? data.data.filter((question: any) => question.appId === appId)
-                : [],
+        category: data !== undefined ? data.data : [],
         isLoading: !error && !data,
         // isLoading: true,
         error: error,
     };
 };
 
-export default useGetQuestions;
+export default useCategoryWithId;

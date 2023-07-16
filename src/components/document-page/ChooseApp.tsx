@@ -1,58 +1,54 @@
 import { Box, Heading, Image, SimpleGrid } from "@chakra-ui/react";
 import Loading from "components/Loading";
-import useCategories from "lib/hooks/useGetCategories";
-import { useEffect, useState } from "react";
+import useCategoryWithId from "lib/hooks/useCategoryWithId";
 import { useFormContext } from "react-hook-form";
-import useConfirmStore from "stores/useCofirmOptions";
-import useSelectionStore from "stores/useSelectionStore";
 
-const ChooseAppCategory = ({ nextStep }) => {
-    const { setValue } = useFormContext();
+const ChooseApp = ({ nextStep }) => {
+    const { watch, setValue } = useFormContext();
+    const categoryId = watch("category");
 
-    const [isComming, setIsComming] = useState(false);
-    const { clearOptions } = useConfirmStore();
+    const {
+        category: { apps },
+        isLoading,
+    } = useCategoryWithId(categoryId);
 
-    const setCategory = useSelectionStore((state) => state.setCategory);
-
-    const { categories, isLoading } = useCategories();
-
-    const onClick = (category: any) => {
-        console.log({ category });
+    const onClick = (app) => {
+        console.log({ app });
         // clearOptions();
-        setValue("category", category.id);
+        setValue("appId", app.id);
         nextStep();
     };
 
     return (
         <Box>
-            <Heading textAlign={["center", "left"]}>Choose Categories</Heading>
+            <Heading textAlign={["center", "left"]}>Choose App</Heading>
             <Box mt={10}>
                 {isLoading ? (
                     <Loading />
                 ) : (
                     <SimpleGrid columns={[1, 1, 2, 4]} spacing={[5, 10]}>
-                        {categories.map((category: any) => (
-                            <Box mx={"auto"} key={category.id}>
-                                {category.status ? (
+                        {apps.map((app) => (
+                            <Box mx={"auto"} key={app.id}>
+                                {app.status ? (
                                     <Box
                                         rounded="full"
                                         w="240px"
                                         h="60px"
                                         overflow="hidden"
                                         transition="ease-in-out .5s"
-                                        onClick={() => onClick(category)}
+                                        onClick={() => onClick(app)}
                                         _hover={{
                                             transform: "scale(1.1)",
                                         }}
-                                        key={category.id}
+                                        key={app.id}
                                     >
                                         <Image
                                             objectFit="fill"
                                             w="full"
                                             h="full"
                                             cursor="pointer"
-                                            alt={category.name}
-                                            src={category.thumbnail}
+                                            alt={app.name}
+                                            src={app.thumbnail}
                                         />
                                     </Box>
                                 ) : (
@@ -66,16 +62,14 @@ const ChooseAppCategory = ({ nextStep }) => {
                                         _hover={{
                                             transform: "scale(1.1)",
                                         }}
-                                        onMouseOver={() => setIsComming(true)}
-                                        onMouseLeave={() => setIsComming(false)}
-                                        key={category.id}
+                                        key={app.id}
                                     >
                                         <Image
                                             w="full"
                                             h="full"
                                             cursor="pointer"
-                                            alt={category.name}
-                                            src={category.thumbnail}
+                                            alt={app.name}
+                                            src={app.thumbnail}
                                         />
                                         <Box
                                             position="absolute"
@@ -85,8 +79,6 @@ const ChooseAppCategory = ({ nextStep }) => {
                                             left="0"
                                             bottom="0"
                                             bg="rgba(0,0,0,.8)"
-                                            opacity={isComming ? 1 : 0}
-                                            transition="ease-in-out .5s"
                                         ></Box>
                                         <Box
                                             position="absolute"
@@ -97,7 +89,7 @@ const ChooseAppCategory = ({ nextStep }) => {
                                             left="0"
                                             right="0"
                                             textAlign="center"
-                                            opacity={isComming ? 1 : 0}
+                                            // opacity={isComming ? 1 : 0}
                                             transition="ease-in-out .5s"
                                         >
                                             Comming soon!
@@ -113,4 +105,4 @@ const ChooseAppCategory = ({ nextStep }) => {
     );
 };
 
-export default ChooseAppCategory;
+export default ChooseApp;

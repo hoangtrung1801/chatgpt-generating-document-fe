@@ -14,13 +14,11 @@ import {
     Textarea,
 } from "@chakra-ui/react";
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
-function TypeShortDescriptionApp({
-    shortDescriptionApp,
-    handleDescriptionChange,
-    handleNameChange,
-    handleSubmitDescription,
-}: any) {
+function TypeShortDescriptionApp({ nextStep }: any) {
+    const { register } = useFormContext();
+
     return (
         <Box position={"relative"}>
             <Container
@@ -100,18 +98,15 @@ function TypeShortDescriptionApp({
                         <Stack spacing={10}>
                             <Input
                                 placeholder="Name"
-                                value={shortDescriptionApp.name}
-                                onChange={handleNameChange}
                                 bg={"gray.100"}
                                 border={0}
                                 color={"gray.500"}
                                 _placeholder={{
                                     color: "gray.500",
                                 }}
+                                {...register("projectName")}
                             />
                             <Textarea
-                                value={shortDescriptionApp.description}
-                                onChange={handleDescriptionChange}
                                 minH={200}
                                 placeholder="Description"
                                 bg={"gray.100"}
@@ -120,10 +115,11 @@ function TypeShortDescriptionApp({
                                 _placeholder={{
                                     color: "gray.500",
                                 }}
+                                {...register("description")}
                             />
                         </Stack>
                         <Button
-                            onClick={handleSubmitDescription}
+                            onClick={() => nextStep()}
                             mt={8}
                             w={"full"}
                             bgGradient="linear(to-r, blue.400,blue.200)"
@@ -147,6 +143,7 @@ function TypeShortDescriptionApp({
         </Box>
     );
 }
+
 export const Blur = (props: IconProps) => {
     return (
         <Icon

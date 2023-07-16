@@ -17,7 +17,9 @@ import {
     Textarea,
 } from "@chakra-ui/react";
 import useGetQuestions from "lib/hooks/useGetQuestions";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import useConfirmStore from "stores/useCofirmOptions";
 import useSelectionStore from "stores/useSelectionStore";
 import BlockChooseQuestion from "./BlockChooseQuestion";
@@ -103,93 +105,37 @@ const questions = [
 ];
 
 const ChooseAppOptions = ({
+    nextStep,
     onSubmit,
     setOutStep,
     shortDescriptionApp,
 }: any) => {
+    const router = useRouter();
+    const step = Number(router.query.step);
+
+    const { watch } = useFormContext();
+    const appId = watch("appId");
+
     const [noStep, setNoStep] = useState(0);
 
-    const category = useSelectionStore((state) => state.category);
-    const options = useSelectionStore((state) => state.options);
-    // const updateNumberBack = useSelectionStore((state) => state.numberBack);
-    // const removeBackOptions = useSelectionStore(
-    //     (state) => state.removeBackOptions
-    // );
+    const { questions, isLoading: questionsIsLoading } = useGetQuestions(appId);
 
-    const { clearOptions, confirmOptions } = useConfirmStore();
-
-    const { questions, isLoading: questionsIsLoading } = useGetQuestions(
-        category as number
-    );
-
-    const nextStep = () => {
-        setNoStep(noStep + 1);
-    };
-
-    const prevStep = () => {
-        // removeBackOptions(updateNumberBack);
-        if (noStep - 1 >= 0) {
-            setNoStep(noStep - 1);
-        }
-    };
     // useEffect(() => {
     //     console.log("category : ", category);
     //     clearOptions();
 
     // }, [category, clearOptions]);
 
+    useEffect(() => {
+        console.log({ questions });
+    }, [questions]);
+
     return (
         <Box>
-            <HStack justify={"space-between"} alignItems="center">
-                {noStep !== 0 && (
-                    <Stack
-                        direction="row"
-                        spacing={2}
-                        alignItems="center"
-                        cursor={"pointer"}
-                        onClick={prevStep}
-                    >
-                        <Button
-                            colorScheme="blue"
-                            leftIcon={<ArrowBackIcon />}
-                            size={"lg"}
-                            mb="20px"
-                        >
-                            Back
-                        </Button>
-                    </Stack>
-                )}
-
-                {/* {noStep <= questions.length && (
-                    <Box>
-                        {noStep > 0 && (
-                            <Stack
-                                padding="4px 16px"
-                                bg="blackAlpha.300"
-                                borderRadius={12}
-                            >
-                                <Text>
-                                    Step {noStep} of {questions.length}
-                                </Text>
-                            </Stack>
-                        )}
-                    </Box>
-                )} */}
-            </HStack>
-
-            {noStep === 0 && (
-                <ChooseAppCategory
-                    nextStep={nextStep}
-                    setOutStep={setOutStep}
-                />
-            )}
-            {!questionsIsLoading && noStep !== 0 && (
+            {!questionsIsLoading && (
                 <Box>
-                    {questions.map((question: any, id: number) => (
-                        <Box
-                            key={question.name}
-                            hidden={id + 1 === noStep ? false : true}
-                        >
+                    {questions.map((question, id) => (
+                        <Box key={id} hidden={step - 3 !== id}>
                             <BlockChooseQuestion
                                 questionId={question.id}
                                 nextStep={nextStep}
@@ -212,26 +158,11 @@ const ChooseAppOptions = ({
                     )}
                 </Box>
             )}
-            {!questionsIsLoading && noStep > questions.length && (
+            {/* {!questionsIsLoading && noStep > questions.length && (
                 <Box display="flex" flexDirection="column" w="full" gap={10}>
                     <Text fontSize="3xl" fontWeight="bold" textAlign="center">
                         Confirm your selection
                     </Text>
-                    {/* <FormControl>
-                        <FormLabel>Application name</FormLabel>
-                        <Input
-                            disabled
-                            defaultValue={shortDescriptionApp.name}
-                            bg="white"
-                        />
-                        <FormLabel>Description</FormLabel>
-                        <Textarea
-                            defaultValue={shortDescriptionApp.description}
-                            disabled
-                            minHeight="200px"
-                            bg="white"
-                        />
-                    </FormControl> */}
                     <Box>
                         <Box>
                             <Text fontSize="xl" fontWeight="semibold">
@@ -298,7 +229,7 @@ const ChooseAppOptions = ({
                         Submit
                     </Button>
                 </Box>
-            )}
+            )} */}
         </Box>
     );
 };
