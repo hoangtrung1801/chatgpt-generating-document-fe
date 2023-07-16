@@ -66,7 +66,7 @@ const HomePage: NextPage = () => {
                         <Button
                             zIndex="1"
                             size="lg"
-                            onClick={() => router.push("/document")}
+                            onClick={() => router.push("/generate")}
                             bgGradient="linear(to-r, blue.500,blue.300)"
                             color={"white"}
                             _hover={{

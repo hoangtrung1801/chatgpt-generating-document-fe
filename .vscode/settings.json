@@ -1,7 +1,4 @@
 {
     "typescript.tsdk": "node_modules\\typescript\\lib",
-    "cSpell.words": [
-        "chakra",
-        "chatgpt"
-    ]
+    "cSpell.words": ["chakra", "chatgpt", "Milkdown"]
 }
