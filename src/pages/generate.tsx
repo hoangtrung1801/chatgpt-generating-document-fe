@@ -52,60 +52,6 @@ const Document: NextPage = () => {
     const onSubmit = async (values) => {
         try {
             console.log({ values });
-            // console.log("confirmOptions : ", confirmOptions);
-            // const result = confirmOptions
-            //     .flatMap((item) => item.option_id)
-            //     .filter((option) => option !== undefined);
-            // setIsLoading(true);
-            // // console.log("result : ", result);
-            // const { category } = values;
-            // // router.push("/result");
-            // if (result) {
-            //     createSelection(
-            //         category.id,
-            //         result,
-            //         shortDescriptionApp.name,
-            //         shortDescriptionApp.description
-            //     )
-            //         .then((selectionData) => {
-            //             console.log("selectionData", selectionData);
-            //             addToast({
-            //                 message: "Your document generation is in progress!",
-            //                 type: "info",
-            //             });
-            //             const selectionId = selectionData.data.id;
-
-            //             generateAnswerWithSelection(selectionId).then(
-            //                 (answerData) => {
-            //                     if (answerData.data) {
-            //                         setResult(answerData.data);
-            //                         addToast({
-            //                             message:
-            //                                 "The system has generated the basic content of the document, waiting for creating your todos!",
-            //                             type: "info",
-            //                         });
-            //                         createTodos(answerData.data.id).then(
-            //                             (todoRes) => {
-            //                                 if (todoRes.data) {
-            //                                     router.push("/result");
-            //                                     addToast({
-            //                                         message:
-            //                                             "Your document was generated!",
-            //                                         type: "success",
-            //                                     });
-            //                                 }
-            //                             }
-            //                         );
-            //                     }
-            //                     console.log(answerData);
-            //                 }
-            //             );
-            //         })
-            //         .catch((error) => {
-            //             console.error("error", error);
-            //         });
-            // }
-
             const body = { ...values };
             delete body.category;
             body.selectedOptions = Object.values(body.selectedOptions).reduce(
@@ -148,15 +94,7 @@ const Document: NextPage = () => {
     }, [router.query]);
 
     return (
-        <Box
-            margin="50px auto"
-            maxWidth={"container.xl"}
-            transition="0.5s ease-out"
-            minHeight={["50vh", "80vh"]}
-            w="full"
-            bg="#eaeaf1"
-            p={8}
-        >
+        <Box w="full" p={8}>
             <FormProvider {...methods}>
                 {step === 0 && <TypeShortDescriptionApp nextStep={nextStep} />}
                 {step !== 0 && (
