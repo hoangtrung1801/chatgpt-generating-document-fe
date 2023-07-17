@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import "@blocknote/core/style.css";
-import CustomButton from "components/common/CustomBottom";
+import CustomButton from "components/common/CustomButton";
 
 const markdown = `# Milkdown Next Commonmark
 

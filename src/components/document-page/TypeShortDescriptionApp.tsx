@@ -13,7 +13,7 @@ import {
     Image,
     Textarea,
 } from "@chakra-ui/react";
-import CustomButton from "components/common/CustomBottom";
+import CustomButton from "components/common/CustomButton";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 

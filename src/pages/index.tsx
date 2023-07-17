@@ -14,7 +14,7 @@ import {
     useBreakpointValue,
     VStack,
 } from "@chakra-ui/react";
-import CustomButton from "components/common/CustomBottom";
+import CustomButton from "components/common/CustomButton";
 import Loading from "components/Loading";
 import useCurrentUser from "lib/hooks/useCurrentUser";
 import useUserSelections from "lib/hooks/useUserSelections";
