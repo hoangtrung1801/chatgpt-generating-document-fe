@@ -14,12 +14,7 @@ const Layout = ({ children }: LayoutProps) => {
             transition="0.5s ease-out"
             backgroundColor={"blackAlpha.100"}
             minHeight="100vh"
-            padding={[
-                "1.25rem 1rem",
-                "1.25rem 2rem",
-                "1.25rem 4rem",
-                "1.25rem 6rem",
-            ]}
+            padding={["2rem 1rem", "2rem 2rem", "2rem 4rem", "2rem 6rem"]}
         >
             <Box>
                 {/* <Header /> */}

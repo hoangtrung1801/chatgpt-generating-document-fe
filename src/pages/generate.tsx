@@ -1,4 +1,5 @@
-import { Box, Button } from "@chakra-ui/react";
+import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import { Box, Button, Divider, Stack, Text } from "@chakra-ui/react";
 import { CustomToast } from "components/CustomToast";
 import ChooseApp from "components/document-page/ChooseApp";
 import ChooseAppCategory from "components/document-page/ChooseAppCategory";
@@ -98,10 +99,37 @@ const Document: NextPage = () => {
             <FormProvider {...methods}>
                 {step === 0 && <TypeShortDescriptionApp nextStep={nextStep} />}
                 {step !== 0 && (
-                    <>
-                        <Button onClick={() => backStep()}>Back</Button>
-                        <Button onClick={() => nextStep()}>Next</Button>
-                    </>
+                    <Box>
+                        <Stack direction="row" justifyContent="space-between">
+                            <Button
+                                variant="unstyled"
+                                onClick={() => backStep()}
+                            >
+                                <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    alignItems="center"
+                                >
+                                    <Text>Back</Text>
+                                    <ArrowBackIcon />
+                                </Stack>
+                            </Button>
+                            <Button
+                                variant="unstyled"
+                                onClick={() => nextStep()}
+                            >
+                                <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    alignItems="center"
+                                >
+                                    <ArrowForwardIcon />
+                                    <Text>Next</Text>
+                                </Stack>
+                            </Button>
+                        </Stack>
+                        <Divider color="blackAlpha.800" />
+                    </Box>
                 )}
                 {step === 1 && <ChooseAppCategory nextStep={nextStep} />}
                 {step === 2 && <ChooseApp nextStep={nextStep} />}

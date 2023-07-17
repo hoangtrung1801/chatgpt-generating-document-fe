@@ -11,7 +11,7 @@ const useUserSelections = () => {
     );
 
     return {
-        selections: !data ? undefined : data.data,
+        selections: data !== undefined ? data.data : [],
         isLoading: !error && !data,
         // isLoading: true,
         error: error,

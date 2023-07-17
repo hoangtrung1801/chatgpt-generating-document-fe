@@ -17,6 +17,8 @@
     "commit": "git-cz"
   },
   "dependencies": {
+    "@blocknote/core": "^0.8.2",
+    "@blocknote/react": "^0.8.2",
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.5.1",
     "@chakra-ui/shared-utils": "^2.0.5",

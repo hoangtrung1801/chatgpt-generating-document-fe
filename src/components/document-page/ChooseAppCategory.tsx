@@ -9,9 +9,6 @@ import useSelectionStore from "stores/useSelectionStore";
 const ChooseAppCategory = ({ nextStep }) => {
     const { setValue } = useFormContext();
 
-    const [isComming, setIsComming] = useState(false);
-    const { clearOptions } = useConfirmStore();
-
     const setCategory = useSelectionStore((state) => state.setCategory);
 
     const { categories, isLoading } = useCategories();
@@ -66,8 +63,6 @@ const ChooseAppCategory = ({ nextStep }) => {
                                         _hover={{
                                             transform: "scale(1.1)",
                                         }}
-                                        onMouseOver={() => setIsComming(true)}
-                                        onMouseLeave={() => setIsComming(false)}
                                         key={category.id}
                                     >
                                         <Image
@@ -85,7 +80,6 @@ const ChooseAppCategory = ({ nextStep }) => {
                                             left="0"
                                             bottom="0"
                                             bg="rgba(0,0,0,.8)"
-                                            opacity={isComming ? 1 : 0}
                                             transition="ease-in-out .5s"
                                         ></Box>
                                         <Box
@@ -97,7 +91,6 @@ const ChooseAppCategory = ({ nextStep }) => {
                                             left="0"
                                             right="0"
                                             textAlign="center"
-                                            opacity={isComming ? 1 : 0}
                                             transition="ease-in-out .5s"
                                         >
                                             Comming soon!

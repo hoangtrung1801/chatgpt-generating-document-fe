@@ -56,7 +56,7 @@ const HomePage: NextPage = () => {
                         templateColumns={["repeat(1, 1fr)", "repeat(3, 1fr)"]}
                         gap={6}
                     >
-                        {selections.length === 0 ? (
+                        {selections?.length === 0 ? (
                             <Text>You have no documents yet!</Text>
                         ) : (
                             <>
