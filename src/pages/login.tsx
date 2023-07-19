@@ -1,7 +1,5 @@
 import {
     Box,
-    Button,
-    Checkbox,
     Flex,
     FormControl,
     FormLabel,
@@ -10,10 +8,11 @@ import {
     Link as ChakraLink,
     Stack,
     Text,
-    useColorModeValue,
 } from "@chakra-ui/react";
 import { login } from "lib/api/auth";
 
+import CustomButton from "components/common/CustomButton";
+import { CustomToast } from "components/CustomToast";
 import useCurrentUser, {
     API_URL as useCurrentUserEndpoint,
 } from "lib/hooks/useCurrentUser";
@@ -21,7 +20,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
-import { CustomToast } from "components/CustomToast";
 type Auth = {
     email?: string;
     password?: string;
@@ -42,7 +40,7 @@ export default function Login() {
                 console.log(response);
                 if (response.data) {
                     mutate(useCurrentUserEndpoint);
-                    addToast({ message: "login successful", type: "success" });
+                    addToast({ message: "Login successful", type: "success" });
                     router.push("/");
                 } else {
                     setIsSubmit(false);
@@ -73,12 +71,7 @@ export default function Login() {
     }, [currentUser, isCurrentUserLoading, router]);
 
     return (
-        <Flex
-            minH={"100vh"}
-            align={"center"}
-            justify={"center"}
-            bg={useColorModeValue("gray.50", "gray.800")}
-        >
+        <Flex align={"center"} justify={"center"}>
             <Stack
                 minW="40%"
                 spacing={8}
@@ -89,15 +82,18 @@ export default function Login() {
             >
                 <Stack align={"center"}>
                     <Heading fontSize={"4xl"}>Sign in to your account</Heading>
-                    <Text fontSize={"lg"} color={"gray.600"}>
+                    <Text fontSize={"lg"} color={"blackAlpha.600"}>
                         to enjoy all of our cool{" "}
-                        <ChakraLink color={"blue.400"}>features</ChakraLink> ✌️
+                        <ChakraLink color={"blackAlpha.800"}>
+                            features
+                        </ChakraLink>{" "}
+                        ✌️
                     </Text>
                 </Stack>
                 <Box
                     rounded={"lg"}
-                    bg={useColorModeValue("white", "gray.700")}
-                    boxShadow={"lg"}
+                    bgColor="blackAlpha.50"
+                    // boxShadow={"lg"}
                     p={8}
                 >
                     <Stack spacing={4}>
@@ -126,25 +122,13 @@ export default function Login() {
                                 </Link>
                             </Stack>
                             {isSubmit ? (
-                                <Button
-                                    isLoading
-                                    loadingText="login"
-                                    colorScheme="teal"
-                                    variant="outline"
-                                >
-                                    login
-                                </Button>
+                                <CustomButton isLoading loadingText="login">
+                                    Login
+                                </CustomButton>
                             ) : (
-                                <Button
-                                    onClick={handleSubmit}
-                                    bg={"blue.400"}
-                                    color={"white"}
-                                    _hover={{
-                                        bg: "blue.500",
-                                    }}
-                                >
+                                <CustomButton onClick={handleSubmit}>
                                     Sign in
-                                </Button>
+                                </CustomButton>
                             )}
                         </Stack>
                     </Stack>

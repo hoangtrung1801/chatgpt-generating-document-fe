@@ -1,26 +1,24 @@
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
-    Flex,
     Box,
+    Button,
+    Flex,
     FormControl,
     FormLabel,
+    Heading,
     Input,
     InputGroup,
-    HStack,
     InputRightElement,
     Stack,
-    Button,
-    Heading,
     Text,
     useColorModeValue,
-    useToast,
 } from "@chakra-ui/react";
-import Link from "next/link";
-import { useState } from "react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { signup } from "lib/api/auth";
-import ToastHook from "lib/hooks/useToastHook";
-import { useRouter } from "next/router";
+import CustomButton from "components/common/CustomButton";
 import { CustomToast } from "components/CustomToast";
+import { signup } from "lib/api/auth";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 type Signup = {
     name?: string;
@@ -81,12 +79,7 @@ export default function SignupCard() {
     };
 
     return (
-        <Flex
-            minH={"100vh"}
-            align={"center"}
-            justify={"center"}
-            bg={useColorModeValue("gray.50", "gray.800")}
-        >
+        <Flex align={"center"} justify={"center"}>
             <Stack spacing={8} mx={"auto"} minW="xl" py={12} px={6}>
                 <Stack align={"center"}>
                     <Heading fontSize={"4xl"} textAlign={"center"}>
@@ -96,12 +89,7 @@ export default function SignupCard() {
                         to enjoy all of our cool features ✌️
                     </Text>
                 </Stack>
-                <Box
-                    rounded={"lg"}
-                    bg={useColorModeValue("white", "gray.700")}
-                    boxShadow={"lg"}
-                    p={8}
-                >
+                <Box rounded={"lg"} shadow="base" p={8}>
                     <Stack spacing={4}>
                         <Box>
                             <FormControl id="lastName">
@@ -144,34 +132,23 @@ export default function SignupCard() {
                         </FormControl>
                         <Stack spacing={10} pt={2}>
                             {isSubmit ? (
-                                <Button
-                                    isLoading
-                                    loadingText="signup"
-                                    colorScheme="teal"
-                                    variant="outline"
-                                >
+                                <CustomButton isLoading loadingText="signup">
                                     signup
-                                </Button>
+                                </CustomButton>
                             ) : (
-                                <Button
+                                <CustomButton
                                     onClick={handleSubmit}
                                     loadingText="Submitting"
-                                    size="lg"
-                                    bg={"blue.400"}
-                                    color={"white"}
-                                    _hover={{
-                                        bg: "blue.500",
-                                    }}
                                 >
                                     Sign up
-                                </Button>
+                                </CustomButton>
                             )}
                         </Stack>
                         <Stack pt={6}>
-                            <Text color={"blue.400"} align={"center"}>
+                            <Text color={"blackAlpha.700"} align={"center"}>
                                 Already a user?{" "}
                                 <Link href="/login">
-                                    <Text as="u" color="blue.400">
+                                    <Text as="u" color="blackAlpha.800">
                                         Login
                                     </Text>
                                 </Link>

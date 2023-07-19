@@ -70,26 +70,27 @@ const HomePage: NextPage = () => {
                                 <Text>You have no documents yet!</Text>
                             ) : (
                                 <>
-                                    {selections.map((selection) => (
-                                        <GridItem
-                                            onClick={() => {
-                                                router.push(
-                                                    `/documents/${selection.id}`
-                                                );
-                                            }}
-                                            key={selection.id}
-                                            p={4}
-                                            borderRadius={12}
-                                            cursor="pointer"
-                                            fontWeight="bold"
-                                            _hover={{
-                                                bg: "blackAlpha.300",
-                                            }}
-                                            bg="blackAlpha.200"
-                                        >
-                                            {selection.projectName}
-                                        </GridItem>
-                                    ))}
+                                    {selections &&
+                                        selections.map((selection) => (
+                                            <GridItem
+                                                onClick={() => {
+                                                    router.push(
+                                                        `/documents/${selection.id}`
+                                                    );
+                                                }}
+                                                key={selection.id}
+                                                p={4}
+                                                borderRadius={12}
+                                                cursor="pointer"
+                                                fontWeight="bold"
+                                                _hover={{
+                                                    bg: "blackAlpha.300",
+                                                }}
+                                                bg="blackAlpha.200"
+                                            >
+                                                {selection.projectName}
+                                            </GridItem>
+                                        ))}
                                 </>
                             )}
                         </Grid>

@@ -16,7 +16,7 @@ import useCurrentUser from "lib/hooks/useCurrentUser";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getCookies, setCookie, deleteCookie } from "cookies-next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "components/Loading";
 import { CustomToast } from "components/CustomToast";
 
@@ -37,6 +37,10 @@ const Header = () => {
         });
     };
 
+    useEffect(() => {
+        console.log({ currentUser });
+    }, [currentUser]);
+
     return (
         <Flex as="header" width="full" align="center">
             {logoutSuccess ? (
@@ -47,7 +51,9 @@ const Header = () => {
                     alignItems="center"
                     w="100%"
                 >
-                    <Heading size="xl">CodeDocAI</Heading>
+                    <Link href={"/"}>
+                        <Heading size="xl">CodeDocAI</Heading>
+                    </Link>
 
                     <Menu>
                         <MenuButton
@@ -57,14 +63,31 @@ const Header = () => {
                             fontSize={"sm"}
                         />
                         <MenuList>
-                            <MenuGroup
-                                fontSize="20px"
-                                title={`Hi, ${currentUser && currentUser.name}`}
-                            >
-                                <MenuItem onClick={handleLogout}>
-                                    Log out
-                                </MenuItem>
-                            </MenuGroup>
+                            {!currentUser && (
+                                <MenuGroup
+                                    fontSize="20px"
+                                    title={`You are not logged in`}
+                                >
+                                    <Link href={"/login"}>
+                                        <MenuItem>Login</MenuItem>
+                                    </Link>
+                                    <Link href={"/signup"}>
+                                        <MenuItem>Sign up</MenuItem>
+                                    </Link>
+                                </MenuGroup>
+                            )}
+                            {currentUser && (
+                                <MenuGroup
+                                    fontSize="20px"
+                                    title={`Hi, ${
+                                        currentUser && currentUser.name
+                                    }`}
+                                >
+                                    <MenuItem onClick={handleLogout}>
+                                        Log out
+                                    </MenuItem>
+                                </MenuGroup>
+                            )}
                         </MenuList>
                     </Menu>
                 </HStack>
