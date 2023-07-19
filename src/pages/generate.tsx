@@ -95,7 +95,7 @@ const Document: NextPage = () => {
     }, [router.query]);
 
     return (
-        <Box w="full" p={8}>
+        <Box w="full" py={4}>
             <FormProvider {...methods}>
                 {step === 0 && <TypeShortDescriptionApp nextStep={nextStep} />}
                 {step !== 0 && (

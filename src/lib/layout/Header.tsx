@@ -1,7 +1,9 @@
 import {
     Avatar,
     Flex,
+    Heading,
     HStack,
+    IconProps,
     Menu,
     MenuButton,
     MenuGroup,
@@ -40,24 +42,25 @@ const Header = () => {
             {logoutSuccess ? (
                 <Loading />
             ) : (
-                <HStack justifyContent="space-between" w="100%">
-                    <Text fontWeight="bold" fontSize={["20px", "40px"]}>
-                        Welcome to CodeDocAI
-                    </Text>
+                <HStack
+                    justifyContent="space-between"
+                    alignItems="center"
+                    w="100%"
+                >
+                    <Heading size="xl">CodeDocAI</Heading>
+
                     <Menu>
                         <MenuButton
                             as={Avatar}
                             cursor="pointer"
                             colorScheme="pink"
+                            fontSize={"sm"}
                         />
                         <MenuList>
                             <MenuGroup
                                 fontSize="20px"
                                 title={`Hi, ${currentUser && currentUser.name}`}
                             >
-                                <MenuItem as={Link} href="/result">
-                                    Dashboard
-                                </MenuItem>
                                 <MenuItem onClick={handleLogout}>
                                     Log out
                                 </MenuItem>
@@ -66,10 +69,6 @@ const Header = () => {
                     </Menu>
                 </HStack>
             )}
-
-            {/* <Box marginLeft="auto">
-                <ThemeToggle />
-            </Box> */}
         </Flex>
     );
 };

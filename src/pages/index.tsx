@@ -39,51 +39,62 @@ const HomePage: NextPage = () => {
             {isCurrentUserLoading ? (
                 <Loading />
             ) : (
-                <Flex flexDirection="column" gap={10}>
-                    <Header />
-                    <Text fontSize={["18px", "20px"]} fontWeight="bold">
-                        Hi, {currentUser && currentUser.name}! Which function
-                        you want to use below?
-                    </Text>
-                    <Stack direction="row">
-                        <CustomButton onClick={() => router.push("/generate")}>
-                            Generate document
-                        </CustomButton>
-                        <CustomButton>Generate code project</CustomButton>
+                <Stack spacing={8}>
+                    {/* <Header /> */}
+                    <Stack spacing={2}>
+                        <Heading size="lg" color="blackAlpha.800">
+                            Hi, {currentUser && currentUser.name}! Which
+                            function you want to use below?
+                        </Heading>
+                        <Stack direction="row">
+                            <CustomButton
+                                onClick={() => router.push("/generate")}
+                            >
+                                Generate document
+                            </CustomButton>
+                            <CustomButton>Generate code project</CustomButton>
+                        </Stack>
                     </Stack>
-                    <Heading size="md">Your documents</Heading>
-                    <Grid
-                        templateColumns={["repeat(1, 1fr)", "repeat(3, 1fr)"]}
-                        gap={6}
-                    >
-                        {selections?.length === 0 ? (
-                            <Text>You have no documents yet!</Text>
-                        ) : (
-                            <>
-                                {selections.map((selection) => (
-                                    <GridItem
-                                        onClick={() => {
-                                            router.push(
-                                                `/documents/${selection.id}`
-                                            );
-                                        }}
-                                        key={selection.id}
-                                        p={4}
-                                        borderRadius={12}
-                                        cursor="pointer"
-                                        fontWeight="bold"
-                                        _hover={{
-                                            bg: "blackAlpha.300",
-                                        }}
-                                        bg="blackAlpha.200"
-                                    >
-                                        {selection.projectName}
-                                    </GridItem>
-                                ))}
-                            </>
-                        )}
-                    </Grid>
-                </Flex>
+                    <Stack spacing={2}>
+                        <Heading size="lg" color="blackAlpha.800">
+                            Your documents
+                        </Heading>
+                        <Grid
+                            templateColumns={[
+                                "repeat(1, 1fr)",
+                                "repeat(3, 1fr)",
+                            ]}
+                            gap={6}
+                        >
+                            {selections?.length === 0 ? (
+                                <Text>You have no documents yet!</Text>
+                            ) : (
+                                <>
+                                    {selections.map((selection) => (
+                                        <GridItem
+                                            onClick={() => {
+                                                router.push(
+                                                    `/documents/${selection.id}`
+                                                );
+                                            }}
+                                            key={selection.id}
+                                            p={4}
+                                            borderRadius={12}
+                                            cursor="pointer"
+                                            fontWeight="bold"
+                                            _hover={{
+                                                bg: "blackAlpha.300",
+                                            }}
+                                            bg="blackAlpha.200"
+                                        >
+                                            {selection.projectName}
+                                        </GridItem>
+                                    ))}
+                                </>
+                            )}
+                        </Grid>
+                    </Stack>
+                </Stack>
             )}
         </Box>
     );

@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Stack } from "@chakra-ui/react";
 import type { ReactNode } from "react";
 import Header from "./Header";
 
@@ -16,12 +16,12 @@ const Layout = ({ children }: LayoutProps) => {
             minHeight="100vh"
             padding={["2rem 1rem", "2rem 2rem", "2rem 4rem", "2rem 6rem"]}
         >
-            <Box>
-                {/* <Header /> */}
+            <Stack spacing={12}>
+                <Header />
                 {/* marginY={22} */}
                 <Box>{children}</Box>
                 {/* <Footer /> */}
-            </Box>
+            </Stack>
         </Box>
     );
 };

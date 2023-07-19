@@ -7,8 +7,9 @@ export default function CustomButton({
 }: ButtonProps & { children: ReactNode }) {
     return (
         <Button
-            backgroundColor={"gray.200"}
-            _hover={{ backgroundColor: "gray.300" }}
+            backgroundColor={"blackAlpha.700"}
+            color="whiteAlpha.900"
+            _hover={{ backgroundColor: "blackAlpha.800" }}
             {...props}
         >
             {children}
