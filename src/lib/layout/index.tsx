@@ -12,7 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
             // margin="0 auto"
             // maxWidth={"container.xl"}
             transition="0.5s ease-out"
-            backgroundColor={"blackAlpha.100"}
+            backgroundColor="white"
             minHeight="100vh"
             padding={["2rem 1rem", "2rem 2rem", "2rem 4rem", "2rem 6rem"]}
         >

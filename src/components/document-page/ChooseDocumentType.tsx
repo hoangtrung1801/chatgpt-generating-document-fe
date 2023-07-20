@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-const ChooseDocumentType = ({ setDocumentType, setOutStep }: any) => {
+export const ChooseDocumentType = ({ setDocumentType, setOutStep }: any) => {
     const [isHoverExsistApp, setIsHoverExsistApp] = useState(false);
     const [isHoverNewApp, setIsHoverNewApp] = useState(false);
     return (
@@ -120,23 +120,7 @@ const ChooseDocumentType = ({ setDocumentType, setOutStep }: any) => {
                         Comming soon!
                     </Box>
                 </Flex>
-                {/* <Center
-                    w={400}
-                    h={400}
-                    borderRadius="1rem"
-                    bg="blackAlpha.900"
-                    _hover={{
-                        bg: "blackAlpha.800",
-                    }}
-                    color={"white"}
-                    cursor="pointer"
-                    onClick={() => {}}
-                >
-                    <Text>New app</Text>
-                </Center> */}
             </Stack>
         </Flex>
     );
 };
-
-export default ChooseDocumentType;

@@ -1,27 +1,26 @@
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
-import { Box, Button, Divider, Stack, Text } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { CustomToast } from "components/CustomToast";
-import ChooseApp from "components/document-page/ChooseApp";
-import ChooseAppCategory from "components/document-page/ChooseAppCategory";
-import ChooseAppOptions from "components/document-page/ChooseAppOptions";
-import TypeShortDescriptionApp from "components/document-page/TypeShortDescriptionApp";
+import {
+    ChooseApp,
+    ChooseAppCategory,
+    ChooseAppOptions,
+    TypeShortDescriptionApp,
+} from "components/document-page";
+import Loading from "components/Loading";
 import createSelection from "lib/api/createSelection";
 import generateDocument from "lib/api/generateDocument";
 import useGetQuestions from "lib/hooks/useGetQuestions";
 import useOptions from "lib/hooks/useOptions";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-
-type shortDescription = {
-    name: string;
-    description: string;
-};
 
 const Document: NextPage = () => {
     const router = useRouter();
     const step = Number(router.query?.step) || 0;
+
+    const [loading, setLoading] = useState(false);
 
     const methods = useForm();
     const { watch, handleSubmit } = methods;
@@ -30,11 +29,21 @@ const Document: NextPage = () => {
     const appId = watch("appId");
 
     const { questions } = useGetQuestions(appId);
+
     const { options } = useOptions();
 
     const { addToast } = CustomToast();
+    console.log(
+        "questions.length !== 0 && step - 2 > questions.length: ",
+        questions
+    );
 
     const nextStep = () => {
+        if (questions.length !== 0 && step - 2 === questions.length) {
+            handleSubmit(onSubmit)();
+        }
+        if (questions.length !== 0 && step - 2 > questions.length)
+            console.log("day ne");
         router.query.step = String(step + 1);
         router.push(router);
         console.log({ formValues });
@@ -67,13 +76,9 @@ const Document: NextPage = () => {
             body.username = "Hoang Trung";
 
             console.log({ body });
-            // console.log(
-            //     body.selectedOptions.filter(
-            //         (id) => !options.find((option) => option.id === id)
-            //     )
-            // );
 
             // API - Create Selection
+            setLoading(true);
             const response = await createSelection(body);
             const selection = response.data;
             console.log({ selection });
@@ -85,6 +90,7 @@ const Document: NextPage = () => {
             addToast(response);
 
             router.push(`/documents/${selection.id}`);
+            setLoading(false);
         } catch {
             addToast(Response);
         }
@@ -94,49 +100,34 @@ const Document: NextPage = () => {
         console.log("query", router.query);
     }, [router.query]);
 
+    if (loading) return <Loading />;
+
     return (
-        <Box w="full" py={4}>
+        <Box py={4}>
             <FormProvider {...methods}>
                 {step === 0 && <TypeShortDescriptionApp nextStep={nextStep} />}
-                {step !== 0 && (
-                    <Box>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Button
-                                variant="unstyled"
-                                onClick={() => backStep()}
-                            >
-                                <Stack
-                                    direction="row"
-                                    spacing={2}
-                                    alignItems="center"
-                                >
-                                    <Text>Back</Text>
-                                    <ArrowBackIcon />
-                                </Stack>
-                            </Button>
-                            <Button
-                                variant="unstyled"
-                                onClick={() => nextStep()}
-                            >
-                                <Stack
-                                    direction="row"
-                                    spacing={2}
-                                    alignItems="center"
-                                >
-                                    <ArrowForwardIcon />
-                                    <Text>Next</Text>
-                                </Stack>
-                            </Button>
-                        </Stack>
-                        <Divider color="blackAlpha.800" />
-                    </Box>
+
+                {step === 1 && (
+                    <ChooseAppCategory
+                        backStep={backStep}
+                        nextStep={nextStep}
+                    />
                 )}
-                {step === 1 && <ChooseAppCategory nextStep={nextStep} />}
-                {step === 2 && <ChooseApp nextStep={nextStep} />}
-                {step >= 3 && <ChooseAppOptions nextStep={nextStep} />}
-                {step === questions.length + 3 && (
+                {step === 2 && (
+                    <ChooseApp backStep={backStep} nextStep={nextStep} />
+                )}
+                {questions.length !== 0 &&
+                    step >= 3 &&
+                    step - 2 <= questions.length && (
+                        <ChooseAppOptions
+                            backStep={backStep}
+                            nextStep={nextStep}
+                        />
+                    )}
+
+                {/* {step === questions.length + 3 && (
                     <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
-                )}
+                )} */}
             </FormProvider>
         </Box>
     );

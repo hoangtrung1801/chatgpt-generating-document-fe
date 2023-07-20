@@ -1,155 +1,63 @@
-import {
-    ArrowBackIcon,
-    ArrowForwardIcon,
-    TriangleDownIcon,
-} from "@chakra-ui/icons";
-import {
-    Box,
-    Button,
-    FormControl,
-    FormLabel,
-    Heading,
-    HStack,
-    Input,
-    Progress,
-    Stack,
-    Text,
-    Textarea,
-} from "@chakra-ui/react";
+import { Box, Button, Stack, Text } from "@chakra-ui/react";
 import useGetQuestions from "lib/hooks/useGetQuestions";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import useConfirmStore from "stores/useCofirmOptions";
-import useSelectionStore from "stores/useSelectionStore";
-import BlockChooseQuestion from "./BlockChooseQuestion";
-import ChooseAppCategory from "./ChooseAppCategory";
+import { BlockChooseQuestion } from "./BlockChooseQuestion";
+import { LayoutGenerate } from "./components";
+import { checkEmpty } from "./data";
 
-const questions = [
-    {
-        id: 1,
-        name: "What type are you building?",
-        description: "What type are you building?",
-        type: "single",
-        options: [
-            {
-                id: 4,
-                name: "Android",
-                description: "android",
-            },
-            {
-                id: 5,
-                name: "IOS",
-                description: "IOS",
-            },
-            {
-                id: 6,
-                name: "Both",
-                description: "both",
-            },
-        ],
-    },
-    {
-        id: 2,
-        name: "Do you need regsitration & authirzation?",
-        description: "Do you need regsitration & authirzation?",
-        type: "yesno",
-        options: [
-            {
-                id: 8,
-                name: "via Email",
-                description: "via Email",
-                type: "ENOUGH",
-            },
-            {
-                id: 9,
-                name: "via Phone",
-                description: "via Phone",
-                type: "ENOUGH",
-            },
-            {
-                id: 10,
-                name: "via Twitter",
-                description: "via Twitter",
-                type: "ADDITIONAL",
-            },
-        ],
-        // options: [
-        //     {
-        //         id: 7,
-        //         name: "Yes",
-        //         description: "yes",
-        //         subOptions: [
-        //             {
-        //                 id: 8,
-        //                 name: "via Email",
-        //                 description: "via Email",
-        //                 type: "ENOUGH",
-        //             },
-        //             {
-        //                 id: 9,
-        //                 name: "via Phone",
-        //                 description: "via Phone",
-        //                 type: "ENOUGH",
-        //             },
-        //             {
-        //                 id: 10,
-        //                 name: "via Twitter",
-        //                 description: "via Twitter",
-        //                 type: "ADDITIONAL",
-        //             },
-        //         ],
-        //     },
-        // ],
-    },
-];
+type TChooseAppOptions = {
+    nextStep: () => void;
+    backStep: () => void;
+};
 
-const ChooseAppOptions = ({
-    nextStep,
-    onSubmit,
-    setOutStep,
-    shortDescriptionApp,
-}: any) => {
+export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
     const router = useRouter();
     const step = Number(router.query.step);
 
-    const { watch } = useFormContext();
-    const appId = watch("appId");
+    const [continuationEnablement, setContinuationEnablement] = useState(false);
 
-    const [noStep, setNoStep] = useState(0);
+    const { watch } = useFormContext();
+    const [appId, selectedOptions] = watch(["appId", "selectedOptions"]);
 
     const { questions, isLoading: questionsIsLoading } = useGetQuestions(appId);
 
+    // check empty options
+    useEffect(() => {
+        if (step >= 3 && step - 3 < questions.length) {
+            checkEmpty(selectedOptions, questions[step - 3].id)
+                ? setContinuationEnablement(false)
+                : setContinuationEnablement(true);
+        }
+    }, [questions, selectedOptions, step]);
+
     return (
-        <Box>
-            {!questionsIsLoading && (
-                <Stack minH={500}>
-                    {questions.map((question, id) => (
-                        <Box key={id} hidden={step - 3 !== id}>
-                            <BlockChooseQuestion
-                                questionId={question.id}
-                                nextStep={nextStep}
-                            />
-                        </Box>
-                    ))}
-                    {step <= questions.length && (
-                        <Box style={{ marginTop: "auto !important" }}>
-                            <Text fontSize="lg" mb={4} textAlign="center">
-                                Step {step - 2} of {questions.length}
-                            </Text>
-                            <Progress
-                                // transition="ease-in-out 2s"
-                                hasStripe
-                                colorScheme="blackAlpha"
-                                size="md"
-                                value={((step - 2) * 100) / questions.length}
-                            />
-                        </Box>
-                    )}
-                </Stack>
-            )}
-        </Box>
+        <LayoutGenerate
+            questionsLength={questions.length}
+            continueButton={
+                <Button
+                    isDisabled={!continuationEnablement}
+                    onClick={nextStep}
+                    maxW="200px"
+                    variant="primary"
+                >
+                    <Text>Continue</Text>
+                </Button>
+            }
+            backAction={backStep}
+        >
+            <Box flex={1}>
+                {!questionsIsLoading && (
+                    <Stack>
+                        {questions.map((question, id) => (
+                            <Box flex={1} key={id} hidden={step - 3 !== id}>
+                                <BlockChooseQuestion questionId={question.id} />
+                            </Box>
+                        ))}
+                    </Stack>
+                )}
+            </Box>
+        </LayoutGenerate>
     );
 };
-
-export default ChooseAppOptions;

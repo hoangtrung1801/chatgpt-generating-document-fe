@@ -1,24 +1,22 @@
 import {
     Box,
-    Stack,
-    Heading,
-    Text,
-    Container,
-    Input,
     Button,
-    SimpleGrid,
-    useBreakpointValue,
-    IconProps,
-    Icon,
+    Container,
+    Heading,
     Image,
+    Input,
+    SimpleGrid,
+    Stack,
+    Text,
     Textarea,
 } from "@chakra-ui/react";
 import CustomButton from "components/common/CustomButton";
-import React from "react";
 import { useFormContext } from "react-hook-form";
 
-function TypeShortDescriptionApp({ nextStep }: any) {
-    const { register } = useFormContext();
+export function TypeShortDescriptionApp({ nextStep }: any) {
+    const { register, watch } = useFormContext();
+
+    const [projectName, description] = watch(["projectName", "description"]);
 
     return (
         <Box position={"relative"}>
@@ -109,13 +107,15 @@ function TypeShortDescriptionApp({ nextStep }: any) {
                                 {...register("description")}
                             />
                         </Stack>
-                        <CustomButton
+                        <Button
+                            variant="primary"
+                            isDisabled={!(projectName && description)}
                             onClick={() => nextStep()}
                             mt={8}
                             w={"full"}
                         >
                             Submit
-                        </CustomButton>
+                        </Button>
                     </Box>
                     form
                 </Stack>
@@ -123,5 +123,3 @@ function TypeShortDescriptionApp({ nextStep }: any) {
         </Box>
     );
 }
-
-export default TypeShortDescriptionApp;
