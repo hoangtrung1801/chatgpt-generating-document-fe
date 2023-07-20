@@ -11,6 +11,7 @@ import {
     Textarea,
 } from "@chakra-ui/react";
 import CustomButton from "components/common/CustomButton";
+import MotionBox from "components/motion/Box";
 import { useFormContext } from "react-hook-form";
 
 export function TypeShortDescriptionApp({ nextStep }: any) {
@@ -48,18 +49,28 @@ export function TypeShortDescriptionApp({ nextStep }: any) {
                     >
                         CodeDocAI & Best choice for you!
                     </Heading>
+
                     <Stack
                         w="full"
                         direction={"row"}
                         align={"center"}
                         justifyContent="center"
                     >
-                        <Image
-                            w="200px"
-                            height="200px"
-                            src="/codeDocAi.png"
-                            alt="me"
-                        />
+                        <MotionBox
+                            animate={{ y: 40 }}
+                            transition={{
+                                repeat: Infinity,
+                                duration: 2,
+                                repeatType: "reverse",
+                            }}
+                        >
+                            <Image
+                                w="200px"
+                                height="200px"
+                                src="/codeDocAi.png"
+                                alt="me"
+                            />
+                        </MotionBox>
                     </Stack>
                 </Stack>
                 <Stack

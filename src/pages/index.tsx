@@ -1,27 +1,11 @@
-import {
-    Box,
-    Button,
-    Flex,
-    Grid,
-    GridItem,
-    Heading,
-    HStack,
-    Icon,
-    IconProps,
-    Skeleton,
-    Stack,
-    Text,
-    useBreakpointValue,
-    VStack,
-} from "@chakra-ui/react";
+import { Box, Grid, Heading, Stack, Text } from "@chakra-ui/react";
 import CustomButton from "components/common/CustomButton";
+import { DocumentCard } from "components/homepage";
 import Loading from "components/Loading";
 import useCurrentUser from "lib/hooks/useCurrentUser";
 import useUserSelections from "lib/hooks/useUserSelections";
-import Header from "lib/layout/Header";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-
 const HomePage: NextPage = () => {
     const router = useRouter();
 
@@ -32,7 +16,7 @@ const HomePage: NextPage = () => {
     } = useCurrentUser();
     const { selections, isLoading: isUserSelectionLoading } =
         useUserSelections();
-
+    console.log("selections: ", selections);
     return (
         <Box>
             {/* userLoading && */}
@@ -41,18 +25,21 @@ const HomePage: NextPage = () => {
             ) : (
                 <Stack spacing={8}>
                     {/* <Header /> */}
-                    <Stack spacing={2}>
+                    <Stack spacing={8}>
                         <Heading size="lg" color="blackAlpha.800">
                             Hi, {currentUser && currentUser.name}! Which
                             function you want to use below?
                         </Heading>
                         <Stack direction="row">
                             <CustomButton
+                                maxW="200px"
                                 onClick={() => router.push("/generate")}
                             >
                                 Generate document
                             </CustomButton>
-                            <CustomButton>Generate code project</CustomButton>
+                            <CustomButton maxW="200px">
+                                Generate code project
+                            </CustomButton>
                         </Stack>
                     </Stack>
                     <Stack spacing={2}>
@@ -72,24 +59,10 @@ const HomePage: NextPage = () => {
                                 <>
                                     {selections &&
                                         selections.map((selection) => (
-                                            <GridItem
-                                                onClick={() => {
-                                                    router.push(
-                                                        `/documents/${selection.id}`
-                                                    );
-                                                }}
+                                            <DocumentCard
+                                                selection={selection}
                                                 key={selection.id}
-                                                p={4}
-                                                borderRadius={12}
-                                                cursor="pointer"
-                                                fontWeight="bold"
-                                                _hover={{
-                                                    bg: "blackAlpha.300",
-                                                }}
-                                                bg="blackAlpha.200"
-                                            >
-                                                {selection.projectName}
-                                            </GridItem>
+                                            />
                                         ))}
                                 </>
                             )}

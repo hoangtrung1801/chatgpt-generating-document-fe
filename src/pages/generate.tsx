@@ -7,6 +7,8 @@ import {
     TypeShortDescriptionApp,
 } from "components/document-page";
 import Loading from "components/Loading";
+import { movePage } from "components/motion";
+import { motion } from "framer-motion";
 import createSelection from "lib/api/createSelection";
 import generateDocument from "lib/api/generateDocument";
 import useGetQuestions from "lib/hooks/useGetQuestions";
@@ -28,22 +30,26 @@ const Document: NextPage = () => {
     const formValues = watch();
     const appId = watch("appId");
 
+    const renderStep = () => {
+        if (step === 0) return <TypeShortDescriptionApp nextStep={nextStep} />;
+        if (step === 1)
+            return (
+                <ChooseAppCategory backStep={backStep} nextStep={nextStep} />
+            );
+        if (step === 2)
+            return <ChooseApp backStep={backStep} nextStep={nextStep} />;
+        if (questions.length !== 0 && step >= 3 && step - 2 <= questions.length)
+            return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
+    };
+
     const { questions } = useGetQuestions(appId);
 
-    const { options } = useOptions();
-
     const { addToast } = CustomToast();
-    console.log(
-        "questions.length !== 0 && step - 2 > questions.length: ",
-        questions
-    );
 
     const nextStep = () => {
         if (questions.length !== 0 && step - 2 === questions.length) {
             handleSubmit(onSubmit)();
         }
-        if (questions.length !== 0 && step - 2 > questions.length)
-            console.log("day ne");
         router.query.step = String(step + 1);
         router.push(router);
         console.log({ formValues });
@@ -51,11 +57,6 @@ const Document: NextPage = () => {
 
     const backStep = () => {
         router.query.step = String(Math.max(step - 1, 0));
-        router.push(router);
-    };
-
-    const gotoStep = (step: number) => {
-        router.query.step = String(step);
         router.push(router);
     };
 
@@ -96,38 +97,14 @@ const Document: NextPage = () => {
         }
     };
 
-    useEffect(() => {
-        console.log("query", router.query);
-    }, [router.query]);
-
     if (loading) return <Loading />;
 
     return (
         <Box py={4}>
             <FormProvider {...methods}>
-                {step === 0 && <TypeShortDescriptionApp nextStep={nextStep} />}
-
-                {step === 1 && (
-                    <ChooseAppCategory
-                        backStep={backStep}
-                        nextStep={nextStep}
-                    />
-                )}
-                {step === 2 && (
-                    <ChooseApp backStep={backStep} nextStep={nextStep} />
-                )}
-                {questions.length !== 0 &&
-                    step >= 3 &&
-                    step - 2 <= questions.length && (
-                        <ChooseAppOptions
-                            backStep={backStep}
-                            nextStep={nextStep}
-                        />
-                    )}
-
-                {/* {step === questions.length + 3 && (
-                    <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
-                )} */}
+                <Box as={motion.div} {...movePage}>
+                    {renderStep()}
+                </Box>
             </FormProvider>
         </Box>
     );
