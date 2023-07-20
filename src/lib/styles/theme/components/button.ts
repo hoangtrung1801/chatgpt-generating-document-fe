@@ -33,6 +33,9 @@ export const Button: ComponentStyleConfig = {
             _disabled: {
                 background: "rgb(0, 102, 255)",
                 opacity: 0.5,
+                _hover: {
+                    background: "rgb(0, 102, 255) !important",
+                },
             },
         },
     },

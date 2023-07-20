@@ -1,10 +1,9 @@
-import { Box, Progress, Stack, Text } from "@chakra-ui/react";
+import { Box, Divider, Progress, Stack, Text } from "@chakra-ui/react";
 import { BackTo } from "components/common/BackTo";
 import { movePage } from "components/motion";
 import { motion } from "framer-motion";
-import useGetQuestions from "lib/hooks/useGetQuestions";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useRef } from "react";
 
 type LayoutGenerateProps = {
     children: React.ReactElement;
@@ -21,6 +20,13 @@ export const LayoutGenerate = ({
 }: LayoutGenerateProps) => {
     const router = useRouter();
     const step = Number(router.query.step);
+    const progressDivRef = useRef();
+    const progressBarDiv: any = progressDivRef.current;
+    // add css progress bar animation
+    if (progressBarDiv) {
+        progressBarDiv.querySelector("div").style.transition =
+            "ease-in-out .5s";
+    }
 
     return (
         <Stack as={motion.div} {...movePage} align="center" spacing={10}>
@@ -37,12 +43,14 @@ export const LayoutGenerate = ({
                 py={4}
             >
                 <Box>
-                    <Stack direction="row" justifyContent="space-between">
+                    <Stack pb={3} direction="row" align="center">
                         <BackTo color="black" action={backAction}>
-                            <Text>Back</Text>
+                            <Text fontSize="md" fontWeight="semibold">
+                                Back
+                            </Text>
                         </BackTo>
                     </Stack>
-                    {/* <Divider color="blackAlpha.800" /> */}
+                    <Divider color="blackAlpha.800" />
                 </Box>
                 {children}
                 {step - 3 < questionsLength && (
@@ -52,10 +60,11 @@ export const LayoutGenerate = ({
                         </Text>
 
                         <Progress
+                            ref={progressDivRef}
                             hasStripe
                             isAnimated
-                            colorScheme="blackAlpha"
-                            size="sm"
+                            color="rgb(0, 102, 153)"
+                            size="xs"
                             value={((step - 2) * 100) / questionsLength}
                         />
                     </Box>

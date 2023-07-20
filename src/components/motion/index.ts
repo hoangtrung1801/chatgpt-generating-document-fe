@@ -43,3 +43,8 @@ export const hoverTapMotion = {
     whileHover: { scale: 1.1 },
     whileTap: { scale: 0.9 },
 };
+
+export const boxQAMotion = {
+    hidden: { opacity: 0, height: 0, margin: 0 },
+    visible: { opacity: 1 },
+};

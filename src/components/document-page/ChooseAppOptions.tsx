@@ -1,12 +1,13 @@
 import { Box, Button, Stack, Text } from "@chakra-ui/react";
+import { boxQAMotion } from "components/motion";
+import MotionBox from "components/motion/Box";
 import useGetQuestions from "lib/hooks/useGetQuestions";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { BlockChooseQuestion } from "./BlockChooseQuestion";
 import { LayoutGenerate } from "./components";
-import { checkEmpty } from "./data";
-
+import { checkEmptyOption } from "./data";
 type TChooseAppOptions = {
     nextStep: () => void;
     backStep: () => void;
@@ -26,7 +27,7 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
     // check empty options
     useEffect(() => {
         if (step >= 3 && step - 3 < questions.length) {
-            checkEmpty(selectedOptions, questions[step - 3].id)
+            checkEmptyOption(selectedOptions, questions[step - 3].id)
                 ? setContinuationEnablement(false)
                 : setContinuationEnablement(true);
         }
@@ -51,9 +52,20 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
                 {!questionsIsLoading && (
                     <Stack>
                         {questions.map((question, id) => (
-                            <Box flex={1} key={id} hidden={step - 3 !== id}>
-                                <BlockChooseQuestion questionId={question.id} />
-                            </Box>
+                            <MotionBox
+                                flex={1}
+                                key={id}
+                                variants={boxQAMotion}
+                                initial="hidden"
+                                animate={step - 3 === id ? "visible" : "hidden"}
+                                transition={{ duration: 0.6 }}
+                            >
+                                <Box flex={1} key={id} hidden={step - 3 !== id}>
+                                    <BlockChooseQuestion
+                                        questionId={question.id}
+                                    />
+                                </Box>
+                            </MotionBox>
                         ))}
                     </Stack>
                 )}

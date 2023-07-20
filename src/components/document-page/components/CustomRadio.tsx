@@ -30,6 +30,7 @@ export function CustomRadio(props) {
                 fontSize="22px"
                 fontWeight="bold"
                 {...radio}
+                transition="all .5s ease-in-out"
                 _checked={{
                     borderColor: "#06f",
                     backgroundColor: "rgba(0,102,255,.1)",
