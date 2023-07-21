@@ -4,3 +4,4 @@ export * from "./ChooseAppCategory";
 export * from "./ChooseAppOptions";
 export * from "./ChooseDocumentType";
 export * from "./TypeShortDescriptionApp";
+export * from "./PreviewDocument";

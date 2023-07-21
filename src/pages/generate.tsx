@@ -4,6 +4,7 @@ import {
     ChooseApp,
     ChooseAppCategory,
     ChooseAppOptions,
+    PreviewDocument,
     TypeShortDescriptionApp,
 } from "components/document-page";
 import Loading from "components/Loading";
@@ -31,15 +32,17 @@ const Document: NextPage = () => {
     const appId = watch("appId");
 
     const renderStep = () => {
-        if (step === 0) return <TypeShortDescriptionApp nextStep={nextStep} />;
-        if (step === 1)
-            return (
-                <ChooseAppCategory backStep={backStep} nextStep={nextStep} />
-            );
-        if (step === 2)
-            return <ChooseApp backStep={backStep} nextStep={nextStep} />;
-        if (questions.length !== 0 && step >= 3 && step - 2 <= questions.length)
-            return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
+        // if (step === 0) return <TypeShortDescriptionApp nextStep={nextStep} />;
+        // if (step === 1)
+        //     return (
+        //         <ChooseAppCategory backStep={backStep} nextStep={nextStep} />
+        //     );
+        // if (step === 2)
+        //     return <ChooseApp backStep={backStep} nextStep={nextStep} />;
+        // if (questions.length !== 0 && step >= 3 && step - 2 <= questions.length)
+        //     return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
+
+        return <PreviewDocument />;
     };
 
     const { questions } = useGetQuestions(appId);

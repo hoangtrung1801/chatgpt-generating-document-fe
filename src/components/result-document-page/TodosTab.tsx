@@ -1,23 +1,9 @@
-import { ArrowDownIcon } from "@chakra-ui/icons";
 import {
-    Avatar,
-    Box,
-    Card,
-    CardBody,
-    CardFooter,
-    Flex,
-    Heading,
-    Stack,
-    Text,
+    Box, Flex, Text
 } from "@chakra-ui/react";
-import React, { useEffect, useMemo } from "react";
-import CardTodo from "./CardTodo";
-import useTodoStoreStore from "stores/useUserStoriesStore";
-import useCurrentUser from "lib/hooks/useCurrentUser";
-import useUserStoriesOfSelection from "lib/hooks/useUserStoriesOfSelection";
-import { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { updateUserStories } from "lib/api/userStories";
+import { useEffect, useMemo, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import ModalTodo from "./ModalTodos";
 
 type UserStory = {

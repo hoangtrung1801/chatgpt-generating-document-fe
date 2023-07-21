@@ -1,4 +1,12 @@
-import { Box, Divider, Progress, Stack, Text } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Divider,
+    HStack,
+    Progress,
+    Stack,
+    Text,
+} from "@chakra-ui/react";
 import { BackTo } from "components/common/BackTo";
 import { movePage } from "components/motion";
 import { motion } from "framer-motion";
@@ -9,12 +17,14 @@ type LayoutGenerateProps = {
     children: React.ReactElement;
     continueButton?: React.ReactElement;
     backAction: () => void;
+    handleCreateSection?: () => void;
     questionsLength?: number;
 };
 
 export const LayoutGenerate = ({
     children,
     backAction,
+    handleCreateSection,
     continueButton,
     questionsLength,
 }: LayoutGenerateProps) => {
@@ -44,11 +54,16 @@ export const LayoutGenerate = ({
             >
                 <Box>
                     <Stack pb={3} direction="row" align="center">
-                        <BackTo color="black" action={backAction}>
-                            <Text fontSize="md" fontWeight="semibold">
-                                Back
-                            </Text>
-                        </BackTo>
+                        <HStack w="full" justify="space-between">
+                            <BackTo color="black" action={backAction}>
+                                <Text fontSize="md" fontWeight="semibold">
+                                    Back
+                                </Text>
+                            </BackTo>
+                            <Button onClick={handleCreateSection} maxW="200px">
+                                Create section
+                            </Button>
+                        </HStack>
                     </Stack>
                     <Divider color="blackAlpha.800" />
                 </Box>
