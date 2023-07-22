@@ -1,13 +1,8 @@
 import {
-    Box,
-    Center,
-    Flex,
-    Heading,
-    HStack,
-    Image,
+    Box, Flex,
+    Heading, Image,
     Stack,
-    Text,
-    VStack,
+    Text
 } from "@chakra-ui/react";
 import { useState } from "react";
 

@@ -16,15 +16,15 @@ import React, { useRef } from "react";
 type LayoutGenerateProps = {
     children: React.ReactElement;
     continueButton?: React.ReactElement;
+    createSectionButton?: React.ReactElement;
     backAction: () => void;
-    handleCreateSection?: () => void;
     questionsLength?: number;
 };
 
 export const LayoutGenerate = ({
     children,
     backAction,
-    handleCreateSection,
+    createSectionButton,
     continueButton,
     questionsLength,
 }: LayoutGenerateProps) => {
@@ -60,9 +60,7 @@ export const LayoutGenerate = ({
                                     Back
                                 </Text>
                             </BackTo>
-                            <Button onClick={handleCreateSection} maxW="200px">
-                                Create section
-                            </Button>
+                            {createSectionButton}
                         </HStack>
                     </Stack>
                     <Divider color="blackAlpha.800" />
@@ -78,7 +76,7 @@ export const LayoutGenerate = ({
                             ref={progressDivRef}
                             hasStripe
                             isAnimated
-                            color="rgb(0, 102, 153)"
+                            colorScheme="blackAlpha"
                             size="xs"
                             value={((step - 2) * 100) / questionsLength}
                         />

@@ -38,6 +38,30 @@ export const Button: ComponentStyleConfig = {
                 },
             },
         },
+        secondary: {
+            bg: "blackAlpha.700",
+            background: "blackAlpha.700",
+            color: "whiteAlpha.900",
+
+            _hover: {
+                bg: "blackAlpha.800",
+                background: "blackAlpha.800",
+            },
+
+            _active: {
+                // bg: "#B1C36B",
+                // background: "#B1C36B",
+                // backdropFilter: "blur(3px)",
+            },
+
+            _disabled: {
+                background: "blackAlpha.800",
+                opacity: 0.5,
+                _hover: {
+                    background: "blackAlpha.800 !important",
+                },
+            },
+        },
     },
 
     sizes: {

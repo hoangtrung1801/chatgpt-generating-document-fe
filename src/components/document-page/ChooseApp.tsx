@@ -1,4 +1,4 @@
-import { Box, Heading, Image, SimpleGrid } from "@chakra-ui/react";
+import { Box, Heading, SimpleGrid } from "@chakra-ui/react";
 import Loading from "components/Loading";
 import useCategoryWithId from "lib/hooks/useCategoryWithId";
 import { useFormContext } from "react-hook-form";

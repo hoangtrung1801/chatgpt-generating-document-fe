@@ -41,7 +41,7 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
                     isDisabled={!continuationEnablement}
                     onClick={nextStep}
                     maxW="200px"
-                    variant="primary"
+                    variant="secondary"
                 >
                     <Text>Continue</Text>
                 </Button>

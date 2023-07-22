@@ -8,9 +8,8 @@ import {
     SimpleGrid,
     Stack,
     Text,
-    Textarea,
+    Textarea
 } from "@chakra-ui/react";
-import CustomButton from "components/common/CustomButton";
 import MotionBox from "components/motion/Box";
 import { useFormContext } from "react-hook-form";
 

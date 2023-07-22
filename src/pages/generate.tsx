@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { CustomToast } from "components/CustomToast";
 import {
     ChooseApp,
@@ -13,17 +13,18 @@ import { motion } from "framer-motion";
 import createSelection from "lib/api/createSelection";
 import generateDocument from "lib/api/generateDocument";
 import useGetQuestions from "lib/hooks/useGetQuestions";
-import useOptions from "lib/hooks/useOptions";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTableContents } from "stores";
 
 const Document: NextPage = () => {
     const router = useRouter();
     const step = Number(router.query?.step) || 0;
 
     const [loading, setLoading] = useState(false);
+    const { columns } = useTableContents();
 
     const methods = useForm();
     const { watch, handleSubmit } = methods;
@@ -32,17 +33,18 @@ const Document: NextPage = () => {
     const appId = watch("appId");
 
     const renderStep = () => {
-        // if (step === 0) return <TypeShortDescriptionApp nextStep={nextStep} />;
-        // if (step === 1)
-        //     return (
-        //         <ChooseAppCategory backStep={backStep} nextStep={nextStep} />
-        //     );
-        // if (step === 2)
-        //     return <ChooseApp backStep={backStep} nextStep={nextStep} />;
-        // if (questions.length !== 0 && step >= 3 && step - 2 <= questions.length)
-        //     return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
+        if (step === 0) return <TypeShortDescriptionApp nextStep={nextStep} />;
+        if (step === 1)
+            return (
+                <ChooseAppCategory backStep={backStep} nextStep={nextStep} />
+            );
+        if (step === 2)
+            return <ChooseApp backStep={backStep} nextStep={nextStep} />;
+        if (questions.length !== 0 && step >= 3 && step - 2 <= questions.length)
+            return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
 
-        return <PreviewDocument />;
+        if (step - 2 > questions.length)
+            return <PreviewDocument backStep={backStep} nextStep={nextStep} />;
     };
 
     const { questions } = useGetQuestions(appId);
@@ -50,8 +52,11 @@ const Document: NextPage = () => {
     const { addToast } = CustomToast();
 
     const nextStep = () => {
-        if (questions.length !== 0 && step - 2 === questions.length) {
-            handleSubmit(onSubmit)();
+        // step preview document
+        if (questions.length !== 0 && step - 2 === questions.length + 1) {
+            // handleSubmit(onSubmit)();
+            console.log("form values: ", { formValues });
+            console.log("table contents: ", columns);
         }
         router.query.step = String(step + 1);
         router.push(router);

@@ -1,100 +1,81 @@
-import { Box, Stack, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
-import { CardTableContent, LayoutGenerate } from "./components";
-import { defaultValues, schema_create_section } from "./components/data";
-import ModalAddSection from "./components/ModalAddSection";
-import { ColumnPreview } from "./data";
+import { useTableContents } from "stores";
+import {
+    ModalAddSection,
+    CardTableContent,
+    LayoutGenerate,
+} from "./components";
+import {
+    HandleUpdateColumns,
+    onDragEnd,
+    defaultValues,
+    schema_create_section,
+} from "./data";
 
-type Props = {};
-const onDragEnd = (result, columns, setColumns) => {
-    if (!result.destination) return;
-    const { source, destination } = result;
-
-    if (source.droppableId !== destination.droppableId) {
-        const sourceColumn = columns[source.droppableId];
-        const destColumn = columns[destination.droppableId];
-        const sourceItems = [...sourceColumn.items];
-        const destItems = [...destColumn.items];
-        const [removed] = sourceItems.splice(source.index, 1);
-        destItems.splice(destination.index, 0, removed);
-        setColumns({
-            ...columns,
-            [source.droppableId]: {
-                ...sourceColumn,
-                items: sourceItems,
-            },
-            [destination.droppableId]: {
-                ...destColumn,
-                items: destItems,
-            },
-        });
-    } else {
-        const column = columns[source.droppableId];
-        const copiedItems = [...column.items];
-        const [removed] = copiedItems.splice(source.index, 1);
-        copiedItems.splice(destination.index, 0, removed);
-        setColumns({
-            ...columns,
-            [source.droppableId]: {
-                ...column,
-                items: copiedItems,
-            },
-        });
-    }
+type TPreviewDocumentProps = {
+    nextStep: () => void;
+    backStep: () => void;
 };
 
-export const PreviewDocument = (props: Props) => {
+export const PreviewDocument = ({
+    backStep,
+    nextStep,
+}: TPreviewDocumentProps) => {
+    const { columns, updateColumns } = useTableContents();
     const form = useForm<any>({
         resolver: yupResolver(schema_create_section),
         defaultValues,
     });
     const ModalStatus = useDisclosure();
     const ModalUpdateStatus = useDisclosure();
-    const { handleSubmit, setValue, reset, watch } = form;
+    const { reset } = form;
 
     const onSubmit = async (values) => {
         // update mode
         if (values.id) {
-            const updatedColumnPreview = columns;
-            const updatedItems = columns[0].items.map((item) => {
-                if (item.id === values.id) {
-                    return {
-                        ...item,
-                        title: values.title,
-                        content: values.subsection,
-                    };
-                } else return item;
-            });
-            updatedColumnPreview[0].items = updatedItems;
-            setColumns(updatedColumnPreview);
+            const updatedColumnPreview = HandleUpdateColumns(columns, values);
+            updateColumns(updatedColumnPreview);
             reset();
             ModalUpdateStatus.onClose();
         } else {
-            const updatedColumnPreview = [...columns];
-            updatedColumnPreview[0].items.push({
-                id: columns[0].items.length + 1,
+            // create mode
+            const updatedColumnPreview = columns;
+            updatedColumnPreview[0].tableOfContents.push({
+                id: columns[0].tableOfContents.length + 1,
                 title: values.title,
                 content: values.subsection,
             });
-            setColumns(updatedColumnPreview);
+            updateColumns(updatedColumnPreview);
             reset();
             ModalStatus.onClose();
         }
     };
-    const [columns, setColumns] = useState(ColumnPreview);
-    console.log("columns: ", columns);
+
     return (
         <LayoutGenerate
-            handleCreateSection={() => ModalStatus.onOpen()}
-            backAction={() => {}}
+            createSectionButton={
+                <Button
+                    onClick={() => ModalStatus.onOpen()}
+                    maxW="200px"
+                    variant="secondary"
+                >
+                    <Text>Create section</Text>
+                </Button>
+            }
+            continueButton={
+                <Button onClick={nextStep} maxW="200px" variant="secondary">
+                    <Text>Continue</Text>
+                </Button>
+            }
+            backAction={backStep}
         >
-            <Box overflow="auto">
+            <Box h="full" overflow="auto">
                 <DragDropContext
                     onDragEnd={(result) =>
-                        onDragEnd(result, columns, setColumns)
+                        onDragEnd(result, columns, updateColumns)
                     }
                 >
                     {Object.entries(columns).map(
@@ -105,45 +86,50 @@ export const PreviewDocument = (props: Props) => {
                                         droppableId={columnId}
                                         key={columnId}
                                     >
-                                        {(provided, snapshot) => {
+                                        {(
+                                            droppableProvided,
+                                            droppableProvidedSnapshot
+                                        ) => {
                                             return (
                                                 <Box
                                                     w="full"
-                                                    {...provided.droppableProps}
-                                                    ref={provided.innerRef}
+                                                    {...droppableProvided.droppableProps}
+                                                    ref={
+                                                        droppableProvided.innerRef
+                                                    }
                                                 >
-                                                    {column.items.map(
-                                                        (item, index) => {
+                                                    {column.tableOfContents.map(
+                                                        (section, index) => {
                                                             return (
                                                                 <Draggable
                                                                     key={
-                                                                        item.id
+                                                                        section.id
                                                                     }
-                                                                    draggableId={item.id.toString()}
+                                                                    draggableId={section.id.toString()}
                                                                     index={
                                                                         index
                                                                     }
                                                                 >
                                                                     {(
-                                                                        provided,
-                                                                        snapshot
+                                                                        DraggableProvided,
+                                                                        DraggableSnapshot
                                                                     ) => {
                                                                         return (
                                                                             <CardTableContent
+                                                                                index={
+                                                                                    index
+                                                                                }
                                                                                 form={
                                                                                     form
                                                                                 }
-                                                                                columns={
-                                                                                    columns
+                                                                                section={
+                                                                                    section
                                                                                 }
-                                                                                setColumns={
-                                                                                    setColumns
-                                                                                }
-                                                                                item={
-                                                                                    item
+                                                                                snapshot={
+                                                                                    DraggableSnapshot
                                                                                 }
                                                                                 provided={
-                                                                                    provided
+                                                                                    DraggableProvided
                                                                                 }
                                                                                 ModalUpdateStatus={
                                                                                     ModalUpdateStatus
@@ -170,8 +156,6 @@ export const PreviewDocument = (props: Props) => {
                 <ModalAddSection
                     onSubmit={onSubmit}
                     form={form}
-                    columns={columns}
-                    setColumns={setColumns}
                     ModalStatus={ModalStatus}
                 />
             </Box>

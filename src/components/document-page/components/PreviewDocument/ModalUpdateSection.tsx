@@ -1,4 +1,3 @@
-import { PlusSquareIcon } from "@chakra-ui/icons";
 import {
     Button,
     FormLabel,
@@ -13,54 +12,48 @@ import {
     Stack,
     Text,
 } from "@chakra-ui/react";
-import { TrashIcon } from "icons";
-import { InputField, InputFieldWithoutLabel } from "ui-kit";
+import { PlusIcon } from "icons";
+import { InputField } from "ui-kit";
+import { SubSection } from "./SubSection";
 
 type Props = {
     ModalUpdateStatus: any;
-    columns: any;
-    setColumns: any;
     form: any;
     onSubmit: any;
-    item: any;
 };
 
-const ModalUpdateSection = ({
-    ModalUpdateStatus,
-    setColumns,
-    columns,
-    form,
-    onSubmit,
-    item,
-}: Props) => {
-    const { handleSubmit, setValue, reset, watch } = form;
-
+const ModalUpdateSection = ({ ModalUpdateStatus, form, onSubmit }: Props) => {
+    const { handleSubmit, setValue, watch, reset } = form;
     const listSubsection = watch("subsection");
 
     return (
         <Modal
+            isCentered
             isOpen={ModalUpdateStatus.isOpen}
-            onClose={ModalUpdateStatus.onClose}
+            onClose={() => {
+                reset();
+                ModalUpdateStatus.onClose();
+            }}
         >
-            <ModalOverlay opacity={0.5} />
+            <ModalOverlay bg="#4144441f" />
             <ModalContent>
-                <ModalHeader>{"new section"}</ModalHeader>
+                <ModalHeader>{"update section"}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Stack
                         onSubmit={handleSubmit(onSubmit)}
                         as="form"
                         h="100%"
-                        gap={4}
+                        gap={2}
                     >
                         <InputField
                             form={form}
-                            label="title"
+                            label="Title"
                             name="title"
-                            placeholder="title"
+                            placeholder="Enter title..."
                             type="text"
                         />
-                        <FormLabel>{"subsection"}</FormLabel>
+                        <FormLabel>{"Subsection"}</FormLabel>
 
                         {listSubsection.map((_, _idx) => (
                             <SubSection key={_idx} _idx={_idx} form={form} />
@@ -73,11 +66,13 @@ const ModalUpdateSection = ({
                                 setValue("subsection", temp);
                             }}
                         >
-                            <Icon as={PlusSquareIcon} />
+                            <Icon as={PlusIcon} />
                             <Text>Add subsection</Text>
                         </HStack>
 
-                        <Button type="submit">{"update"}</Button>
+                        <Button variant="secondary" type="submit">
+                            {"update"}
+                        </Button>
                     </Stack>
                 </ModalBody>
             </ModalContent>
@@ -86,27 +81,3 @@ const ModalUpdateSection = ({
 };
 
 export default ModalUpdateSection;
-
-const SubSection = ({ form, _idx }: any) => {
-    const { setValue, watch } = form;
-    const listSubsection = watch("subsection");
-    // delete value form
-    const handleDelete = () => {
-        let temp = [...listSubsection];
-        temp.splice(_idx, 1);
-        setValue("subsection", temp);
-    };
-    return (
-        <HStack>
-            <InputFieldWithoutLabel
-                form={form}
-                _idx={_idx}
-                nameOfArr="subsection"
-                name={`subsection.${_idx}`}
-                placeholder="subsection"
-                type="text"
-            />
-            <Icon onClick={handleDelete} as={TrashIcon} />
-        </HStack>
-    );
-};

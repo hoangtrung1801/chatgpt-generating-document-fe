@@ -20,8 +20,8 @@ export const schema_string_no_length_required = Yup.string()
 
 export const schema_string = Yup.string()
     .trim()
-    .min(1, "field_is_a_required_field")
-    .max(256, "maximum_character_is256");
+    .min(1, "field is a required field")
+    .max(256, "maximum character is256");
 
 export const schema_number_required = Yup.number()
     .required("field_is_a_required_field")
@@ -70,9 +70,9 @@ export const schema_array_select_option_required = Yup.array()
     );
 
 export const schema_array_string_required = Yup.array()
-    .min(1, "field_is_a_required_field")
+    .min(1, "field is a required field")
     .of(
         Yup.string()
-            .required("field_is_a_required_field")
-            .min(1, "field_is_a_required_field")
+            .required("field is a required field")
+            .min(1, "field is a required field")
     );
