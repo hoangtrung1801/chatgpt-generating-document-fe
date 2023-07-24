@@ -65,7 +65,9 @@ export const LayoutGenerate = ({
                     </Stack>
                     <Divider color="blackAlpha.800" />
                 </Box>
-                {children}
+                <Box flex={1} overflow="auto">
+                    {children}
+                </Box>
                 {step - 3 < questionsLength && (
                     <Box>
                         <Text fontSize="md" mb={4} textAlign="center">

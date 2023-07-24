@@ -40,11 +40,12 @@ const Document: NextPage = () => {
             );
         if (step === 2)
             return <ChooseApp backStep={backStep} nextStep={nextStep} />;
-        if (questions.length !== 0 && step >= 3 && step - 2 <= questions.length)
+        if (
+            questions.length !== 0 &&
+            step >= 3 &&
+            step - 2 <= questions.length + 1
+        )
             return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
-
-        if (step - 2 > questions.length)
-            return <PreviewDocument backStep={backStep} nextStep={nextStep} />;
     };
 
     const { questions } = useGetQuestions(appId);
@@ -53,14 +54,17 @@ const Document: NextPage = () => {
 
     const nextStep = () => {
         // step preview document
+
         if (questions.length !== 0 && step - 2 === questions.length + 1) {
             // handleSubmit(onSubmit)();
             console.log("form values: ", { formValues });
             console.log("table contents: ", columns);
+        } else {
+            router.query.step = String(step + 1);
+            router.push(router);
         }
-        router.query.step = String(step + 1);
-        router.push(router);
-        console.log({ formValues });
+
+        // console.log({ formValues });
     };
 
     const backStep = () => {

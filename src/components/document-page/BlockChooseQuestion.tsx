@@ -9,7 +9,6 @@ type TBlockChooseQuestion = {
 
 export const BlockChooseQuestion = ({ questionId }: TBlockChooseQuestion) => {
     const { question, isLoading } = useGetQuestion(questionId);
-    console.log("question: ", question);
 
     if (isLoading) {
         return <Loading />;
