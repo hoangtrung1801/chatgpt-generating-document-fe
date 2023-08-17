@@ -4,3 +4,7 @@ export * from "./trash";
 export * from "./drag";
 export * from "./edit";
 export * from "./plus";
+export * from "./bg-create-project";
+export * from "./home";
+export * from "./send";
+export * from "./check";
