@@ -12,7 +12,8 @@ const Layout = ({ children }: LayoutProps) => {
             // margin="0 auto"
             // maxWidth={"container.xl"}
             transition="0.5s ease-out"
-            backgroundColor="white"
+            // backgroundColor="white"
+            bgImage="linear-gradient(to bottom, #fde6e1, #fffae8)"
             minHeight="100vh"
             padding={["2rem 1rem", "2rem 2rem", "2rem 4rem", "2rem 6rem"]}
         >

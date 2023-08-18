@@ -5,6 +5,7 @@ import useGetQuestions from "lib/hooks/useGetQuestions";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import { useCreateProject } from "stores";
 import { BlockChooseQuestion } from "./BlockChooseQuestion";
 import { LayoutGenerate } from "./components";
 import { checkEmptyOption } from "./data";
@@ -17,19 +18,21 @@ type TChooseAppOptions = {
 export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
     const ModalStatus = useDisclosure();
     const router = useRouter();
-    const step = Number(router.query.step);
+    const step = Number(router.query.step) || 0;
+    const { appId } = useCreateProject((state) => state.data);
 
     const [continuationEnablement, setContinuationEnablement] = useState(false);
 
     const { watch } = useFormContext();
-    const [appId, selectedOptions] = watch(["appId", "selectedOptions"]);
+    const [selectedOptions] = watch(["selectedOptions"]);
 
     const { questions, isLoading: questionsIsLoading } = useGetQuestions(appId);
+    console.log("questions:", questions);
 
     // check empty options
     useEffect(() => {
-        if (step >= 3 && step - 3 < questions.length) {
-            checkEmptyOption(selectedOptions, questions[step - 3].id)
+        if (step < questions.length) {
+            checkEmptyOption(selectedOptions, questions[step].id)
                 ? setContinuationEnablement(false)
                 : setContinuationEnablement(true);
         }
@@ -38,7 +41,7 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
     return (
         <LayoutGenerate
             createSectionButton={
-                step - 2 === questions.length + 1 && (
+                step === questions.length && (
                     <Button
                         onClick={() => ModalStatus.onOpen()}
                         maxW="200px"
@@ -55,13 +58,14 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
                     onClick={nextStep}
                     maxW="200px"
                     variant="secondary"
+                    bg="blue"
                 >
                     <Text>Continue</Text>
                 </Button>
             }
             backAction={backStep}
         >
-            <Box flex={1}>
+            <Box color="black" flex={1}>
                 {!questionsIsLoading && (
                     <Stack>
                         {questions.map((question, id) => (
@@ -70,10 +74,10 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
                                 key={id}
                                 variants={boxQAMotion}
                                 initial="hidden"
-                                animate={step - 3 === id ? "visible" : "hidden"}
+                                animate={step === id ? "visible" : "hidden"}
                                 transition={{ duration: 0.6 }}
                             >
-                                <Box flex={1} key={id} hidden={step - 3 !== id}>
+                                <Box flex={1} key={id} hidden={step !== id}>
                                     <BlockChooseQuestion
                                         questionId={question.id}
                                     />
@@ -84,13 +88,11 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
                             variants={boxQAMotion}
                             initial="hidden"
                             animate={
-                                step - 2 === questions.length + 1
-                                    ? "visible"
-                                    : "hidden"
+                                step === questions.length ? "visible" : "hidden"
                             }
                             transition={{ duration: 0.6 }}
                         >
-                            <Box hidden={step - 2 !== questions.length + 1}>
+                            <Box hidden={step !== questions.length}>
                                 <PreviewDocument
                                     ModalStatus={ModalStatus}
                                     backStep={backStep}

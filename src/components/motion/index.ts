@@ -4,18 +4,6 @@ interface IFadeInProps {
     transition?: any;
 }
 
-export const variantsItemFadeIn = {
-    hidden: { opacity: 0, scale: 0.1 },
-    show: {
-        opacity: 1,
-        scale: 1,
-        transition: {
-            type: "spring",
-            stiffness: 50,
-            bounce: 0.25,
-        },
-    },
-};
 export const fadeIn = ({ show, hidden, transition }: IFadeInProps) => {
     return {
         hidden: {
@@ -39,11 +27,29 @@ export const movePage = {
     animate: { opacity: 1, transition: { duration: 1 } },
 };
 
-export const hoverTapMotion = {
-    whileHover: { scale: 1.1 },
-    whileTap: { scale: 0.9 },
+interface ILeftToRightProps {
+    delay?: number;
+}
+
+export const LeftToRight = ({ delay }: ILeftToRightProps) => {
+    return {
+        exit: { opacity: 0 },
+        initial: { opacity: 0, x: -50 },
+        animate: {
+            opacity: 1,
+            x: 0,
+            transition: {
+                delay,
+                duration: 0.5,
+            },
+        },
+    };
 };
 
+export const hoverTapMotion = {
+    whileHover: { scale: 1.03 },
+    whileTap: { scale: 1.03 },
+};
 export const boxQAMotion = {
     hidden: { opacity: 0, height: 0, margin: 0 },
     visible: { opacity: 1 },

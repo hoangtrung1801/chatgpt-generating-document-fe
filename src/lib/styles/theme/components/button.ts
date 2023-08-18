@@ -62,6 +62,37 @@ export const Button: ComponentStyleConfig = {
                 },
             },
         },
+        outline: {
+            bg: "transparent",
+            background: "transparent",
+            color: "#7E1AA1",
+            fontSize: "16px",
+            minHeight: "2rem",
+            width: "fit-content",
+            padding: "12px 16px",
+            borderRadius: "md",
+            borderWidth: "1px",
+            borderColor: "#e5e0df",
+
+            _hover: {
+                bg: "#EBD2F4",
+                background: "#EBD2F4",
+            },
+
+            _active: {
+                // bg: "#B1C36B",
+                // background: "#B1C36B",
+                // backdropFilter: "blur(3px)",
+            },
+
+            _disabled: {
+                background: "blackAlpha.800",
+                opacity: 0.5,
+                _hover: {
+                    background: "blackAlpha.800 !important",
+                },
+            },
+        },
     },
 
     sizes: {
