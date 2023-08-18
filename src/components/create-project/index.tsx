@@ -20,15 +20,9 @@ const CreateProjectSection = (props: Props) => {
     const AvailableModeRender = () => {
         return (
             <>
-                <Box hidden={!(step >= 1)}>
-                    <StepChooseCategories form={form} />
-                </Box>
-                <Box hidden={!(step >= 2)}>
-                    <StepChooseApps form={form} />
-                </Box>
-                <Box hidden={!(step >= 3)}>
-                    <StepStepTypeShortDesc form={form} />
-                </Box>
+                {step >= 1 && <StepChooseCategories form={form} />}
+                {step >= 2 && <StepChooseApps form={form} />}
+                {step >= 3 && <StepStepTypeShortDesc form={form} />}
             </>
         );
     };

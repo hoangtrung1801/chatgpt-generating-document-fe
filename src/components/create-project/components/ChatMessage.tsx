@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex } from "@chakra-ui/react";
+import { Box, BoxProps, Flex, Text } from "@chakra-ui/react";
 import { UseFormReturn } from "react-hook-form";
 
 interface Props extends BoxProps {
@@ -76,35 +76,14 @@ export const ReplyContent = ({
     );
 };
 
-export type askTypeProps = {
-    form: UseFormReturn<any>;
-};
-export const AskType = ({ form }: askTypeProps) => {
-    const { control, handleSubmit, watch } = form;
-    const [step] = watch(["step"]);
-    const [type] = watch(["type"]);
-    return (
-        <>
-            <ReceiveContent isTriangle>what type?</ReceiveContent>
-            {type && <ReplyContent isTriangle>{type}</ReplyContent>}
-        </>
-    );
+export type TNoteMessageProps = {
+    content: string;
 };
 
-export type askNameProps = {
-    form: UseFormReturn<any>;
-};
-export const askName = ({ form }: askNameProps) => {
-    const { control, handleSubmit, watch } = form;
-    const [name] = watch(["name"]);
-    const [step] = watch(["step"]);
-    const [type] = watch(["type"]);
+export const NoteMessage = ({ content }: TNoteMessageProps) => {
     return (
-        <>
-            {(step === "askName" || name) && (
-                <ReceiveContent isTriangle>what name?</ReceiveContent>
-            )}
-            {name && <ReplyContent isTriangle>{name}</ReplyContent>}
-        </>
+        <Text fontSize="sm" color="gray.500">
+            {content}
+        </Text>
     );
 };

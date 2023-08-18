@@ -13,11 +13,12 @@ import { motion } from "framer-motion";
 import createSelection from "lib/api/createSelection";
 import generateDocument from "lib/api/generateDocument";
 import useGetQuestions from "lib/hooks/useGetQuestions";
+import Layout from "lib/layout";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTableContents } from "stores";
+import { useCreateProject, useTableContents } from "stores";
 
 const Document: NextPage = () => {
     const router = useRouter();
@@ -25,44 +26,51 @@ const Document: NextPage = () => {
 
     const [loading, setLoading] = useState(false);
     const { columns } = useTableContents();
+    const data = useCreateProject((state) => state.data);
 
     const methods = useForm();
     const { watch, handleSubmit } = methods;
 
     const formValues = watch();
-    const appId = watch("appId");
 
     const renderStep = () => {
-        if (step === 0) return <TypeShortDescriptionApp nextStep={nextStep} />;
-        if (step === 1)
-            return (
-                <ChooseAppCategory backStep={backStep} nextStep={nextStep} />
-            );
-        if (step === 2)
-            return <ChooseApp backStep={backStep} nextStep={nextStep} />;
-        if (
-            questions.length !== 0 &&
-            step >= 3 &&
-            step - 2 <= questions.length + 1
-        )
+        // if (step === 0) return <TypeShortDescriptionApp nextStep={nextStep} />;
+        // if (step === 1)
+        //     return (
+        //         <ChooseAppCategory backStep={backStep} nextStep={nextStep} />
+        //     );
+        // if (step === 2)
+        //     return <ChooseApp backStep={backStep} nextStep={nextStep} />;
+        // if (
+        //     questions.length !== 0 &&
+        //     step >= 3 &&
+        //     step - 2 <= questions.length + 1
+        // )
+        if (step >= 0)
             return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
     };
 
-    const { questions } = useGetQuestions(appId);
-
     const { addToast } = CustomToast();
+    const { questions } = useGetQuestions(data.appId);
+    console.log(questions.length);
+    console.log(step - 1);
 
     const nextStep = () => {
         // step preview document
-
-        if (questions.length !== 0 && step - 2 === questions.length + 1) {
-            // handleSubmit(onSubmit)();
-            console.log("form values: ", { formValues });
-            console.log("table contents: ", columns);
-        } else {
-            router.query.step = String(step + 1);
-            router.push(router);
+        router.query.step = String(step + 1);
+        router.push(router);
+        if (step === questions.length) {
+            console.log("vao day");
+            handleSubmit(onSubmit)();
         }
+        // if (questions.length !== 0 && step - 2 === questions.length + 1) {
+        //     // handleSubmit(onSubmit)();
+        //     console.log("form values: ", { formValues });
+        //     console.log("table contents: ", columns);
+        // } else {
+        //     router.query.step = String(step + 1);
+        //     router.push(router);
+        // }
 
         // console.log({ formValues });
     };
@@ -75,8 +83,8 @@ const Document: NextPage = () => {
     const onSubmit = async (values) => {
         try {
             console.log({ values });
-            const body = { ...values };
-            delete body.category;
+            const body = { ...values, ...data };
+            // delete body.category;
             body.selectedOptions = Object.values(body.selectedOptions).reduce(
                 (prev: Array<Number>, cur: any) => {
                     if (!cur) return prev;
@@ -87,7 +95,6 @@ const Document: NextPage = () => {
 
             // Test
             body.username = "Hoang Trung";
-
             console.log({ body });
 
             // API - Create Selection
@@ -112,13 +119,15 @@ const Document: NextPage = () => {
     if (loading) return <Loading />;
 
     return (
-        <Box py={4}>
-            <FormProvider {...methods}>
-                <Box as={motion.div} {...movePage}>
-                    {renderStep()}
-                </Box>
-            </FormProvider>
-        </Box>
+        <Layout>
+            <Box py={4}>
+                <FormProvider {...methods}>
+                    <Box as={motion.div} {...movePage}>
+                        {renderStep()}
+                    </Box>
+                </FormProvider>
+            </Box>
+        </Layout>
     );
 };
 

@@ -1,21 +1,21 @@
-import { Box, Button, Stack, Icon, Flex } from "@chakra-ui/react";
+import { Box, Button, Stack, Icon, Flex, StackProps } from "@chakra-ui/react";
 import { documentModes } from "components/create-project/data";
 import { CheckIcon } from "icons";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 
-export type TCardModeProps = {
+export interface TCardModeProps extends StackProps {
     form: UseFormReturn<any>;
     mode: documentModes;
     title: string;
     imageUrl: string;
-};
+}
 
 const bgMapping = {
     1: "rgb(204, 165, 218)",
     2: "rgb(244, 225, 200)",
 };
-const CardMode = ({ form, imageUrl, mode, title }: TCardModeProps) => {
+const CardMode = ({ form, imageUrl, mode, title, ...rest }: TCardModeProps) => {
     const { setValue, watch } = form;
     const [documentMode] = watch(["documentMode"]);
     const isActive = mode === documentMode;
@@ -47,11 +47,9 @@ const CardMode = ({ form, imageUrl, mode, title }: TCardModeProps) => {
             w="100%"
             h="16rem"
             boxShadow="xl"
-            _hover={{
-                transform: "scale(1.03)",
-            }}
             borderColor={`${isActive && "#C479DF"} `}
             borderWidth={"4px"}
+            {...rest}
         >
             <Box
                 pos="relative"
@@ -83,6 +81,9 @@ const CardMode = ({ form, imageUrl, mode, title }: TCardModeProps) => {
                 bg="blackAlpha.400"
                 backdropFilter="saturate(200%)"
                 color="white"
+                // _hover={{
+                //     bg: "",
+                // }}
             >
                 {title}
             </Button>

@@ -12,6 +12,12 @@ const ButtonLabel = ({ children, isActive, ...rest }: IButtonLabelProps) => {
             bg={`${isActive && "#5E1379"}`}
             color={`${isActive ? "white" : "#7E1AA1"}`}
             variant="outline"
+            _hover={{
+                bgColor: isActive ? "" : "#EBD2F4",
+            }}
+            _disabled={{
+                cursor: "not-allowed",
+            }}
             {...rest}
         >
             {children}

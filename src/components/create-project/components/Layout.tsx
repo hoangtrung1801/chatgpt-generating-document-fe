@@ -1,5 +1,6 @@
-import { Box, Flex, Text, Icon } from "@chakra-ui/react";
+import { Box, Flex, Text, Icon, Button } from "@chakra-ui/react";
 import { BgCreateProjectIcon, HomeIcon } from "icons";
+import { useRouter } from "next/router";
 import React from "react";
 
 type Props = {
@@ -7,6 +8,7 @@ type Props = {
 };
 
 export const LayoutCreateProject = ({ children }: Props) => {
+    const router = useRouter();
     return (
         <Box>
             <Flex flexDir="column">
@@ -21,9 +23,25 @@ export const LayoutCreateProject = ({ children }: Props) => {
                 >
                     <Icon as={BgCreateProjectIcon} w="400px" h="400px" />
                 </Flex>
-                <Flex gap={1} p="8px">
-                    <Icon as={HomeIcon} />
-                    <Text>Home</Text>
+                <Flex zIndex={2} gap={1} p="18px">
+                    <Button
+                        onClick={() => router.push("/")}
+                        px={4}
+                        color="gray.800"
+                        fontSize="sm"
+                        w="fit-content"
+                        height={8}
+                        fontWeight="700"
+                        borderColor="gray-200"
+                        borderRadius="full"
+                        bgColor="white"
+                        _hover={{
+                            color: "blue",
+                        }}
+                        leftIcon={<Icon as={HomeIcon} />}
+                    >
+                        Home
+                    </Button>
                 </Flex>
                 {/* render step... */}
                 <Flex w="full" minH="full" justify="center">

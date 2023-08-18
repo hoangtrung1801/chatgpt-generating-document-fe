@@ -1,6 +1,8 @@
 import {
     Box,
+    BoxProps,
     Button,
+    HStack,
     Icon,
     InputGroup,
     InputRightElement,
@@ -8,44 +10,134 @@ import {
     Text,
     Textarea,
 } from "@chakra-ui/react";
-import { SendIcon } from "icons";
+import TextareaAutosize from "react-textarea-autosize";
+import { AgainIcon, ArrowIcon, SendIcon } from "icons";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { ReceiveContent } from "../ChatMessage";
+import styled from "@emotion/styled";
+import Typist from "react-typist";
+import { motion } from "framer-motion";
+import { LeftToRight } from "components/motion";
+import { useCreateProject } from "stores";
 
-type StepStepTypeShortDescProps = {
+const Wrapper = styled(Typist)`
+    .Cursor {
+        display: inline-block;
+    }
+    .Cursor--blinking {
+        display: none;
+    }
+`;
+
+interface StepStepTypeShortDescProps extends BoxProps {
     form: UseFormReturn<any>;
-};
+}
 
-const StepStepTypeShortDesc = ({ form }: StepStepTypeShortDescProps) => {
+const StepStepTypeShortDesc = ({
+    form,
+    ...rest
+}: StepStepTypeShortDescProps) => {
     const router = useRouter();
     const { watch, setValue } = form;
-    const [categoryState, setCategoryState] = useState("");
+    const [category, appId, description, projectName] = watch([
+        "category",
+        "appId",
+        "description",
+        "projectName",
+    ]);
+    const ref = useRef(null);
+    const updateCreateProjectContent = useCreateProject(
+        (state) => state.updateCreateProjectContent
+    );
+    const [descriptionState, setDescriptionState] = useState("");
     const handleClick = () => {
-        setValue("category", "1");
+        setValue("description", descriptionState);
+        router.push("/generate");
+        updateCreateProjectContent({
+            appId,
+            description: descriptionState,
+            projectName,
+        });
+
         // router qua generate
         // set data into store, xong do qua ben kia fetch cau hoi
     };
+    useEffect(() => {
+        ref.current?.scrollIntoView({ behavior: "smooth" });
+    }, [ref]);
     return (
-        <Stack spacing="24px">
+        <Stack ref={ref} {...rest} spacing="24px">
             <ReceiveContent>
-                Sounds good! What would you like the document to be about?
+                <Wrapper avgTypingDelay={30} cursor={{ hideWhenDone: true }}>
+                    {`${projectName}? Sounds interesting! Please give me a detailed description of your project?`}
+                </Wrapper>
             </ReceiveContent>
-            <Stack color="black" p={4} bg="white">
-                <Text>You can edit this outline, or continue as is:</Text>
+            <Stack
+                as={motion.div}
+                {...LeftToRight({ delay: 1 })}
+                color="black"
+                p={4}
+                bg="white"
+            >
+                <Text>
+                    Typing the most detailed information to achieve the best
+                    results!
+                </Text>
                 <InputGroup>
                     <Textarea
-                        color="white"
+                        as={TextareaAutosize}
+                        minH="150px"
+                        color="black"
                         bg="white"
                         borderWidth="1px"
                         borderColor="#e5e0df"
-                        // onKeyDown={(e) => e.keyCode === 13 && handleOnSend()}
-                        value={categoryState}
-                        // onChange={(e) => setInputText(e.target.value)}
+                        onKeyDown={(e) => e.keyCode === 13 && handleClick()}
+                        value={descriptionState}
+                        onChange={(e) => setDescriptionState(e.target.value)}
                     />
                 </InputGroup>
-                <Button onClick={handleClick}>Continue</Button>
+                <HStack maxH="44px">
+                    <Button
+                        fontSize="md"
+                        h="full"
+                        minW="190px"
+                        color="#2208cc"
+                        borderColor="#2208cc"
+                        borderWidth="2px"
+                        borderRadius="md"
+                        bg="transparent"
+                        variant="outline"
+                        boxShadow="md"
+                        onClick={handleClick}
+                        rightIcon={<Icon as={AgainIcon} />}
+                        _hover={{
+                            backgroundColor: "#eae7ff",
+                        }}
+                    >
+                        Try again!
+                    </Button>
+                    <Button
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        fontSize="md"
+                        h="full"
+                        flex={1}
+                        bg="#3c03d7"
+                        fontWeight="600"
+                        variant="primary"
+                        color="gray.100"
+                        borderRadius="md"
+                        boxShadow="md"
+                        rightIcon={<Icon as={ArrowIcon} />}
+                        onClick={handleClick}
+                        isDisabled={!descriptionState}
+                    >
+                        Continue
+                    </Button>
+                </HStack>
             </Stack>
         </Stack>
     );

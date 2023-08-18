@@ -39,14 +39,20 @@ export const LayoutGenerate = ({
     }
 
     return (
-        <Stack as={motion.div} {...movePage} align="center" spacing={10}>
+        <Stack
+            color="black"
+            as={motion.div}
+            {...movePage}
+            align="center"
+            spacing={10}
+        >
             <Stack
                 pos="relative"
                 p={6}
                 border="1px solid"
                 borderRadius="16px"
                 borderColor="#f8f8fb"
-                bg="#f8f8fb"
+                bg="white"
                 mx="auto"
                 w="900px"
                 h="500px"
@@ -68,19 +74,20 @@ export const LayoutGenerate = ({
                 <Box flex={1} overflow="auto">
                     {children}
                 </Box>
-                {step - 3 < questionsLength && (
+                {step < questionsLength && (
                     <Box>
                         <Text fontSize="md" mb={4} textAlign="center">
-                            Step {step - 2} of {questionsLength}
+                            Step {step + 1} of {questionsLength}
                         </Text>
 
                         <Progress
                             ref={progressDivRef}
                             hasStripe
                             isAnimated
-                            colorScheme="blackAlpha"
+                            // bg="blue"
+                            colorScheme="blue"
                             size="xs"
-                            value={((step - 2) * 100) / questionsLength}
+                            value={(step * 100) / questionsLength}
                         />
                     </Box>
                 )}

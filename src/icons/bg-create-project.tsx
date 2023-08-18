@@ -14,12 +14,12 @@ export const BgCreateProjectIcon = createIcon({
                     <stop
                         id="gradientStop1"
                         offset="0%"
-                        stop-color="hsla(273, 75%, 50%, .2)"
+                        stopColor="hsla(273, 75%, 50%, .2)"
                     ></stop>
                     <stop
                         id="gradientStop2"
                         offset="100%"
-                        stop-color="#F7C88133"
+                        stopColor="#F7C88133"
                     ></stop>
                 </linearGradient>
             </defs>
@@ -36,5 +36,3 @@ export const BgCreateProjectIcon = createIcon({
         </>
     ),
 });
-
-
