@@ -7,7 +7,7 @@ type Props = {};
 
 const CreateProject = (props: Props) => {
     return (
-        <LayoutCreateProject>
+        <LayoutCreateProject page="Home">
             {/* create project steps... */}
             <CreateProjectSection />
         </LayoutCreateProject>

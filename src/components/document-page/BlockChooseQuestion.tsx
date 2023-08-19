@@ -1,13 +1,16 @@
-import { Box, Heading, VStack } from "@chakra-ui/react";
+import { Box, BoxProps, Heading, VStack } from "@chakra-ui/react";
 import Loading from "components/Loading";
 import useGetQuestion from "lib/hooks/useGetQuestion";
 import { MultiOptions, SingleOption } from "./components";
 
-type TBlockChooseQuestion = {
+interface TBlockChooseQuestion extends BoxProps {
     questionId: number;
-};
+}
 
-export const BlockChooseQuestion = ({ questionId }: TBlockChooseQuestion) => {
+export const BlockChooseQuestion = ({
+    questionId,
+    ...rest
+}: TBlockChooseQuestion) => {
     const { question, isLoading } = useGetQuestion(questionId);
 
     if (isLoading) {
@@ -15,7 +18,7 @@ export const BlockChooseQuestion = ({ questionId }: TBlockChooseQuestion) => {
     }
 
     return (
-        <Box>
+        <Box {...rest}>
             <VStack spacing={[10, 16]}>
                 <Heading>{question.name}</Heading>
                 <Box maxH="250px" overflow="auto" w="full">

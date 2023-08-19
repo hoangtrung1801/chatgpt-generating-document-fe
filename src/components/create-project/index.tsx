@@ -1,4 +1,4 @@
-import { Box, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import StepChooseApps from "./components/StepChooseApps";
 import StepChooseCategories from "./components/StepChooseCategories";

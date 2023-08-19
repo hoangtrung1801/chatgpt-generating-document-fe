@@ -1,3 +1,4 @@
+import { AddIcon } from "@chakra-ui/icons";
 import { Box, Flex, Text, Icon, Button } from "@chakra-ui/react";
 import { BgCreateProjectIcon, HomeIcon } from "icons";
 import { useRouter } from "next/router";
@@ -5,9 +6,20 @@ import React from "react";
 
 type Props = {
     children: React.ReactElement;
+    page: string;
 };
 
-export const LayoutCreateProject = ({ children }: Props) => {
+const IconMapping = {
+    "Home": HomeIcon,
+    "Create project": AddIcon,
+};
+
+const PathMapping = {
+    "Home": "/",
+    "Create project": "create-project",
+};
+
+export const LayoutCreateProject = ({ children, page }: Props) => {
     const router = useRouter();
     return (
         <Box>
@@ -25,7 +37,7 @@ export const LayoutCreateProject = ({ children }: Props) => {
                 </Flex>
                 <Flex zIndex={2} gap={1} p="18px">
                     <Button
-                        onClick={() => router.push("/")}
+                        onClick={() => router.push(PathMapping[page])}
                         px={4}
                         color="gray.800"
                         fontSize="sm"
@@ -38,9 +50,9 @@ export const LayoutCreateProject = ({ children }: Props) => {
                         _hover={{
                             color: "blue",
                         }}
-                        leftIcon={<Icon as={HomeIcon} />}
+                        leftIcon={<Icon as={IconMapping[page]} />}
                     >
-                        Home
+                        {page}
                     </Button>
                 </Flex>
                 {/* render step... */}

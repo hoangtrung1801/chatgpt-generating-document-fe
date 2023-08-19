@@ -1,6 +1,7 @@
+import type { HTMLChakraProps } from "@chakra-ui/react";
 import {
     Box,
-    Button,
+    BoxProps,
     Divider,
     HStack,
     Progress,
@@ -8,28 +9,39 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { BackTo } from "components/common/BackTo";
-import { movePage } from "components/motion";
-import { motion } from "framer-motion";
+import type { HTMLMotionProps } from "framer-motion";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
 
-type LayoutGenerateProps = {
+import type { Merge } from "lib/types/merge";
+type MotionBoxProps = Merge<HTMLChakraProps<"div">, HTMLMotionProps<"div">>;
+
+type CardProps = {
     children: React.ReactElement;
     continueButton?: React.ReactElement;
     createSectionButton?: React.ReactElement;
     backAction: () => void;
     questionsLength?: number;
 };
+// type CardQAMotionProps = CardProps & BoxProps & MotionBoxProps;
+interface CardQAProps extends BoxProps {
+    children: React.ReactElement;
+    continueButton?: React.ReactElement;
+    createSectionButton?: React.ReactElement;
+    backAction: () => void;
+    questionsLength?: number;
+}
 
-export const LayoutGenerate = ({
+export const CardQA = ({
     children,
     backAction,
     createSectionButton,
     continueButton,
     questionsLength,
-}: LayoutGenerateProps) => {
+    ...rest
+}: CardQAProps) => {
     const router = useRouter();
-    const step = Number(router.query.step);
+    const step = Number(router.query.step) | 0;
     const progressDivRef = useRef();
     const progressBarDiv: any = progressDivRef.current;
     // add css progress bar animation
@@ -39,27 +51,21 @@ export const LayoutGenerate = ({
     }
 
     return (
-        <Stack
-            color="black"
-            as={motion.div}
-            {...movePage}
-            align="center"
-            spacing={10}
-        >
+        <Stack color="black" align="center" spacing={10}>
             <Stack
-                pos="relative"
                 p={6}
                 border="1px solid"
                 borderRadius="16px"
                 borderColor="#f8f8fb"
-                bg="white"
+                bg="#f7f3f2"
                 mx="auto"
                 w="900px"
                 h="500px"
                 py={4}
+                {...rest}
             >
                 <Box>
-                    <Stack pb={3} direction="row" align="center">
+                    <Stack spacing={4} align="center">
                         <HStack w="full" justify="space-between">
                             <BackTo color="black" action={backAction}>
                                 <Text fontSize="md" fontWeight="semibold">
@@ -68,15 +74,20 @@ export const LayoutGenerate = ({
                             </BackTo>
                             {createSectionButton}
                         </HStack>
+                        <Divider borderColor="#726e6e" />
                     </Stack>
-                    <Divider color="blackAlpha.800" />
                 </Box>
                 <Box flex={1} overflow="auto">
                     {children}
                 </Box>
                 {step < questionsLength && (
                     <Box>
-                        <Text fontSize="md" mb={4} textAlign="center">
+                        <Text
+                            fontSize="md"
+                            fontWeight={500}
+                            mb={4}
+                            textAlign="center"
+                        >
                             Step {step + 1} of {questionsLength}
                         </Text>
 
@@ -87,7 +98,7 @@ export const LayoutGenerate = ({
                             // bg="blue"
                             colorScheme="blue"
                             size="xs"
-                            value={(step * 100) / questionsLength}
+                            value={((step + 1) * 100) / questionsLength}
                         />
                     </Box>
                 )}

@@ -1,13 +1,13 @@
-import { Box, Button, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { boxQAMotion } from "components/motion";
-import MotionBox from "components/motion/Box";
+import { motion } from "framer-motion";
 import useGetQuestions from "lib/hooks/useGetQuestions";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useCreateProject } from "stores";
 import { BlockChooseQuestion } from "./BlockChooseQuestion";
-import { LayoutGenerate } from "./components";
+import { CardQA } from "./components";
 import { checkEmptyOption } from "./data";
 import { PreviewDocument } from "./PreviewDocument";
 type TChooseAppOptions = {
@@ -17,17 +17,14 @@ type TChooseAppOptions = {
 
 export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
     const ModalStatus = useDisclosure();
-    const router = useRouter();
-    const step = Number(router.query.step) || 0;
-    const { appId } = useCreateProject((state) => state.data);
-
-    const [continuationEnablement, setContinuationEnablement] = useState(false);
-
     const { watch } = useFormContext();
     const [selectedOptions] = watch(["selectedOptions"]);
-
+    const { appId } = useCreateProject((state) => state.data);
+    const router = useRouter();
     const { questions, isLoading: questionsIsLoading } = useGetQuestions(appId);
-    console.log("questions:", questions);
+    const step = Number(router.query.step) || 0;
+
+    const [continuationEnablement, setContinuationEnablement] = useState(false);
 
     // check empty options
     useEffect(() => {
@@ -39,70 +36,68 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
     }, [questions, selectedOptions, step]);
 
     return (
-        <LayoutGenerate
-            createSectionButton={
-                step === questions.length && (
-                    <Button
-                        onClick={() => ModalStatus.onOpen()}
-                        maxW="200px"
-                        variant="secondary"
+        <VStack spacing={6}>
+            {!questionsIsLoading &&
+                questions.map((question, idx) => (
+                    <motion.div
+                        key={idx}
+                        hidden={step !== idx}
+                        variants={boxQAMotion}
+                        initial="hidden"
+                        animate={step === idx ? "visible" : "hidden"}
+                        transition={{ duration: 0.6 }}
                     >
-                        <Text>Create section</Text>
-                    </Button>
-                )
-            }
-            questionsLength={questions.length}
-            continueButton={
-                <Button
-                    isDisabled={!continuationEnablement}
-                    onClick={nextStep}
-                    maxW="200px"
-                    variant="secondary"
-                    bg="blue"
-                >
-                    <Text>Continue</Text>
-                </Button>
-            }
-            backAction={backStep}
-        >
-            <Box color="black" flex={1}>
-                {!questionsIsLoading && (
-                    <Stack>
-                        {questions.map((question, id) => (
-                            <MotionBox
-                                flex={1}
-                                key={id}
-                                variants={boxQAMotion}
-                                initial="hidden"
-                                animate={step === id ? "visible" : "hidden"}
-                                transition={{ duration: 0.6 }}
-                            >
-                                <Box flex={1} key={id} hidden={step !== id}>
-                                    <BlockChooseQuestion
-                                        questionId={question.id}
-                                    />
-                                </Box>
-                            </MotionBox>
-                        ))}
-                        <MotionBox
-                            variants={boxQAMotion}
-                            initial="hidden"
-                            animate={
-                                step === questions.length ? "visible" : "hidden"
-                            }
-                            transition={{ duration: 0.6 }}
+                        <CardQA
+                            questionsLength={questions.length}
+                            backAction={backStep}
                         >
-                            <Box hidden={step !== questions.length}>
-                                <PreviewDocument
-                                    ModalStatus={ModalStatus}
-                                    backStep={backStep}
-                                    nextStep={nextStep}
-                                />
+                            <Box color="black" flex={1}>
+                                <BlockChooseQuestion questionId={question.id} />
                             </Box>
-                        </MotionBox>
-                    </Stack>
-                )}
-            </Box>
-        </LayoutGenerate>
+                        </CardQA>
+                    </motion.div>
+                ))}
+            {step === questions.length && (
+                <motion.div
+                    variants={boxQAMotion}
+                    initial="hidden"
+                    animate={step === questions.length ? "visible" : "hidden"}
+                    transition={{ duration: 0.6 }}
+                >
+                    <CardQA
+                        createSectionButton={
+                            step === questions.length && (
+                                <Button
+                                    onClick={() => ModalStatus.onOpen()}
+                                    maxW="200px"
+                                    variant="secondary"
+                                >
+                                    Create Section
+                                </Button>
+                            )
+                        }
+                        questionsLength={questions.length}
+                        backAction={backStep}
+                    >
+                        <PreviewDocument
+                            ModalStatus={ModalStatus}
+                            backStep={backStep}
+                            nextStep={nextStep}
+                        />
+                    </CardQA>
+                </motion.div>
+            )}
+
+            <Button
+                zIndex={2}
+                isDisabled={!continuationEnablement}
+                onClick={nextStep}
+                maxW="200px"
+                variant="secondary"
+                bg="blue"
+            >
+                <Text>Continue</Text>
+            </Button>
+        </VStack>
     );
 };

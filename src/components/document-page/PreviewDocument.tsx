@@ -1,13 +1,17 @@
-import { Box, Button, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import {
+    Box,
+    BoxProps,
+    Button,
+    Heading,
+    Stack,
+    Text,
+    useDisclosure,
+} from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useTableContents } from "stores";
-import {
-    ModalAddSection,
-    CardTableContent,
-    LayoutGenerate,
-} from "./components";
+import { ModalAddSection, CardTableContent } from "./components";
 import {
     HandleUpdateColumns,
     onDragEnd,
@@ -15,13 +19,16 @@ import {
     schema_create_section,
 } from "./data";
 
-type TPreviewDocumentProps = {
+interface TPreviewDocumentProps extends BoxProps {
     nextStep: () => void;
     backStep: () => void;
     ModalStatus: any;
-};
+}
 
-export const PreviewDocument = ({ ModalStatus }: TPreviewDocumentProps) => {
+export const PreviewDocument = ({
+    ModalStatus,
+    ...rest
+}: TPreviewDocumentProps) => {
     const { columns, updateColumns } = useTableContents();
     const form = useForm<any>({
         resolver: yupResolver(schema_create_section),
@@ -52,7 +59,14 @@ export const PreviewDocument = ({ ModalStatus }: TPreviewDocumentProps) => {
     };
 
     return (
-        <Box h="full" overflow="auto">
+        <Box zIndex={2} {...rest} h="full" overflow="auto">
+            <Text fontSize="2xl" fontWeight="bold">
+                Your document is almost finished...
+            </Text>
+            <Text fontStyle="italic" fontSize="md" color="gray.500">
+                Please recheck the table of content below.
+            </Text>
+
             <DragDropContext
                 onDragEnd={(result) =>
                     onDragEnd(result, columns, updateColumns)

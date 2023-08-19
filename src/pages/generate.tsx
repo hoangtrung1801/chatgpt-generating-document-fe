@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/react";
+import { LayoutCreateProject } from "components/create-project/components/Layout";
 import { CustomToast } from "components/CustomToast";
 import {
     ChooseApp,
@@ -25,27 +26,12 @@ const Document: NextPage = () => {
     const step = Number(router.query?.step) || 0;
 
     const [loading, setLoading] = useState(false);
-    const { columns } = useTableContents();
     const data = useCreateProject((state) => state.data);
 
     const methods = useForm();
     const { watch, handleSubmit } = methods;
 
-    const formValues = watch();
-
     const renderStep = () => {
-        // if (step === 0) return <TypeShortDescriptionApp nextStep={nextStep} />;
-        // if (step === 1)
-        //     return (
-        //         <ChooseAppCategory backStep={backStep} nextStep={nextStep} />
-        //     );
-        // if (step === 2)
-        //     return <ChooseApp backStep={backStep} nextStep={nextStep} />;
-        // if (
-        //     questions.length !== 0 &&
-        //     step >= 3 &&
-        //     step - 2 <= questions.length + 1
-        // )
         if (step >= 0)
             return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
     };
@@ -60,19 +46,8 @@ const Document: NextPage = () => {
         router.query.step = String(step + 1);
         router.push(router);
         if (step === questions.length) {
-            console.log("vao day");
             handleSubmit(onSubmit)();
         }
-        // if (questions.length !== 0 && step - 2 === questions.length + 1) {
-        //     // handleSubmit(onSubmit)();
-        //     console.log("form values: ", { formValues });
-        //     console.log("table contents: ", columns);
-        // } else {
-        //     router.query.step = String(step + 1);
-        //     router.push(router);
-        // }
-
-        // console.log({ formValues });
     };
 
     const backStep = () => {
@@ -119,15 +94,15 @@ const Document: NextPage = () => {
     if (loading) return <Loading />;
 
     return (
-        <Layout>
-            <Box py={4}>
+        <LayoutCreateProject page="Create project">
+            <Box zIndex={2} py={4}>
                 <FormProvider {...methods}>
                     <Box as={motion.div} {...movePage}>
                         {renderStep()}
                     </Box>
                 </FormProvider>
             </Box>
-        </Layout>
+        </LayoutCreateProject>
     );
 };
 
