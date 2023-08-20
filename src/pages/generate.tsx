@@ -8,6 +8,7 @@ import {
     PreviewDocument,
     TypeShortDescriptionApp,
 } from "components/document-page";
+import { ChooseAppOptionsV2 } from "components/document-page/ChooseAppOptionsV2";
 import Loading from "components/Loading";
 import { movePage } from "components/motion";
 import { motion } from "framer-motion";
@@ -33,7 +34,9 @@ const Document: NextPage = () => {
 
     const renderStep = () => {
         if (step >= 0)
-            return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
+            return (
+                <ChooseAppOptionsV2 backStep={backStep} nextStep={nextStep} />
+            );
     };
 
     const { addToast } = CustomToast();
@@ -95,7 +98,7 @@ const Document: NextPage = () => {
 
     return (
         <LayoutCreateProject page="Create project">
-            <Box zIndex={2} py={4}>
+            <Box w="container.md" zIndex={2} py={4}>
                 <FormProvider {...methods}>
                     <Box as={motion.div} {...movePage}>
                         {renderStep()}

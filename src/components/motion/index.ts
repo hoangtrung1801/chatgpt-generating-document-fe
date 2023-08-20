@@ -55,3 +55,9 @@ export const boxQAMotion = {
     visible: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: 100 },
 };
+
+export const boxQAPopoverMotion = {
+    hidden: { opacity: 0, y: 100 },
+    visible: { opacity: 1, y: 0, width: "100%" },
+    exit: { opacity: 0, transition: { duration: 0.15 } },
+};

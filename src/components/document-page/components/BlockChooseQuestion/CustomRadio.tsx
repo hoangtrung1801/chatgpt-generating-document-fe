@@ -21,9 +21,12 @@ export function CustomRadio(props) {
             <Flex
                 align="center"
                 justify="space-between"
-                h="105px"
-                w="242px"
-                p="24px 30px"
+                // h="105px"
+                // w="242px"
+                // p="24px 30px"
+                // h="105px"
+                // w="242px"
+                p="12px 24px"
                 border="2px solid #949ca8"
                 borderRadius="17.3px"
                 textAlign="center"
@@ -39,15 +42,17 @@ export function CustomRadio(props) {
                 {props.children}
                 {isChecked ? (
                     <Icon
-                        w="58px"
-                        h="58px"
+                        // w="58px"
+                        // h="58px"
+                        ml={2}
                         rounded="full"
                         as={CustomRadioIconUnCheckedChecked}
                     />
                 ) : (
                     <Icon
-                        w="58px"
-                        h="58px"
+                        // w="58px"
+                        // h="58px"
+                        ml={2}
                         rounded="full"
                         border="1.9px solid #949ca8"
                         as={CustomRadioIconUnChecked}

@@ -11,7 +11,7 @@ export const ReceiveContent = ({
     ...rest
 }: Props) => {
     return (
-        <Flex>
+        <Flex w="100%" justify="flex-start">
             <Box
                 bg="#eae7ff"
                 color="#000"
