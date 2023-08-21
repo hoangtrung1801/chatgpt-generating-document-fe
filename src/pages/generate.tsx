@@ -1,21 +1,13 @@
 import { Box } from "@chakra-ui/react";
 import { LayoutCreateProject } from "components/create-project/components/Layout";
 import { CustomToast } from "components/CustomToast";
-import {
-    ChooseApp,
-    ChooseAppCategory,
-    ChooseAppOptions,
-    PreviewDocument,
-    TypeShortDescriptionApp,
-} from "components/document-page";
-import { ChooseAppOptionsV2 } from "components/document-page/ChooseAppOptionsV2";
+import { ChooseAppOptions } from "components/document-page/ChooseAppOptions";
 import Loading from "components/Loading";
 import { movePage } from "components/motion";
 import { motion } from "framer-motion";
 import createSelection from "lib/api/createSelection";
 import generateDocument from "lib/api/generateDocument";
 import useGetQuestions from "lib/hooks/useGetQuestions";
-import Layout from "lib/layout";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -25,32 +17,45 @@ import { useCreateProject, useTableContents } from "stores";
 const Document: NextPage = () => {
     const router = useRouter();
     const step = Number(router.query?.step) || 0;
+    const { columns, updateColumns } = useTableContents();
 
     const [loading, setLoading] = useState(false);
     const data = useCreateProject((state) => state.data);
 
     const methods = useForm();
     const { watch, handleSubmit } = methods;
+    const [valueSelection] = watch(["selectedOptions"]);
 
     const renderStep = () => {
         if (step >= 0)
-            return (
-                <ChooseAppOptionsV2 backStep={backStep} nextStep={nextStep} />
-            );
+            return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
     };
 
     const { addToast } = CustomToast();
     const { questions } = useGetQuestions(data.appId);
-    console.log(questions.length);
-    console.log(step - 1);
+    // console.log(questions.length);
+    // console.log(step - 1);
 
     const nextStep = () => {
         // step preview document
-        router.query.step = String(step + 1);
-        router.push(router);
-        if (step === questions.length) {
-            handleSubmit(onSubmit)();
+        // console.log("valueSelection: ", valueSelection);
+        if (step <= questions.length) {
+            if (step === questions.length) {
+                handleSubmit(onSubmit)();
+            } else {
+                router.query.step = String(step + 1);
+                router.push(router);
+            }
         }
+        if (step > questions.length) {
+            router.push("/");
+        }
+
+        // router.query.step = String(step + 1);
+        // router.push(router);
+        // if (step === questions.length) {
+        //     handleSubmit(onSubmit)();
+        // }
     };
 
     const backStep = () => {
@@ -73,7 +78,8 @@ const Document: NextPage = () => {
 
             // Test
             body.username = "Hoang Trung";
-            console.log({ body });
+            console.log("body", { body });
+            console.log("columns: ", columns);
 
             // API - Create Selection
             setLoading(true);

@@ -1,26 +1,19 @@
 import {
-    Box,
-    Input,
+    BoxProps, Flex, Icon, Input,
     InputGroup,
     InputRightElement,
-    Stack,
-    Icon,
-    Flex,
-    Text,
-    Button,
-    BoxProps,
+    Stack
 } from "@chakra-ui/react";
-import { app } from "components/create-project/data";
+import styled from "@emotion/styled";
+import { LeftToRight } from "components/motion";
+import { motion } from "framer-motion";
 import { SendIcon } from "icons";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import useCategoryWithId from "lib/hooks/useCategoryWithId";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
+import Typist from "react-typist";
 import ButtonLabel from "../ButtonLabel";
 import { ReceiveContent } from "../ChatMessage";
-import styled from "@emotion/styled";
-import Typist from "react-typist";
-import { motion } from "framer-motion";
-import { LeftToRight } from "components/motion";
-import useCategoryWithId from "lib/hooks/useCategoryWithId";
 
 const Wrapper = styled(Typist)`
     .Cursor {

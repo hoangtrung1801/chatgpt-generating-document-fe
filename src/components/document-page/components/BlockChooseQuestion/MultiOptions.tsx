@@ -7,17 +7,23 @@ type TMultiOptions = {
 };
 export const MultiOptions = ({ questionId, options }: TMultiOptions) => {
     const { setValue: setFormValue, watch } = useFormContext();
-
+    const [valueSelection] = watch(["selectedOptions"]);
     const [value, setValue] = useState([]);
+    // console.log("value: " + value);
 
     const onChange = (e) => {
-        setValue(e);
+        // setValue(e);
+        // console.log("change", e);
         setFormValue(`selectedOptions.${questionId}`, e.map(Number));
+        // console.log("valueSelection: ", valueSelection[questionId]);
     };
 
     return (
         <Box>
-            <CheckboxGroup value={value} onChange={onChange}>
+            <CheckboxGroup
+                value={valueSelection[questionId] || []}
+                onChange={onChange}
+            >
                 <Stack direction={"column"}>
                     {options.map((option, idx) => (
                         <Box key={option.id} w="full" cursor="pointer">
@@ -33,7 +39,7 @@ export const MultiOptions = ({ questionId, options }: TMultiOptions) => {
                                     },
                                 }}
                                 w="full"
-                                value={String(option.id)}
+                                value={option.id}
                             >
                                 {option.name}
                             </Checkbox>

@@ -1,4 +1,4 @@
-import { Box, BoxProps, Heading, VStack } from "@chakra-ui/react";
+import { Box, BoxProps, Stack, Text, VStack } from "@chakra-ui/react";
 import Loading from "components/Loading";
 import useGetQuestion from "lib/hooks/useGetQuestion";
 import { MultiOptions, SingleOption } from "./components";
@@ -18,10 +18,10 @@ export const BlockChooseQuestion = ({
     }
 
     return (
-        <Box {...rest}>
-            <VStack spacing={[10, 16]}>
-                <Heading>{question.name}</Heading>
-                <Box maxH="250px" overflow="auto" w="full">
+        <Box minW="500px" {...rest}>
+            <VStack w="full" spacing={[6, 6]}>
+                <Text color="gray.500">{question.name}</Text>
+                <Stack maxH="250px" overflow="auto" w="full">
                     {["SINGLE", "YESNO"].includes(question.type) && (
                         <SingleOption
                             questionId={question.id}
@@ -35,7 +35,7 @@ export const BlockChooseQuestion = ({
                             options={question.options}
                         />
                     )}
-                </Box>
+                </Stack>
             </VStack>
         </Box>
     );

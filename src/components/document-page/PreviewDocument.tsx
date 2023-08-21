@@ -1,8 +1,7 @@
 import {
     Box,
     BoxProps,
-    Button,
-    Heading,
+    HStack,
     Stack,
     Text,
     useDisclosure,
@@ -11,11 +10,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useTableContents } from "stores";
-import { ModalAddSection, CardTableContent } from "./components";
+import { CardTableContent, ModalAddSection } from "./components";
 import {
+    defaultValues,
     HandleUpdateColumns,
     onDragEnd,
-    defaultValues,
     schema_create_section,
 } from "./data";
 
@@ -23,10 +22,12 @@ interface TPreviewDocumentProps extends BoxProps {
     nextStep: () => void;
     backStep: () => void;
     ModalStatus: any;
+    createSectionButton: any;
 }
 
 export const PreviewDocument = ({
     ModalStatus,
+    createSectionButton,
     ...rest
 }: TPreviewDocumentProps) => {
     const { columns, updateColumns } = useTableContents();
@@ -59,13 +60,18 @@ export const PreviewDocument = ({
     };
 
     return (
-        <Box zIndex={2} {...rest} h="full" overflow="auto">
-            <Text fontSize="2xl" fontWeight="bold">
-                Your document is almost finished...
-            </Text>
-            <Text fontStyle="italic" fontSize="md" color="gray.500">
-                Please recheck the table of content below.
-            </Text>
+        <Box color="black" zIndex={2} {...rest} h="full" overflow="auto">
+            <HStack mb={6} justify="space-between">
+                <Box>
+                    <Text fontSize="2xl" fontWeight="bold">
+                        Your document is almost finished...
+                    </Text>
+                    <Text fontStyle="italic" fontSize="md" color="gray.500">
+                        Please recheck the table of content below.
+                    </Text>
+                </Box>
+                {createSectionButton}
+            </HStack>
 
             <DragDropContext
                 onDragEnd={(result) =>
@@ -74,7 +80,7 @@ export const PreviewDocument = ({
             >
                 {Object.entries(columns).map(([columnId, column], index) => {
                     return (
-                        <Stack key={index}>
+                        <Stack maxH="400px" overflow="auto" key={index}>
                             <Droppable droppableId={columnId} key={columnId}>
                                 {(
                                     droppableProvided,

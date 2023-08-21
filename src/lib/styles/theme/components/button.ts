@@ -2,6 +2,8 @@ import type { ComponentStyleConfig } from "@chakra-ui/theme";
 
 export const Button: ComponentStyleConfig = {
     baseStyle: {
+        height: "100%",
+        fontSize: "md",
         w: "100%",
         minW: "100px",
         borderRadius: "100px",
@@ -14,14 +16,20 @@ export const Button: ComponentStyleConfig = {
 
     variants: {
         primary: {
-            bg: "rgb(0, 102, 153)",
-            background: "rgb(0, 102, 255)",
-            color: "#fff",
+            bg: "#3f04d8",
+            background: "#3f04d8",
+            color: "gray.100",
+            borderRadius: "md",
+            boxShadow: "md",
+            borderWidth: "1px",
+            borderColor: "#e5e0df",
+            minHeight: "16px",
+            width: "fit-content",
+            padding: "12px 16px",
 
             _hover: {
-                bg: "rgb(0, 51, 153)",
-                background: "rgb(0, 51, 153)",
-                color: "#fff",
+                bg: "#3d4de4",
+                background: "#3d4de4",
             },
 
             _active: {
@@ -31,10 +39,10 @@ export const Button: ComponentStyleConfig = {
             },
 
             _disabled: {
-                background: "rgb(0, 102, 255)",
+                background: "blackAlpha.800",
                 opacity: 0.5,
                 _hover: {
-                    background: "rgb(0, 102, 255) !important",
+                    background: "blackAlpha.800 !important",
                 },
             },
         },
@@ -65,15 +73,14 @@ export const Button: ComponentStyleConfig = {
         outline: {
             bg: "transparent",
             background: "transparent",
-            color: "#7E1AA1",
-            fontSize: "16px",
+            color: "#2208cc",
+            borderColor: "#2208cc",
             minHeight: "2rem",
             width: "fit-content",
             padding: "12px 16px",
             borderRadius: "md",
-            borderWidth: "1px",
-            borderColor: "#e5e0df",
-
+            borderWidth: "2px",
+            boxShadow: "md",
             _hover: {
                 bg: "#EBD2F4",
                 background: "#EBD2F4",

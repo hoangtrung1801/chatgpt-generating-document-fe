@@ -1,6 +1,4 @@
-import {
-    Box, Flex, Text
-} from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { updateUserStories } from "lib/api/userStories";
 import { useEffect, useMemo, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -181,8 +179,8 @@ function TodosTab({ userStories }) {
                                                     return (
                                                         <Box
                                                             // p={1}
-                                                            w={250}
-                                                            minH={500}
+                                                            // w={250}
+                                                            // minH={500}
                                                             bg={
                                                                 snapshot.isDraggingOver
                                                                     ? "#f4f5f7"

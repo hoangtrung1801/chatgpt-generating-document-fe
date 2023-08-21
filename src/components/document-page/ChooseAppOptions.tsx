@@ -1,19 +1,28 @@
-import { Box, Button, Text, useDisclosure, VStack } from "@chakra-ui/react";
-import { boxQAMotion } from "components/motion";
-import { motion } from "framer-motion";
+import { useDisclosure, VStack } from "@chakra-ui/react";
+import styled from "@emotion/styled";
+import { ReceiveContent } from "components/create-project/components/ChatMessage";
 import useGetQuestions from "lib/hooks/useGetQuestions";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import Typist from "react-typist";
 import { useCreateProject } from "stores";
-import { BlockChooseQuestion } from "./BlockChooseQuestion";
-import { CardQA } from "./components";
+import SingleQuestionAndReply from "./components/SingleQuestionAndReply";
+import SingleTableContentAndReply from "./components/SingleTableContentAndReply";
 import { checkEmptyOption } from "./data";
-import { PreviewDocument } from "./PreviewDocument";
 type TChooseAppOptions = {
     nextStep: () => void;
     backStep: () => void;
 };
+
+const Wrapper = styled(Typist)`
+    .Cursor {
+        display: inline-block;
+    }
+    .Cursor--blinking {
+        display: none;
+    }
+`;
 
 export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
     const ModalStatus = useDisclosure();
@@ -22,6 +31,7 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
     const { appId } = useCreateProject((state) => state.data);
     const router = useRouter();
     const { questions, isLoading: questionsIsLoading } = useGetQuestions(appId);
+
     const step = Number(router.query.step) || 0;
 
     const [continuationEnablement, setContinuationEnablement] = useState(false);
@@ -37,67 +47,40 @@ export const ChooseAppOptions = ({ nextStep, backStep }: TChooseAppOptions) => {
 
     return (
         <VStack spacing={6}>
+            <ReceiveContent>
+                <Wrapper avgTypingDelay={30} cursor={{ hideWhenDone: true }}>
+                    Sounds good! What would you like the document to be about?
+                </Wrapper>
+            </ReceiveContent>
             {!questionsIsLoading &&
-                questions.map((question, idx) => (
-                    <motion.div
-                        key={idx}
-                        hidden={step !== idx}
-                        variants={boxQAMotion}
-                        initial="hidden"
-                        animate={step === idx ? "visible" : "hidden"}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <CardQA
-                            questionsLength={questions.length}
-                            backAction={backStep}
-                        >
-                            <Box color="black" flex={1}>
-                                <BlockChooseQuestion questionId={question.id} />
-                            </Box>
-                        </CardQA>
-                    </motion.div>
-                ))}
-            {step === questions.length && (
-                <motion.div
-                    variants={boxQAMotion}
-                    initial="hidden"
-                    animate={step === questions.length ? "visible" : "hidden"}
-                    transition={{ duration: 0.6 }}
-                >
-                    <CardQA
-                        createSectionButton={
-                            step === questions.length && (
-                                <Button
-                                    onClick={() => ModalStatus.onOpen()}
-                                    maxW="200px"
-                                    variant="secondary"
-                                >
-                                    Create Section
-                                </Button>
-                            )
-                        }
-                        questionsLength={questions.length}
-                        backAction={backStep}
-                    >
-                        <PreviewDocument
-                            ModalStatus={ModalStatus}
-                            backStep={backStep}
-                            nextStep={nextStep}
-                        />
-                    </CardQA>
-                </motion.div>
-            )}
+                questions.map(
+                    (question, idx) =>
+                        idx <= step && (
+                            <SingleQuestionAndReply
+                                continuationEnablement={continuationEnablement}
+                                setContinuationEnablement={
+                                    setContinuationEnablement
+                                }
+                                question={question}
+                                backAction={backStep}
+                                nextAction={nextStep}
+                                key={idx}
+                                step={step}
+                                idx={idx}
+                            />
+                        )
+                )}
 
-            <Button
-                zIndex={2}
-                isDisabled={!continuationEnablement}
-                onClick={nextStep}
-                maxW="200px"
-                variant="secondary"
-                bg="blue"
-            >
-                <Text>Continue</Text>
-            </Button>
+            {step === questions.length && (
+                <SingleTableContentAndReply
+                    ModalStatus={ModalStatus}
+                    continuationEnablement={continuationEnablement}
+                    setContinuationEnablement={setContinuationEnablement}
+                    backAction={backStep}
+                    nextAction={nextStep}
+                    step={step}
+                />
+            )}
         </VStack>
     );
 };

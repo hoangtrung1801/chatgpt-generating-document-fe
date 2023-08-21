@@ -1,26 +1,24 @@
 import {
-    Box,
     BoxProps,
     Button,
     HStack,
     Icon,
     InputGroup,
-    InputRightElement,
     Stack,
     Text,
     Textarea,
 } from "@chakra-ui/react";
-import TextareaAutosize from "react-textarea-autosize";
-import { AgainIcon, ArrowIcon, SendIcon } from "icons";
+import styled from "@emotion/styled";
+import { LeftToRight } from "components/motion";
+import { motion } from "framer-motion";
+import { AgainIcon, ArrowIcon } from "icons";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { ReceiveContent } from "../ChatMessage";
-import styled from "@emotion/styled";
+import TextareaAutosize from "react-textarea-autosize";
 import Typist from "react-typist";
-import { motion } from "framer-motion";
-import { LeftToRight } from "components/motion";
 import { useCreateProject } from "stores";
+import { ReceiveContent } from "../ChatMessage";
 
 const Wrapper = styled(Typist)`
     .Cursor {
@@ -52,7 +50,7 @@ const StepStepTypeShortDesc = ({
         (state) => state.updateCreateProjectContent
     );
     const [descriptionState, setDescriptionState] = useState("");
-    const handleClick = () => {
+    const handleClickContinue = () => {
         setValue("description", descriptionState);
         router.push("/generate");
         updateCreateProjectContent({
@@ -60,9 +58,9 @@ const StepStepTypeShortDesc = ({
             description: descriptionState,
             projectName,
         });
-
-        // router qua generate
-        // set data into store, xong do qua ben kia fetch cau hoi
+    };
+    const handleTryAgain = () => {
+        setDescriptionState("");
     };
     useEffect(() => {
         ref.current?.scrollIntoView({ behavior: "smooth" });
@@ -93,24 +91,17 @@ const StepStepTypeShortDesc = ({
                         bg="white"
                         borderWidth="1px"
                         borderColor="#e5e0df"
-                        onKeyDown={(e) => e.keyCode === 13 && handleClick()}
+                        onKeyDown={(e) =>
+                            e.keyCode === 13 && handleClickContinue()
+                        }
                         value={descriptionState}
                         onChange={(e) => setDescriptionState(e.target.value)}
                     />
                 </InputGroup>
                 <HStack maxH="44px">
                     <Button
-                        fontSize="md"
-                        h="full"
-                        minW="190px"
-                        color="#2208cc"
-                        borderColor="#2208cc"
-                        borderWidth="2px"
-                        borderRadius="md"
-                        bg="transparent"
                         variant="outline"
-                        boxShadow="md"
-                        onClick={handleClick}
+                        onClick={handleTryAgain}
                         rightIcon={<Icon as={AgainIcon} />}
                         _hover={{
                             backgroundColor: "#eae7ff",
@@ -122,17 +113,10 @@ const StepStepTypeShortDesc = ({
                         display="flex"
                         justifyContent="center"
                         alignItems="center"
-                        fontSize="md"
-                        h="full"
                         flex={1}
-                        bg="#3c03d7"
-                        fontWeight="600"
                         variant="primary"
-                        color="gray.100"
-                        borderRadius="md"
-                        boxShadow="md"
                         rightIcon={<Icon as={ArrowIcon} />}
-                        onClick={handleClick}
+                        onClick={handleClickContinue}
                         isDisabled={!descriptionState}
                     >
                         Continue

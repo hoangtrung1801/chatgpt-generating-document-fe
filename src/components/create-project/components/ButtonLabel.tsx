@@ -9,9 +9,10 @@ interface IButtonLabelProps extends ButtonProps {
 const ButtonLabel = ({ children, isActive, ...rest }: IButtonLabelProps) => {
     return (
         <Button
+            variant="outline"
+            borderColor="#e5e0df"
             bg={`${isActive && "#5E1379"}`}
             color={`${isActive ? "white" : "#7E1AA1"}`}
-            variant="outline"
             _hover={{
                 bgColor: isActive ? "" : "#EBD2F4",
             }}

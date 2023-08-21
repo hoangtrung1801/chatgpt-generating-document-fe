@@ -1,7 +1,6 @@
-import { Box, Button, Stack, Icon, Flex, StackProps } from "@chakra-ui/react";
+import { Box, Button, Flex, Icon, Stack, StackProps } from "@chakra-ui/react";
 import { documentModes } from "components/create-project/data";
 import { CheckIcon } from "icons";
-import React from "react";
 import { UseFormReturn } from "react-hook-form";
 
 export interface TCardModeProps extends StackProps {
@@ -78,12 +77,14 @@ const CardMode = ({ form, imageUrl, mode, title, ...rest }: TCardModeProps) => {
             </Box>
 
             <Button
+                w="full"
+                variant="primary"
                 bg="blackAlpha.400"
                 backdropFilter="saturate(200%)"
                 color="white"
-                // _hover={{
-                //     bg: "",
-                // }}
+                _hover={{
+                    backdropFilter: "saturate(100%)",
+                }}
             >
                 {title}
             </Button>

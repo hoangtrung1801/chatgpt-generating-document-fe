@@ -1,19 +1,18 @@
-import { Box, Flex, Icon, useRadio } from "@chakra-ui/react";
+import { Box, Flex, Icon, RadioProps, useRadio } from "@chakra-ui/react";
 import {
     CustomRadioIconUnChecked,
     CustomRadioIconUnCheckedChecked,
 } from "icons";
 
-export function CustomRadio(props) {
+export interface CustomRadioProps extends RadioProps {}
+export function CustomRadio(CustomRadioProps) {
     const {
         getRadioProps,
         getInputProps,
-        getCheckboxProps,
         state: { isChecked },
-    } = useRadio(props);
+    } = useRadio(CustomRadioProps);
     const input = getInputProps();
     const radio = getRadioProps({ isChecked });
-
     return (
         <Box w="fit-content" as="label">
             <input {...input} />
@@ -39,7 +38,7 @@ export function CustomRadio(props) {
                     backgroundColor: "rgba(0,102,255,.1)",
                 }}
             >
-                {props.children}
+                {CustomRadioProps.children}
                 {isChecked ? (
                     <Icon
                         // w="58px"
