@@ -19,3 +19,12 @@ export default async function createSelection(body: IBody) {
 
     return data;
 }
+
+export async function updateSelection(body: IBody, selection_id: number) {
+    const data = await fetchWithCredentials(`${API_URL}/${selection_id}`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+    });
+
+    return data;
+}

@@ -9,3 +9,6 @@ export * from "./home";
 export * from "./send";
 export * from "./check";
 export * from "./again";
+export * from "./three-dots";
+export * from "./all-documents";
+export * from "./tip-tap-icons";

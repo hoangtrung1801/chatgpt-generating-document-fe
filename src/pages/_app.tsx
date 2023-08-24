@@ -7,6 +7,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { SWRConfig } from "swr/_internal";
+import Script from "next/script";
+import "../lib/global.css";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
     const { asPath, replace } = useRouter();
@@ -41,6 +43,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 </Head>
                 {/* <Layout> */}
                 <Component {...pageProps} />
+                {/* <Script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs" /> */}
                 {/* </Layout> */}
             </Chakra>
         </SWRConfig>

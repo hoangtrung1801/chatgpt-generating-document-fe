@@ -1,25 +1,27 @@
-import { BlockNoteEditor, Block } from "@blocknote/core";
-import { Editor } from "@milkdown/core";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Stack } from "@chakra-ui/react";
 import "@milkdown/theme-nord/style.css";
-import useCurrentUser from "lib/hooks/useCurrentUser";
-import useSelection from "lib/hooks/useSelection";
-import { useRouter } from "next/router";
-// import { diagram } from "@milkdown/plugin-diagram";
-import { useEffect, useState } from "react";
 
 import "@blocknote/core/style.css";
-import CustomButton from "components/common/CustomButton";
+import DocumentEditor from "components/DocumentEditor";
+import TurndownService from "turndown";
+import { LayoutCreateProject } from "components/create-project/components/Layout";
+import { useRouter } from "next/router";
+import useSelection from "lib/hooks/useSelection";
+import Loading from "components/Loading";
+import { useEffect } from "react";
+import { convertToHTMLFormat } from "utils/convertToHTMLFormat";
+import Mermaid from "components/mermaid";
+import { mermaidRes } from "components/mermaid/data";
+const turndownService = new TurndownService();
+// const markdown = `# Milkdown Next Commonmark
 
-const markdown = `
-# Milkdown Next Commonmark
+// > You're scared of a world where you're needed.
 
-> You're scared of a world where you're needed.
+// This is a demo for using Milkdown with **Next**.`;
 
-This is a demo for using Milkdown with **Next**.`;
-
-const data = `<!DOCTYPE html>
+const getContent = () => {
+    const data = `
+    <!DOCTYPE html>
 <html>
 <head>
     <title>Proposal Document</title>
@@ -105,23 +107,17 @@ const data = `<!DOCTYPE html>
           });
         </script>
 </body>
-</html>`;
+</html>
+    `;
+    return { data };
+};
 
 export default function DocumentPage() {
+    const { data } = getContent();
     const router = useRouter();
     const selectionId = Number(router.query.documentId);
-
-    const { currentUser } = useCurrentUser();
     const { selection, isSelectionLoading, mutateSelection } =
         useSelection(selectionId);
-
-    const [isClient, setIsClient] = useState(false);
-    const editor: BlockNoteEditor | null = useBlockNote({
-        theme: "light",
-        editable: false,
-    });
-    // Editor.make().use(diagram).create();
-
     useEffect(() => {
         const interval = setInterval(() => {
             if (!selection?.document) {
@@ -132,66 +128,13 @@ export default function DocumentPage() {
         return () => clearInterval(interval);
     }, [mutateSelection, selection?.document]);
 
-    useEffect(() => {
-        console.log({ currentUser, selection });
-    }, [currentUser, selection]);
-
-    useEffect(() => setIsClient(true), []);
-    useEffect(() => {
-        if (editor) {
-            // Whenever the current Markdown content changes, converts it to an array
-            // of Block objects and replaces the editor's content with them.
-            const getBlocks = async () => {
-                // @ts-ignore
-                const blocks: Block[] = await editor.HTMLToBlocks(
-                    // selection?.document
-                    data
-                );
-                editor.replaceBlocks(editor.topLevelBlocks, blocks);
-            };
-            getBlocks();
-        }
-    }, [editor, selection?.document]);
-
     return (
-        <Stack className="white" spacing={4}>
-            <Box>
-                <Heading
-                    as="h2"
-                    size={"md"}
-                    fontWeight="normal"
-                    color="blackAlpha.700"
-                >
-                    Software Requirements Document for
-                </Heading>
-                <Heading size="2xl">{selection?.projectName}</Heading>
-            </Box>
-            <Box>
-                <Text color="blackAlpha.600">
-                    Created by {currentUser?.name}
-                </Text>
-            </Box>
-
-            <Box
-                __css={{
-                    "& .ProseMirror": {
-                        paddingY: "2rem",
-                    },
-                }}
-            >
-                {/* {isSelectionLoading || !selection?.document || !isClient ? (
-                    "Loading..."
-                ) : (
-                    <BlockNoteView editor={editor} />
-                )} */}
-                <BlockNoteView editor={editor} />
-            </Box>
-            <Stack direction="row">
-                <CustomButton onClick={() => (editor.isEditable = true)}>
-                    Edit
-                </CustomButton>
-                <CustomButton>Save</CustomButton>
-            </Stack>
-        </Stack>
+        <LayoutCreateProject page="Home">
+            {isSelectionLoading ? (
+                <Loading />
+            ) : (
+                <DocumentEditor content={convertToHTMLFormat(data)} />
+            )}
+        </LayoutCreateProject>
     );
 }

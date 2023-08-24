@@ -93,7 +93,7 @@ const Document: NextPage = () => {
             console.log({ outline });
             addToast(response);
 
-            router.push(`/documents/${selection.id}`);
+            router.push(`/documentsTest/${selection.id}`);
             setLoading(false);
         } catch {
             addToast(Response);

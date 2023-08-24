@@ -1,25 +1,31 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Flex, Text, Icon, Button } from "@chakra-ui/react";
+import { Box, Flex, Text, Icon, Button, FlexProps } from "@chakra-ui/react";
 import { BgCreateProjectIcon, HomeIcon } from "icons";
 import { useRouter } from "next/router";
 import React from "react";
 
-type Props = {
+interface LayoutCreateProjectProps extends FlexProps {
     children: React.ReactElement;
+    isDocumentMode?: boolean;
     page: string;
-};
+}
 
 const IconMapping = {
-    "Home": HomeIcon,
+    Home: HomeIcon,
     "Create project": AddIcon,
 };
 
 const PathMapping = {
-    "Home": "/",
+    Home: "/",
     "Create project": "create-project",
 };
 
-export const LayoutCreateProject = ({ children, page }: Props) => {
+export const LayoutCreateProject = ({
+    children,
+    isDocumentMode,
+    page,
+    ...rest
+}: LayoutCreateProjectProps) => {
     const router = useRouter();
     return (
         <Box>
@@ -32,6 +38,7 @@ export const LayoutCreateProject = ({ children, page }: Props) => {
                     w="100%"
                     h="100%"
                     bgImage="linear-gradient(to bottom, #fde6e1, #fffae8)"
+                    {...rest}
                 >
                     <Icon as={BgCreateProjectIcon} w="400px" h="400px" />
                 </Flex>
