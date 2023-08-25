@@ -52,7 +52,7 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             // py={4}
             height="100px"
             alignItems="center"
-            bg="white"
+            bg="#f7f3f2"
             justifyContent={{ base: "space-between", md: "space-between" }}
             {...rest}
         >
@@ -95,6 +95,7 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 <IconButton
                     size="lg"
                     variant="ghost"
+                    borderRadius="full"
                     aria-label="open menu"
                     icon={<FiBell />}
                 />
@@ -105,9 +106,9 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                             transition="all 0.3s"
                             _focus={{ boxShadow: "none" }}
                         >
-                            <VStack>
+                            <Stack direction="row" align="center">
                                 <Avatar size={"sm"} />
-                                <VStack
+                                <Stack
                                     display={{ base: "none", md: "flex" }}
                                     alignItems="flex-start"
                                     spacing="1px"
@@ -116,11 +117,11 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                                     <Text fontSize="xs" color="gray.600">
                                         {currentUser?.name}
                                     </Text>
-                                </VStack>
+                                </Stack>
                                 <Box display={{ base: "none", md: "flex" }}>
                                     <FiChevronDown />
                                 </Box>
-                            </VStack>
+                            </Stack>
                         </MenuButton>
                         <MenuList p={2} color="black" bg="white">
                             <MenuItem bg="white">{`Hi, ${currentUser?.name}`}</MenuItem>

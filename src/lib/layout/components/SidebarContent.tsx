@@ -32,11 +32,12 @@ interface SidebarProps extends BoxProps {
 export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     return (
         <Box
-            bg="white"
+            bg="inherit"
             transition="3s ease"
             color="gray.500"
             // borderRight="1px"
             // borderRightColor={useColorModeValue("gray.200", "gray.700")}
+            py={8}
             w={{ base: "full", md: 60 }}
             pos="fixed"
             h="full"

@@ -70,11 +70,14 @@ const StepChooseCategories = ({ form, ...rest }: StepChooseCategoriesProps) => {
                 </Wrapper>
             </ReceiveContent>
             <Stack
+                maxW="75%"
                 as={motion.div}
                 {...LeftToRight({ delay: 1 })}
                 spacing={4}
                 p={4}
                 bg="white"
+                alignSelf="flex-end"
+                borderRadius="lg"
             >
                 <InputGroup>
                     <Input

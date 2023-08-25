@@ -21,7 +21,7 @@ const LayoutWithSidebar = ({ children }: LayoutWithSidebarProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
-        <Box p={4} minH="100vh" bg="white">
+        <Box minH="100vh" bg="white">
             <SidebarContent
                 onClose={() => onClose}
                 display={{ base: "none", md: "block" }}

@@ -35,7 +35,7 @@ const StepChooseDocumentType = ({ form }: StepChooseDocumentTypeProps) => {
         <Stack>
             <ReceiveContent>
                 <Wrapper avgTypingDelay={30} cursor={{ hideWhenDone: true }}>
-                    Hi Tuan, I am your AI design partner.
+                    Hi guys, I am your AI design partner.
                 </Wrapper>
             </ReceiveContent>
             {/* block */}
@@ -47,6 +47,8 @@ const StepChooseDocumentType = ({ form }: StepChooseDocumentTypeProps) => {
                 bg="white"
                 rounded="md"
                 spacing={2}
+                w="50%"
+                alignSelf="flex-end"
             >
                 {documentModeData.map((item, idx: number) => (
                     <CardMode

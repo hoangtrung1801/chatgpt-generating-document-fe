@@ -26,7 +26,7 @@ export const defaultValues: ICreateProject = {
 export const documentModeData: Omit<TCardModeProps, "form">[] = [
     {
         mode: documentModes.available,
-        title: "Exist App",
+        title: "Existing App",
         imageUrl:
             "https://cdn.gamma.app/zc87vhr30n8uf3n/29a73f2a0f5840d4a9d30b150a8b0c22/optimized/slide-bg.svg",
     },

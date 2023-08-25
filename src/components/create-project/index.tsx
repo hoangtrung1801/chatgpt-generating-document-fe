@@ -34,7 +34,7 @@ const CreateProjectSection = (props: Props) => {
     };
 
     return (
-        <Stack spacing="24px" pt="48px" w="container.md" zIndex={2}>
+        <Stack spacing="24px" pt="48px" w="container.lg" zIndex={2}>
             <StepChooseDocumentType form={form} />
             {renderSteps()}
         </Stack>
