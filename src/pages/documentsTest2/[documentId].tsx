@@ -1,14 +1,17 @@
 import "@milkdown/theme-nord/style.css";
-
+import dynamic from "next/dynamic";
+const TipTapEditor = dynamic(() => import("components/TipTapEditor"), {
+    ssr: false,
+});
 import "@blocknote/core/style.css";
 import { LayoutCreateProject } from "components/create-project/components/Layout";
 import Loading from "components/Loading";
-import TipTapEditor from "components/TipTapEditor";
 import useSelection from "lib/hooks/useSelection";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import TurndownService from "turndown";
 import { convertToHTMLFormat } from "utils/convertToHTMLFormat";
+const md = require("markdown-it")();
 const turndownService = new TurndownService();
 // const markdown = `# Milkdown Next Commonmark
 
@@ -106,19 +109,22 @@ export default function DocumentPage() {
     const selectionId = Number(router.query.documentId);
     const { selection, isSelectionLoading, mutateSelection } =
         useSelection(selectionId);
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         if (!selection?.document) {
-    //             mutateSelection();
-    //         }
-    //     }, 1000 * 10);
-
-    //     return () => clearInterval(interval);
-    // }, [mutateSelection, selection?.document]);
+    if (!isSelectionLoading) {
+        console.log(selection);
+    }
+    if (!md) return;
 
     return (
         <LayoutCreateProject page="Home">
-            {isSelectionLoading ? <Loading /> : <TipTapEditor content={data} />}
+            {isSelectionLoading && selection && selection.document ? (
+                <Loading />
+            ) : (
+                <TipTapEditor
+                    selection={selection}
+                    // document_id={selectionId}
+                    // content={md.render(selection ? selection?.document : "")}
+                />
+            )}
         </LayoutCreateProject>
     );
 }

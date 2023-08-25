@@ -18,12 +18,32 @@ export const sections: Array<TSection> = [
     },
     {
         id: 2,
-        title: "Project perspective",
+        title: "Project Overview",
         content: ["User interfaces"],
     },
     {
         id: 3,
-        title: "User characteristics",
+        title: "Functional Objectives",
+        content: ["User characteristics"],
+    },
+    {
+        id: 4,
+        title: "Non-functional Objectives",
+        content: ["User characteristics"],
+    },
+    {
+        id: 5,
+        title: "Project Scope",
+        content: ["User characteristics"],
+    },
+    {
+        id: 6,
+        title: "Project Plan",
+        content: ["User characteristics"],
+    },
+    {
+        id: 7,
+        title: "Budget",
         content: ["User characteristics"],
     },
 ];

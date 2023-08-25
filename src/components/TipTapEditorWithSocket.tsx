@@ -1,22 +1,16 @@
-import { Box, Button, HStack, Stack } from "@chakra-ui/react";
-import React, { useCallback } from "react";
-import * as Icons from "svgs/icons";
+import { Box, Button, HStack, Stack, useToast } from "@chakra-ui/react";
+import React from "react";
 // => Tiptap packages
-import Bold from "@tiptap/extension-bold";
-import BulletList from "@tiptap/extension-bullet-list";
-import Code from "@tiptap/extension-code";
-import Document from "@tiptap/extension-document";
 import Heading from "@tiptap/extension-heading";
-import History from "@tiptap/extension-history";
-import Italic from "@tiptap/extension-italic";
-import ListItem from "@tiptap/extension-list-item";
-import OrderedList from "@tiptap/extension-ordered-list";
-import Paragraph from "@tiptap/extension-paragraph";
-import Strike from "@tiptap/extension-strike";
-import Text from "@tiptap/extension-text";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { updateDocument } from "lib/api/document";
+import { useRouter } from "next/router";
 import socketIOClient, { Socket } from "socket.io-client";
+import { Toolbar } from "tiptap/Toolbar";
+import TurndownService from "turndown";
 import { CustomBlockExtension } from "./extension";
+const turndownService = new TurndownService();
 
 const host = "http://localhost:3000";
 // Custom
@@ -27,6 +21,9 @@ type TipTapEditorWithSocketProps = {
 
 export default function TipTapEditorWithSocket({}: TipTapEditorWithSocketProps) {
     const socketRef = React.useRef(null);
+    const toast = useToast();
+    const router = useRouter();
+    const selectionId = Number(router.query.documentId);
 
     const [text, setText] = React.useState("");
     const [content, setContent] = React.useState("");
@@ -36,17 +33,7 @@ export default function TipTapEditorWithSocket({}: TipTapEditorWithSocketProps) 
 
     const editor = useEditor({
         extensions: [
-            Document,
-            History,
-            Paragraph,
-            Text,
-            Bold,
-            Italic,
-            Strike,
-            Code,
-            ListItem,
-            BulletList,
-            OrderedList,
+            StarterKit,
             CustomBlockExtension,
             Heading.configure({
                 levels: [1, 2, 3, 4, 5, 6],
@@ -105,7 +92,7 @@ export default function TipTapEditorWithSocket({}: TipTapEditorWithSocketProps) 
         // Emit the next part whenever the number changes
         // setTextPart((preText) => preText + text);
         if (socketRef.current) {
-            if (number <= 1) {
+            if (number <= 7) {
                 onGenerateDocument();
             }
         }
@@ -122,28 +109,23 @@ export default function TipTapEditorWithSocket({}: TipTapEditorWithSocketProps) 
         // console.log("content: ", content);
     }, [editor?.commands, content]);
 
-    const toggleUnderline = useCallback(() => {
-        // editor.chain().focus().toggleUnderline().run();
-    }, [editor]);
-    const toggleBold = useCallback(() => {
-        editor.chain().focus().toggleBold().run();
-    }, [editor]);
-
-    const toggleItalic = useCallback(() => {
-        editor.chain().focus().toggleItalic().run();
-    }, [editor]);
-
-    const toggleStrike = useCallback(() => {
-        editor.chain().focus().toggleStrike().run();
-    }, [editor]);
-
-    const toggleCode = useCallback(() => {
-        editor.chain().focus().toggleCode().run();
-    }, [editor]);
-
     if (!editor) {
         return null;
     }
+
+    const handleSaveChange = async (HTMLContent: string) => {
+        try {
+            const res = await updateDocument({
+                selectionId: selectionId,
+                payload: {
+                    document: turndownService.turndown(HTMLContent),
+                },
+            });
+            toast({ description: res.message, status: "success" });
+        } catch (error) {
+            toast({ description: error, status: "error" });
+        }
+    };
 
     return (
         <Stack spacing={6}>
@@ -156,86 +138,30 @@ export default function TipTapEditorWithSocket({}: TipTapEditorWithSocketProps) 
                 color="black"
             >
                 <Box>
-                    <HStack p="10px" borderBottom="1px" borderColor="#edf1f6">
-                        <Button
-                            w="32px"
-                            p={0}
-                            onClick={() => editor.chain().focus().undo().run()}
-                            isDisabled={!editor.can().undo()}
-                        >
-                            <Icons.RotateLeft />
-                        </Button>
-                        <Button
-                            p={4}
-                            onClick={() => editor.chain().focus().redo().run()}
-                            isDisabled={!editor.can().redo()}
-                        >
-                            <Icons.RotateRight />
-                        </Button>
-
-                        <Button
-                            // className={classNames("menu-Button", {
-                            //     "is-active": editor.isActive("bold"),
-                            // })}
-                            onClick={toggleBold}
-                        >
-                            <Icons.Bold />
-                        </Button>
-                        <Button
-                            // className={classNames("menu-Button", {
-                            //     "is-active": editor.isActive("underline"),
-                            // })}
-                            onClick={toggleUnderline}
-                        >
-                            <Icons.Underline />
-                        </Button>
-                        <Button
-                            // className={classNames("menu-Button", {
-                            //     "is-active": editor.isActive("intalic"),
-                            // })}
-                            onClick={toggleItalic}
-                        >
-                            <Icons.Italic />
-                        </Button>
-                        <Button
-                            // className={classNames("menu-Button", {
-                            //     "is-active": editor.isActive("strike"),
-                            // })}
-                            onClick={toggleStrike}
-                        >
-                            <Icons.Strikethrough />
-                        </Button>
-                        <Button
-                            // className={classNames("menu-Button", {
-                            //     "is-active": editor.isActive("code"),
-                            // })}
-                            onClick={toggleCode}
-                        >
-                            <Icons.Code />
-                        </Button>
-                    </HStack>
+                    <Toolbar onSave={handleSaveChange} editor={editor} />
 
                     <EditorContent
                         onChange={(e) => console.log(e)}
                         style={{
-                            maxWidth: "900px",
-                            maxHeight: "500px",
+                            width: "100%",
+                            maxHeight: "80vh",
+                            minHeight: "80vh",
                             overflow: "auto",
-                            padding: "10px",
+                            padding: "20px 50px",
                         }}
                         editor={editor}
                     />
                 </Box>
             </Stack>
-            <HStack justify="center">
+            {/* <HStack justify="center">
                 <Button variant="outline">Export</Button>
                 <Button
-                    onClick={() => console.log(editor.getText())}
+                    onClick={() => handleSaveChange(editor.getHTML())}
                     variant="primary"
                 >
                     Save Changes
                 </Button>
-            </HStack>
+            </HStack> */}
         </Stack>
     );
 }

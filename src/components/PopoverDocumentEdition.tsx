@@ -21,26 +21,27 @@ import {
     HStack,
 } from "@chakra-ui/react";
 import { ThreeDotsIcon } from "icons";
+import { deleteDocument } from "lib/api/document";
+import useUserSelections from "lib/hooks/useUserSelections";
 // import { useMutation, useQueryClient } from "react-query";
 export type TPopoverDocumentEdition = { document_id: string; selection: any };
-export function PopoverDocumentEdition({ document_id, selection }: TPopoverDocumentEdition) {
+export function PopoverDocumentEdition({
+    document_id,
+    selection,
+}: TPopoverDocumentEdition) {
     const { isOpen, onToggle, onClose } = useDisclosure();
+    const { mutateUserSelection } = useUserSelections();
     const toast = useToast();
-    // const queryClient = useQueryClient();
-    // const handleDelete = useMutation(
-    //     async () => {
-    //         // const res = await deleteDocument(document_id);
-    //         // return res;
-    //     },
-    //     {
-    //         onSuccess: async (data: any) => {
-    //             queryClient.invalidateQueries({
-    //                 queryKey: ["getDocumentOfUser"],
-    //             });
-    //             toast({ description: data.message, status: "success" });
-    //         },
-    //     }
-    // );
+    const handleDelete = async () => {
+        try {
+            const res = await deleteDocument(Number(document_id));
+            toast({ description: res.message, status: "success" });
+            mutateUserSelection();
+        } catch (error) {
+            toast({ description: error, status: "error" });
+        }
+    };
+
     return (
         <Popover
             isOpen={isOpen}
@@ -71,10 +72,9 @@ export function PopoverDocumentEdition({ document_id, selection }: TPopoverDocum
                         Created August 22nd, 2023
                     </Text>
                 </PopoverHeader>
-                {/* <PopoverArrow /> <PopoverCloseButton /> */}
                 <PopoverBody>
                     <Box>
-                        <HStack p="4px">
+                        <HStack onClick={handleDelete} p="4px">
                             <Icon as={TrashIcon} />
                             <Text>Send to Trash</Text>
                         </HStack>

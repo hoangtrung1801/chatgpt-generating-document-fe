@@ -5,7 +5,7 @@ import useSwr, { SWRResponse } from "swr";
 const API_URL = `${BE_URL}/selections/current-user`;
 
 const useUserSelections = () => {
-    const { data, error }: SWRResponse = useSwr(
+    const { data, error, mutate }: SWRResponse = useSwr(
         `${API_URL}`,
         fetchWithCredentials
     );
@@ -15,6 +15,7 @@ const useUserSelections = () => {
         isLoading: !error && !data,
         // isLoading: true,
         error: error,
+        mutateUserSelection: mutate,
     };
 };
 

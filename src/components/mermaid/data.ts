@@ -1,20 +1,4 @@
 export const mermaidRes = `
-<pre>
-graph TD
- A[Login Page] -->B[Registration]
- B  -->C[Home]
- C --> D[Profile]
- C --> E[Friends]
- C --> F[Notifications]
- C --> G[Events]
- C --> H[Location]
- E --> I[Friend Profile]
- E --> J[Add Friend]
- E --> K[Remove Friend]
- F --> L[Notification Detail]
- G --> M[Event Detail]
- H --> N[Location List]
- H --> O[Location Map]
- </pre>
+\ngraph TD\nA[User] --> B{What type of app}\nB -- On-Demand Food Delivery --> C(Delivery Addresses)\nC --> D[Registration & Authorization]\nB -- Invite Friends --> E[Invite Friends]\nB -- Push Notifications --> F[Push Notifications]\nB -- Splash screen --> G[Splash screen]\nB -- Home screen --> H[Home screen]\nB -- Location screen --> I[Location screen]\n
     
     `;

@@ -80,27 +80,25 @@ const Document: NextPage = () => {
                 []
             );
             toggleLoading("Wait for user selection");
-            setTimeout(() => {
-                router.push(`/documentsTest/${1}`);
-                closeLoading();
-            }, 2000);
 
             // Test
-            // body.username = "Hoang Trung";
-            // console.log("body", { body });
-            // console.log("columns: ", columns);
+            body.username = "Hoang Trung";
+            console.log("body", { body });
+            console.log("columns: ", columns);
 
-            // // API - Create Selection
+            // API - Create Selection
             // setLoading(true);
-            // const response = await createSelection(body);
-            // const selection = response.data;
-            // console.log({ selection });
+            const response = await createSelection(body);
+            const selection = response.data;
+            console.log({ selection });
 
-            // // API - Generate Document
-            // const response2 = await generateDocument(selection.id);
-            // const outline = response2.data;
-            // console.log({ outline });
-            // addToast(response);
+            // API - Generate Document
+            const response2 = await generateDocument(selection.id);
+            const outline = response2.data;
+            console.log({ outline });
+            addToast(response);
+            router.push(`/user-flow/${selection.id}`);
+            closeLoading();
 
             // setLoading(false);
         } catch {
