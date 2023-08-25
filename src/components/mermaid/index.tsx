@@ -1,4 +1,4 @@
-import { Box, Stack } from "@chakra-ui/react";
+import { Box, Flex, Stack } from "@chakra-ui/react";
 import mermaid from "mermaid";
 import React, { useEffect } from "react";
 
@@ -52,6 +52,9 @@ mermaid.initialize({
       stroke-width: 1;
     }`,
     fontFamily: "Fira Code",
+    parseError(err, hash) {
+        console.error("Mermaid parsing error:", err, hash);
+    },
 });
 
 export type MermaidProps = {
@@ -60,9 +63,18 @@ export type MermaidProps = {
 
 const Mermaid = ({ chart }: MermaidProps) => {
     useEffect(() => {
-        mermaid.contentLoaded();
+        try {
+            mermaid.contentLoaded();
+        } catch (e) {
+            // Handle any rendering errors
+            console.error("Mermaid rendering error:", e.toString());
+        }
     }, []);
-    return <Box className="mermaid">{chart}</Box>;
+    return (
+        <Flex p={10} justify="center" overflow="auto" className="mermaid">
+            {chart}
+        </Flex>
+    );
 };
 
 export default Mermaid;

@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { LayoutCreateProject } from "components/create-project/components/Layout";
 import { CustomToast } from "components/CustomToast";
 import { ChooseAppOptions } from "components/document-page/ChooseAppOptions";
@@ -6,6 +6,7 @@ import Loading from "components/Loading";
 import { movePage } from "components/motion";
 import { motion } from "framer-motion";
 import createSelection from "lib/api/createSelection";
+import createUserFlow from "lib/api/createUserFlow";
 import generateDocument from "lib/api/generateDocument";
 import useGetQuestions from "lib/hooks/useGetQuestions";
 import { NextPage } from "next";
@@ -14,6 +15,12 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useCreateProject, useTableContents } from "stores";
 import { useGlobalLoading } from "stores/useGlobalLoading";
+import useSwr, { SWRResponse } from "swr";
+import { fetchWithCredentials } from "lib/fetcher";
+
+function isFormatMermaid(mermaidContent: string) {
+    return mermaidContent.endsWith("```");
+}
 
 const Document: NextPage = () => {
     const router = useRouter();
@@ -35,6 +42,7 @@ const Document: NextPage = () => {
             return <ChooseAppOptions backStep={backStep} nextStep={nextStep} />;
     };
 
+    const toast = useToast();
     const { addToast } = CustomToast();
     const { questions } = useGetQuestions(data.appId);
     // console.log(questions.length);
@@ -93,12 +101,29 @@ const Document: NextPage = () => {
             console.log({ selection });
 
             // API - Generate Document
-            const response2 = await generateDocument(selection.id);
-            const outline = response2.data;
-            console.log({ outline });
-            addToast(response);
-            router.push(`/user-flow/${selection.id}`);
+            // const response2 = await generateDocument(selection.id);
+            // const outline = response2.data;
+            // console.log({ outline });
+            // addToast(response);
+            // router.push(`/user-flow/${selection.id}`);
+
+            //  API -User flow
+
+            const res = await createUserFlow(selection.id);
+            console.log(res.data);
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            // const { data, mutate, isLoading } = useSwr(
+            //     () => createUserFlow(selection.id),
+            //     fetchWithCredentials
+            // );
+            // if (!isFormatMermaid(userflowResponse.data)) {
+            //     // If the format is not valid, trigger a re-fetch
+            //     toast({ description: "Error with format", status: "error" });
+            //     mutateSelection(selectionId);
+            // }
+            // console.log({ graph });
             closeLoading();
+            router.push(`/user-flow/${selection.id}`);
 
             // setLoading(false);
         } catch {

@@ -34,7 +34,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     }, [currentUser]);
 
     return (
-        <SWRConfig value={{ fetcher: fetchWithCredentials }}>
+        <SWRConfig
+            value={{
+                fetcher: fetchWithCredentials,
+            }}
+        >
             <Chakra>
                 <Head>
                     <meta

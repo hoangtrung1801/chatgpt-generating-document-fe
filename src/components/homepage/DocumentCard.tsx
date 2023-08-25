@@ -9,6 +9,7 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { PopoverDocumentEdition } from "components/PopoverDocumentEdition";
+import { ReadMore } from "components/ReadMore";
 import format from "date-fns/format";
 import { useRouter } from "next/router";
 
@@ -33,15 +34,15 @@ export const DocumentCard = ({ selection }: TDocumentCardProps) => {
             key={selection.id}
         >
             <CardBody p={0}>
-                <Box w="full" h="140px" maxH="140px">
+                {/* <Box w="full" h="140px" maxH="140px">
                     <Image
                         w="full"
                         h="full"
                         alt="img"
                         src="https://gamma.app/_next/static/media/placeholderBackground.e75ddbc7.svg"
                     />
-                </Box>
-                <Stack p="12px" color="black" bg="white">
+                </Box> */}
+                <Stack h="200px" p="12px" color="black" bg="white">
                     <Text
                         h="2rem"
                         fontSize="xl"
@@ -50,6 +51,17 @@ export const DocumentCard = ({ selection }: TDocumentCardProps) => {
                     >
                         {selection.projectName}
                     </Text>
+                    <ReadMore
+                        overflow="auto"
+                        flex={1}
+                        onClick={(e) => e.stopPropagation()}
+                        numberOfChars={100}
+                        text={selection.description || ""}
+                        h="2rem"
+                        fontSize="md"
+                        lineHeight="normal"
+                        fontWeight="400"
+                    />
                     <HStack justify="space-between">
                         {/* left */}
                         <HStack>
