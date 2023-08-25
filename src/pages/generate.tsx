@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useCreateProject, useTableContents } from "stores";
+import { useGlobalLoading } from "stores/useGlobalLoading";
 
 const Document: NextPage = () => {
     const router = useRouter();
@@ -25,6 +26,9 @@ const Document: NextPage = () => {
     const methods = useForm();
     const { watch, handleSubmit } = methods;
     const [valueSelection] = watch(["selectedOptions"]);
+    const toggleLoading = useGlobalLoading((state) => state.toggleLoading);
+    const closeLoading = useGlobalLoading((state) => state.closeLoading);
+    const toggle = useGlobalLoading((state) => state.toggle);
 
     const renderStep = () => {
         if (step >= 0)
@@ -75,44 +79,47 @@ const Document: NextPage = () => {
                 },
                 []
             );
+            toggleLoading("Wait for user selection");
+            setTimeout(() => {
+                router.push(`/documentsTest/${1}`);
+                closeLoading();
+            }, 2000);
 
             // Test
-            body.username = "Hoang Trung";
-            console.log("body", { body });
-            console.log("columns: ", columns);
+            // body.username = "Hoang Trung";
+            // console.log("body", { body });
+            // console.log("columns: ", columns);
 
-            // API - Create Selection
-            setLoading(true);
-            const response = await createSelection(body);
-            const selection = response.data;
-            console.log({ selection });
+            // // API - Create Selection
+            // setLoading(true);
+            // const response = await createSelection(body);
+            // const selection = response.data;
+            // console.log({ selection });
 
-            // API - Generate Document
-            const response2 = await generateDocument(selection.id);
-            const outline = response2.data;
-            console.log({ outline });
-            addToast(response);
+            // // API - Generate Document
+            // const response2 = await generateDocument(selection.id);
+            // const outline = response2.data;
+            // console.log({ outline });
+            // addToast(response);
 
-            router.push(`/documentsTest/${selection.id}`);
-            setLoading(false);
+            // setLoading(false);
         } catch {
             addToast(Response);
         }
     };
 
-    if (loading) return <Loading />;
-
-    return (
-        <LayoutCreateProject page="Create project">
-            <Box w="container.md" zIndex={2} py={4}>
-                <FormProvider {...methods}>
-                    <Box as={motion.div} {...movePage}>
-                        {renderStep()}
-                    </Box>
-                </FormProvider>
-            </Box>
-        </LayoutCreateProject>
-    );
+    if (!toggle)
+        return (
+            <LayoutCreateProject page="Create project">
+                <Box w="container.md" zIndex={2} py={4}>
+                    <FormProvider {...methods}>
+                        <Box as={motion.div} {...movePage}>
+                            {renderStep()}
+                        </Box>
+                    </FormProvider>
+                </Box>
+            </LayoutCreateProject>
+        );
 };
 
 export default Document;

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { SWRConfig } from "swr/_internal";
 import Script from "next/script";
 import "../lib/global.css";
+import { GlobalLoading } from "components/loading/index";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
     const { asPath, replace } = useRouter();
@@ -41,10 +42,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                         content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
                     />
                 </Head>
-                {/* <Layout> */}
                 <Component {...pageProps} />
-                {/* <Script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs" /> */}
-                {/* </Layout> */}
+                <GlobalLoading />
             </Chakra>
         </SWRConfig>
     );

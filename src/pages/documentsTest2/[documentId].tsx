@@ -1,18 +1,14 @@
-import { Box, Stack } from "@chakra-ui/react";
 import "@milkdown/theme-nord/style.css";
 
 import "@blocknote/core/style.css";
-import DocumentEditor from "components/DocumentEditor";
-import TurndownService from "turndown";
 import { LayoutCreateProject } from "components/create-project/components/Layout";
-import { useRouter } from "next/router";
-import useSelection from "lib/hooks/useSelection";
 import Loading from "components/Loading";
+import TipTapEditor from "components/TipTapEditor";
+import useSelection from "lib/hooks/useSelection";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
+import TurndownService from "turndown";
 import { convertToHTMLFormat } from "utils/convertToHTMLFormat";
-import Mermaid from "components/mermaid";
-import { mermaidRes } from "components/mermaid/data";
-import SimpleEditor from "components/TipTapEditor";
 const turndownService = new TurndownService();
 // const markdown = `# Milkdown Next Commonmark
 
@@ -110,23 +106,19 @@ export default function DocumentPage() {
     const selectionId = Number(router.query.documentId);
     const { selection, isSelectionLoading, mutateSelection } =
         useSelection(selectionId);
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (!selection?.document) {
-                mutateSelection();
-            }
-        }, 1000 * 10);
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         if (!selection?.document) {
+    //             mutateSelection();
+    //         }
+    //     }, 1000 * 10);
 
-        return () => clearInterval(interval);
-    }, [mutateSelection, selection?.document]);
+    //     return () => clearInterval(interval);
+    // }, [mutateSelection, selection?.document]);
 
     return (
         <LayoutCreateProject page="Home">
-            {isSelectionLoading ? (
-                <Loading />
-            ) : (
-                <SimpleEditor content={convertToHTMLFormat(data)} />
-            )}
+            {isSelectionLoading ? <Loading /> : <TipTapEditor content={data} />}
         </LayoutCreateProject>
     );
 }

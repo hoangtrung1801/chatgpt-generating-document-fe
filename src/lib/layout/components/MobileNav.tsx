@@ -21,11 +21,25 @@ import { AllDocumentsIcon } from "icons/all-documents";
 import useCurrentUser from "lib/hooks/useCurrentUser";
 import { useRouter } from "next/router";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
+import { getCookies, setCookie, deleteCookie } from "cookies-next";
+import { logout } from "lib/api/auth";
+import { CustomToast } from "components/CustomToast";
 interface MobileProps extends FlexProps {
     onOpen: () => void;
 }
 export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     const router = useRouter();
+    const { addToast } = CustomToast();
+    const handleLogout = () => {
+        deleteCookie("Authorization");
+        addToast({ message: "logout successfully!", type: "success" });
+        logout().then(() => {
+            // setLogoutSuccess(false);
+            // route.push("/login");
+            router.reload();
+        });
+    };
+
     const {
         currentUser,
         isLoading: isCurrentUserLoading,
@@ -111,7 +125,9 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                         <MenuList p={2} color="black" bg="white">
                             <MenuItem bg="white">{`Hi, ${currentUser?.name}`}</MenuItem>
                             <MenuDivider bg="black" />
-                            <MenuItem bg="white">Sign out</MenuItem>
+                            <MenuItem onClick={() => handleLogout()} bg="white">
+                                Sign out
+                            </MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>

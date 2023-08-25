@@ -70,6 +70,38 @@ export const Button: ComponentStyleConfig = {
                 },
             },
         },
+        secondary_2: {
+            bg: "#999999",
+            background: "#999999",
+            color: "gray.100",
+            borderRadius: "md",
+            boxShadow: "md",
+            borderWidth: "1px",
+            borderColor: "#e5e0df",
+            minHeight: "16px",
+            width: "fit-content",
+            padding: "12px 16px",
+
+            _hover: {
+                opacity: 0.7,
+            },
+
+            _active: {
+                bg: "#3f04d8",
+                background: "#3f04d8",
+                // bg: "#B1C36B",
+                // background: "#B1C36B",
+                // backdropFilter: "blur(3px)",
+            },
+
+            _disabled: {
+                background: "blackAlpha.800",
+                opacity: 0.5,
+                _hover: {
+                    background: "blackAlpha.800 !important",
+                },
+            },
+        },
         outline: {
             bg: "transparent",
             background: "transparent",
@@ -87,9 +119,9 @@ export const Button: ComponentStyleConfig = {
             },
 
             _active: {
-                // bg: "#B1C36B",
-                // background: "#B1C36B",
-                // backdropFilter: "blur(3px)",
+                bg: "#B1C36B",
+                background: "#B1C36B",
+                backdropFilter: "blur(3px)",
             },
 
             _disabled: {

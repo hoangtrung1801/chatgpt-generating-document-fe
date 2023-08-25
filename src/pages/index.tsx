@@ -1,29 +1,19 @@
-import { Box, Grid, Stack, Text } from "@chakra-ui/react";
+import { Box, Grid, Stack } from "@chakra-ui/react";
 import { DocumentCard } from "components/homepage";
-import Loading from "components/Loading";
-import useCurrentUser from "lib/hooks/useCurrentUser";
 import useUserSelections from "lib/hooks/useUserSelections";
 import LayoutWithSidebar from "lib/layout/LayoutWithSidebar";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
-const HomePage: NextPage = () => {
-    const router = useRouter();
-
-    const {
-        currentUser,
-        isLoading: isCurrentUserLoading,
-        error,
-    } = useCurrentUser();
+import { useGlobalLoading } from "stores/useGlobalLoading";
+const HomePage = () => {
     const { selections, isLoading: isUserSelectionLoading } =
         useUserSelections();
-    console.log("selections: ", selections);
-    return (
-        <LayoutWithSidebar>
-            <Box>
-                {/* userLoading && */}
-                {isCurrentUserLoading ? (
-                    <Loading />
-                ) : (
+    const toggleLoading = useGlobalLoading((state) => state.toggleLoading);
+    const closeLoading = useGlobalLoading((state) => state.closeLoading);
+    if (isUserSelectionLoading) return toggleLoading("Wait for user selection");
+    if (!isUserSelectionLoading) {
+        closeLoading();
+        return (
+            <LayoutWithSidebar>
+                <Box>
                     <Stack spacing={8}>
                         {/* <Header /> */}
 
@@ -35,26 +25,20 @@ const HomePage: NextPage = () => {
                                 ]}
                                 gap={6}
                             >
-                                {selections?.length === 0 ? (
-                                    <Text>You have no documents yet!</Text>
-                                ) : (
-                                    <>
-                                        {selections &&
-                                            selections.map((selection) => (
-                                                <DocumentCard
-                                                    selection={selection}
-                                                    key={selection.id}
-                                                />
-                                            ))}
-                                    </>
-                                )}
+                                {selections &&
+                                    selections.map((selection) => (
+                                        <DocumentCard
+                                            selection={selection}
+                                            key={selection.id}
+                                        />
+                                    ))}
                             </Grid>
                         </Stack>
                     </Stack>
-                )}
-            </Box>
-        </LayoutWithSidebar>
-    );
+                </Box>
+            </LayoutWithSidebar>
+        );
+    }
 };
 
 export default HomePage;
