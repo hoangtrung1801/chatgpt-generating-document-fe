@@ -1,28 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Box, HStack, Icon, Button, Stack, Spinner } from "@chakra-ui/react";
+import { Box, Button, HStack, Stack } from "@chakra-ui/react";
+import React, { useCallback } from "react";
 import * as Icons from "svgs/icons";
 // => Tiptap packages
-import {
-    useEditor,
-    EditorContent,
-    Editor,
-    BubbleMenu,
-    Content,
-} from "@tiptap/react";
+import Bold from "@tiptap/extension-bold";
+import BulletList from "@tiptap/extension-bullet-list";
+import Code from "@tiptap/extension-code";
 import Document from "@tiptap/extension-document";
 import Heading from "@tiptap/extension-heading";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
-import Bold from "@tiptap/extension-bold";
-import Italic from "@tiptap/extension-italic";
-import Strike from "@tiptap/extension-strike";
-import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
-import { CustomBlockExtension } from "./extension";
+import Italic from "@tiptap/extension-italic";
 import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
-import BulletList from "@tiptap/extension-bullet-list";
+import Paragraph from "@tiptap/extension-paragraph";
+import Strike from "@tiptap/extension-strike";
+import Text from "@tiptap/extension-text";
+import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import socketIOClient, { Socket } from "socket.io-client";
+import { CustomBlockExtension } from "./extension";
 
 const host = "http://localhost:3000";
 // Custom
@@ -31,61 +25,15 @@ type TipTapEditorWithSocketProps = {
     content?: string;
 };
 
-export default function TipTapEditorWithSocket({
-    content,
-}: TipTapEditorWithSocketProps) {
+export default function TipTapEditorWithSocket({}: TipTapEditorWithSocketProps) {
     const socketRef = React.useRef(null);
+
     const [text, setText] = React.useState("");
+    const [content, setContent] = React.useState("");
     const [textPart, setTextPart] = React.useState("");
     const [number, setNumber] = React.useState(1);
     // const [loadingMermaid, setIsLoadingMermaid] = React.useState(false);
 
-    const onGenerateDocument = () => {
-        const socket: Socket = socketRef.current;
-
-        const getStreamDocument = (data) => {
-            setText((prevText) => prevText + data);
-        };
-
-        socket.on("get-generate-document-part", getStreamDocument);
-        // socket.once("generate-document-part-complete", () => {
-        //     setNumber((prevNumber) => prevNumber + 1); // Move on to the next part
-        // });
-
-        socket.emit(
-            "generate-document-part",
-            {
-                selectionId: 226,
-                partIndex: number,
-            },
-            (data) => {
-                // xong
-                // setnUmber
-                console.log("data", data);
-                setNumber((prevNumber) => prevNumber + 1);
-                socket.removeListener(
-                    "get-generate-document-part",
-                    getStreamDocument
-                );
-            }
-        );
-    };
-
-    React.useEffect(() => {
-        socketRef.current = socketIOClient(host);
-    }, []);
-    React.useEffect(() => {
-        // Emit the next part whenever the number changes
-        // setTextPart((preText) => preText + text);
-        if (socketRef.current) {
-            if (number <= 1) {
-                onGenerateDocument();
-            }
-        }
-    }, [number, socketRef]);
-
-    // console.log("text:", text);
-    const [contentState, setContentState] = useState<string>(content);
     const editor = useEditor({
         extensions: [
             Document,
@@ -107,17 +55,72 @@ export default function TipTapEditorWithSocket({
         // content: text,
     }) as Editor;
 
+    const onGenerateDocument = () => {
+        const socket: Socket = socketRef.current;
+
+        let data = text;
+        const getStreamDocument = (str) => {
+            data += str;
+            setText(data);
+        };
+
+        socket.on("get-generate-document-part", getStreamDocument);
+
+        console.info(`GENERATE PART ${number}`);
+        socket.emit(
+            "generate-document-part",
+            {
+                selectionId: 226,
+                partIndex: number,
+            },
+            (data) => {
+                // xong
+                // setnUmber
+                console.log("data", data);
+                setNumber((prevNumber) => prevNumber + 1);
+                socket.removeListener(
+                    "get-generate-document-part",
+                    getStreamDocument
+                );
+
+                // const { mermaid } = data;
+                // setText((prevText) => prevText + mermaid);
+            }
+        );
+    };
+
+    React.useEffect(() => {
+        socketRef.current = socketIOClient(host);
+    }, []);
+
+    React.useEffect(() => {
+        if (text) {
+            const md = require("markdown-it")();
+            const str = md.render(text);
+            setContent(str);
+        }
+    }, [text]);
+
+    React.useEffect(() => {
+        // Emit the next part whenever the number changes
+        // setTextPart((preText) => preText + text);
+        if (socketRef.current) {
+            if (number <= 1) {
+                onGenerateDocument();
+            }
+        }
+    }, [number, socketRef]);
+
     // useEffect(() => {
     //     editor?.commands.setContent(textPart);
     //     console.log("text: ", textPart);
     //     // console.log("content: ", content);
     // }, [textPart]);
 
-    useEffect(() => {
-        editor?.commands.setContent(text);
-        console.log("text: ", textPart);
+    React.useEffect(() => {
+        editor?.commands.setContent(content);
         // console.log("content: ", content);
-    }, [text]);
+    }, [editor?.commands, content]);
 
     const toggleUnderline = useCallback(() => {
         // editor.chain().focus().toggleUnderline().run();
